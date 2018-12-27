@@ -1,0 +1,7 @@
+{
+  "license": "GPL-3.0",
+  "repository": "github:oobfest/oobleck-v2",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
