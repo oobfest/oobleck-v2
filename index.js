@@ -1,7 +1,10 @@
-let net = require('net')
 
-let server = net.createServer((connection)=> {
-  connection.end("Hello!\n")
+let express = require('express')
+let app = express()
+app.use(express.json())
+
+app.get('/', (request, response)=> {
+  response.send({cool: true})
 })
 
-server.listen(5000)
+app.listen(5000)
