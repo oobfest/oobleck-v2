@@ -3,7 +3,7 @@ let express = require('express')
 let app = express()
 app.use(express.json())
 
-app.get('/', (request, response)=> {
+app.get('/cool', (request, response)=> {
   response.send({cool: true})
 })
 
