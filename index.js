@@ -1,10 +1,12 @@
+let connectDatabase = require('./app/database')
+let connectServer = require('./app/server')
 
-let express = require('express')
-let app = express()
-app.use(express.json())
+const connectionString = 'mongodb://localhost:27017/2019-test'
+const port = 5000
 
-app.get('/cool', (request, response)=> {
-  response.send({cool: true})
-})
+let setupApp = async ()=> {
+  let database = await connectDatabase(connectionString)
+  let server = await connectServer(port)
+}
 
-app.listen(5000)
+setupApp()
