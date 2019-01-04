@@ -3,6 +3,7 @@
   "repository": "github:oobfest/oobleck-v2",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "mongoose": "^5.4.2"
   },

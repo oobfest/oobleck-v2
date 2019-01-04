@@ -10,7 +10,7 @@ module.exports = port=> {
 
   let connection = server.listen(port)
   return new Promise((resolve, reject)=> {
-    connection.on('listening', resolve(connection))
+    connection.on('listening', ()=> resolve(connection))
     connection.on('error', error=> reject(error))
   })
 

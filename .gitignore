@@ -1,6 +1,7 @@
 # Secret notes!
 .notes
 .notes.md
+.env
 
 # i hate it
 .DS_Store
