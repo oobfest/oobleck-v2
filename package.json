@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "nodemon index.js",
-    "test": "echo 'naw'"
+    "test": "tap test.js | tap-spec"
   },
   "license": "GPL-3.0",
   "repository": "github:oobfest/oobleck-v2",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "mongodb-memory-server": "^3.0.0",
-    "tap": "^12.1.1"
+    "tap": "^12.1.1",
+    "tap-spec": "^5.0.0"
   }
 }
