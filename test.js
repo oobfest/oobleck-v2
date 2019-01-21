@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 let tap = require('tap')
 let createTestDatabase = require('./app/create-test-database')
 let connectMongoose = require('./app/connect-mongoose')
@@ -9,7 +11,14 @@ module.exports = {
       this.testDatabase = createTestDatabase()
       let connectionString = await this.testDatabase.getConnectionString()
       this.mongoose = await connectMongoose(connectionString)
-      this.server = await createServer()
+      this.server = await createServer(process.env.PORT)
+      tap.end()
+    })
+  },
+  run(description, behavior) {
+    tap.test(description, async tap=> {
+      try { await behavior(tap) }
+      catch(error) { tap.fail(error.message) }
       tap.end()
     })
   },

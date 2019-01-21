@@ -16,7 +16,7 @@ module.exports = port=> {
       resolve(connection)
     })
     connection.on('error', error=> reject(error))
-    connection.on('close', ()=> console.log('Server closed'))
+    //connection.on('close', ()=> console.log('Server closed'))
   })
 
 }
