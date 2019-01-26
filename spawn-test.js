@@ -1,6 +1,5 @@
-
 // Run `npm test` to tap all tests
-// Run `npm test -- [entity]` to test entity
+// Run `npm test -- [entity]` to test specific entity
 
 let { spawn } = require('child_process')
 

@@ -7,16 +7,17 @@ let setupApp = async ()=> {
   try {
     await connectMongoose(process.env.CONNECTION_STRING)
     await createServer(process.env.PORT)
-    console.log("Ready!✨")
+    console.log("✨ Ready!")
   }
   catch(error) {
     if(error.name == "Error") {
       if (error.code == "EADDRINUSE") console.error(`Port ${process.env.PORT} is already in use`)
-      else console.error("Server connection error")
+      else console.error("Server connection error \n", error)
     }
     else if (error.name == "MongoNetworkError") {
       console.error("MongoDB Connection Error")
     }
+    console.error("Error: ", error.name)
     console.error("Exiting")
   }
 }

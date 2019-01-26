@@ -7,5 +7,10 @@ module.exports = connectionString=> {
   mongoose.set('useFindAndModify', false)
   let options = { useNewUrlParser: true }
 
+  let database = mongoose.connection
+  database.once('open', ()=> {
+    console.log("⚡️ Database connected")
+  })
+
   return mongoose.connect(connectionString, options)
 }
