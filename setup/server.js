@@ -1,6 +1,5 @@
 let express = require('express')
 let helmet = require('helmet')
-let expressSession = require('express-session')
 let cookieSession = require('cookie-session')
 
 let setupPassport = require('./passport')
@@ -13,7 +12,7 @@ module.exports = port=> {
   app.set('views', 'website')
 
   app.use(cookieSession({
-    secret: "Keyboard Cat",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
   }))
