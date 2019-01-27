@@ -1,16 +1,22 @@
 let express = require('express')
-let bodyParser = require('body-parser')
-let setupPassport = require('./setup-passport')
+let setupPassport = require('./passport')
 
 module.exports = port=> {
   let server = express()
-  server.use(bodyParser.urlencoded({ extended: true }))
+  server.set('view engine', 'pug')
+  server.set('views', 'website')
+
+  server.use(express.urlencoded({ extended: true }))
   server.use(express.json())
-  
-  // Sucks
-  let passport = setupPassport(server)
-  let routes = require('../api/routes')
-  server.use('/', routes)
+  server.use(express.static('website/static'))
+
+  // Passport.js
+  setupPassport(server)
+
+  let apiRouter = require('../api/router')
+  let websiteRouter = require('../website/router')
+  server.use('/api', apiRouter)
+  server.use('/', websiteRouter)
 
   let connection = server.listen(port)
   return new Promise((resolve, reject)=> {

@@ -1,10 +1,10 @@
 let express = require('express')
 let router = express.Router()
 
-let catRouter = require('./cats/routes')
-router.use('/cats', catRouter)
+let catRouter = require('./cats/router')
+let userRouter = require('./users/router')
 
-let userRouter = require('./users/routes')
+router.use('/cats', catRouter)
 router.use('/users', userRouter)
 
 router.get('/', (request, response)=> {

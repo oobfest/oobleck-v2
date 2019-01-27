@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,600');
+
+body { 
+  font-family: 'Raleway', sans-serif; 
+}
+
+.dark-background { 
+  background-color: #242524;
+}
+
+.box-head-accent-oob {
+  background: linear-gradient(45deg,#65A9FF,#2284FE);
+  background-color: rgba(0, 0, 0, 0);
+  background-color: #34bc48;
+  border-color: #239834;
+  color: #fff;
+}

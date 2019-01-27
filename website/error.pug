@@ -1,0 +1,17 @@
+extends _layout
+block content
+  .container
+    .row
+      .col-8.mx-auto.pb-5.my-8
+        .box
+          .box-head.box-head-accent-oob
+          .box-block.box-b.box-bt-0
+            h2 Error! 😯
+            p Something went wrong. Let 
+              code admin@oobfest.com 
+              | know about it, please!
+            if error.status
+              h4 Error Status
+              pre=error.status
+            h4 Error Message
+            pre=error.message

@@ -1,0 +1,39 @@
+#add-user-modal.modal.fade
+  .modal-dialog
+    form#add-user-form.modal-content
+      .modal-header
+        h5.modal-title Create User
+        button.close(data-dismiss="modal")
+          span &times;
+      .modal-body
+        .form-group
+          label.col-form-label(for="add-username") Username
+          input#add-username.form-control(type="text" name="username" v-model="newUser.username")
+        .form-group
+          label.col-form-label(for="add-email") Email
+          input#add-email.form-control(type="email" name="email" v-model="newUser.email")
+        .form-group
+          label.col-form-label(for="add-password") Password
+          input#add-password.form-control(type="password" name="password" v-model="newUser.password")
+        p Roles
+        .form-check
+          input#admin-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="admin" v-model="newUser.roles")
+          label.form-check-label(for="admin-role-checkbox") Admin
+        .form-check
+          input#staff-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="staff" v-model="newUser.roles")
+          label.form-check-label(for="staff-role-checkbox") Staff
+        .form-check
+          input#schedule-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="schedule" v-model="newUser.roles")
+          label.form-check-label(for="schedule-role-checkbox") Schedule
+        .form-check
+          input#standup-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="standup" v-model="newUser.roles")
+          label.form-check-label(for="standup-role-checkbox") Standup
+        .form-check
+          input#panelist-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="panelist" v-model="newUser.roles")
+          label.form-check-label(for="panelist-role-checkbox") Panelist
+        .form-check
+          input#standup-panelist-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="standup-panelist" v-model="newUser.roles")
+          label.form-check-label(for="standup-panelist-role-checkbox") Standup Panelist
+      .modal-footer
+        button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+        button#add-user-button.btn.btn-primary(type="submit" @click.prevent="createUser" data-dismiss="modal") Save

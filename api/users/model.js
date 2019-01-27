@@ -7,7 +7,7 @@ let mongooseModel = mongoose.model('User', schema)
 let overrides = {
   create(user) {
     return new Promise((resolve, reject)=> {
-      let userModel = new mongooseModel({username: user.username})
+      let userModel = new mongooseModel(user)
       mongooseModel.register(userModel, user.password, (error, user)=> {
         if(error) reject(error)
         else resolve(user)

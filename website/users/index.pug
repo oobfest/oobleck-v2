@@ -1,0 +1,61 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Users
+    button.btn.btn-secondary.ml-md-auto(data-toggle="modal" data-target="#add-user-modal") Add User
+
+  #app.dash-boxes.container-fluid
+    .box.box-b
+      table.box-table.table
+        thead
+          tr
+            th Name
+            th Email
+            th Password Set
+            th Roles
+        tbody
+          tr(v-for="user in users")
+            td {{user.username}}
+            td {{user.email}}
+            td {{user.isPasswordSet}}
+            td {{user.roles.join(", ")}}
+
+    include _modal
+
+  script.
+    let vue = new Vue({
+      el: "#app",
+      data: {
+        users: [],
+        newUser: {
+          username: "",
+          password: "",
+          email: "",
+          roles: []
+        }
+      },
+      methods: {
+        createUser() {
+          let self = this
+          axios
+            .post('/api/users', self.newUser)
+            .then((response)=> {
+              self.users.push(response.data)
+            })
+            .catch((error)=> {
+              console.log(error)
+            })
+        }
+      },
+      created() {
+        let self = this
+        axios.get('/api/users')
+          .then((response)=> {
+            self.users = response.data
+          })
+          .catch((error)=> {
+            console.log(error)
+          })
+      }
+    })

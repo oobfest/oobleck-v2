@@ -1,0 +1,26 @@
+extends ../_layout
+block content
+  main.dark-background
+    .p-5.text-center
+      a.charming-logo.text-light(href="#") OoBleck v2
+    .container
+      .row
+        .col-lg-6.mx-auto.pb-5
+          .box
+            form(action="/login" method="POST")
+              .box-head.box-head-accent-oob
+              if info
+                .box-block.box-bb
+                  .alert.alert-secondary(role="alert")=info.message
+                  input(type="hidden" name="attempted-url" value=attemptedUrl)
+              .box-block
+                h3.mb-4 Log In
+                .form-group
+                  label.col-form-label(for="username") Username
+                  input#username.form-control(type="text" name="username" autofocus)
+                .form-group
+                  label.col-form-label(for="password") Password
+                  input#password.form-control(type="password" name="password")
+              .box-block.box-block-actions.box-bt
+                button.btn.btn-primary.float-right(type="submit") Log In
+                //a.py-3(href="#") Forgot password?

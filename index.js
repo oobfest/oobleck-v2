@@ -1,12 +1,12 @@
 require('dotenv').config()
 
-let connectMongoose = require('./app/connect-mongoose')
-let createServer = require('./app/create-server')
+let setupMongoose = require('./setup/mongoose')
+let setupServer = require('./setup/server')
 
 let setupApp = async ()=> {
   try {
-    await connectMongoose(process.env.CONNECTION_STRING)
-    await createServer(process.env.PORT)
+    await setupMongoose(process.env.CONNECTION_STRING)
+    await setupServer(process.env.PORT)
     console.log("✨ Ready!")
   }
   catch(error) {
