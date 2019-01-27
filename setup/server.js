@@ -1,24 +1,40 @@
 let express = require('express')
+let helmet = require('helmet')
+let expressSession = require('express-session')
+let cookieSession = require('cookie-session')
+
 let setupPassport = require('./passport')
+let setupMorgan = require('./morgan')
+
 
 module.exports = port=> {
-  let server = express()
-  server.set('view engine', 'pug')
-  server.set('views', 'website')
+  let app = express()
+  app.set('view engine', 'pug')
+  app.set('views', 'website')
 
-  server.use(express.urlencoded({ extended: true }))
-  server.use(express.json())
-  server.use(express.static('website/static'))
+  app.use(cookieSession({
+    secret: "Keyboard Cat",
+    resave: false,
+    saveUninitialized: false
+  }))
+
+  app.use(express.urlencoded({ extended: true }))
+  app.use(express.json())
+  app.use(express.static('website/static'))
+  app.use(helmet())
 
   // Passport.js
-  setupPassport(server)
+  setupPassport(app)
+
+  // Morgan
+  setupMorgan(app)
 
   let apiRouter = require('../api/router')
   let websiteRouter = require('../website/router')
-  server.use('/api', apiRouter)
-  server.use('/', websiteRouter)
+  app.use('/api', apiRouter)
+  app.use('/', websiteRouter)
 
-  let connection = server.listen(port)
+  let connection = app.listen(port)
   return new Promise((resolve, reject)=> {
     let connectionPort = connection.address().port
     connection.on('listening', ()=> {

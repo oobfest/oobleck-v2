@@ -10,7 +10,12 @@ router.post('/login', (request, response, next)=> {
   passport.authenticate('local', (authenticationError, user, info)=> {
     if(authenticationError) next(authenticationError)
     else if (!user) response.render('login', {info})
-    else response.send("YAY")
+    else request.logIn(user, (loginError)=> {
+      if (loginError) next(loginError)
+      // If user was trying to get to a specific page, redirect to it
+      else if (request.body['attempted-url']) response.redirect(request.body['attempted-url'])
+      else response.send("YAY")
+    })
   })(request, response, next)
 })
 
