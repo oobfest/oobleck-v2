@@ -1,5 +1,9 @@
-module.exports = (router,  controller) => {
+let isLoggedIn = require('./is-logged-in')
 
+module.exports = (router,  controller, requireLogin=false) => {
+
+  if(requireLogin) router.use(isLoggedIn)
+  
   router.route('/')
     .get(controller.getAll)
     .post(controller.create)

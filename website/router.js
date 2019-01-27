@@ -18,7 +18,7 @@ router.get('/', (request, response)=> {
   response.render('index')
 })
 
-router.get('/users', isLoggedIn, (request, response)=> {
+router.get('/users', (request, response)=> {
   response.render('users')
 })
 
