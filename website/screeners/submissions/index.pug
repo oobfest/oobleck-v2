@@ -52,6 +52,7 @@ block content
           if(confirm("Delete " + name + "?")) {
             axios.delete('/api/screener-submissions/' + id)
               .then((response)=> {
+                self.visible = false
                 self.$emit('removed', id)
               })
               .catch((error)=> {
@@ -70,7 +71,6 @@ block content
       }},
       methods: {
         remove(id) {
-          alert("REMOVE " + id)
           let index = this.submissions.findIndex(s=> s._id == id)
           this.submissions.splice(index, 1)
         }

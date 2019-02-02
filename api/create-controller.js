@@ -22,26 +22,23 @@ module.exports = function(model, overrides = {}) {
       }
     },
 
-    async getAll(request, response) {
+    async read(request, response) {
       try {
-        let results = await model.getAll()
-        response.json(results)
+        // Optional 'id' parameter
+        let id = request.params.id
+        if(id) {
+          let results = await model.read(id)
+          if(!results) response.status(404).json({message: "Not found"})
+          else response.json(results)
+        }
+        else {
+          let results = await model.read(null)
+          response.json(results)
+        }
       }
       catch(error) {
         console.log(error.message)
-        response.status(500).send("Error on getAll()")
-      }
-    },
-    
-    async getById(request, response) {
-      try {
-        let results = await model.getById(request.params.id)
-        if(!results) response.status(404).json({message: "Not found"})
-        else response.json(results)
-      }
-      catch(error) {
-        console.log(error.message)
-        response.status(500).send("Error on getById()")
+        response.status(500).send("Error on read()")
       }
     },
 

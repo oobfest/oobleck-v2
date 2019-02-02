@@ -1,4 +1,4 @@
-extends ../_layout
+extends ../../_layout
 block content
   .text-center
     img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
@@ -51,8 +51,6 @@ block content
               .col
                 .form-group
                   include _state-dropdown
-                  //label.col-form-label.required-field(for="state") State
-                  //input#state.form-control(type="text" required autofocus maxlength="280" v-model="submission.state")
             .form-group
               label.col-form-label(for="home-theater") Home Theater / Venue
               input#home-theater.form-control(type="text" required autofocus maxlength="280" v-model="submission.homeTheater")
@@ -102,8 +100,7 @@ block content
             h4 Previous Experience
             p {{submission.previousExperience}}
           .box-block.box-bt
-            .text-center
-              a(href="https://medium.com/oobfest") Read Our Blog
+            a(href="https://www.oobfest.com/") Go back to website
 
   script.
 

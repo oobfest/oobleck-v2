@@ -6,6 +6,7 @@
   "license": "GPL-3.0",
   "repository": "github:oobfest/oobleck-v2",
   "dependencies": {
+    "aws-sdk": "^2.395.0",
     "axios": "^0.18.0",
     "chalk": "^2.4.2",
     "cookie-session": "^2.0.0-beta.3",
@@ -14,6 +15,7 @@
     "helmet": "^3.15.0",
     "mongoose": "^5.4.2",
     "morgan": "^1.9.1",
+    "nodemailer": "^5.1.1",
     "nodemon": "^1.18.9",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
