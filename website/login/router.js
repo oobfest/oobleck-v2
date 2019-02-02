@@ -2,6 +2,10 @@ let express = require('express')
 let router = express.Router()
 let passport = require('passport')
 
+router.get('/', (request, response)=> {
+  response.redirect('/login')
+})
+
 router.get('/login', (request, response)=> {
   response.render('login')
 })
@@ -14,7 +18,7 @@ router.post('/login', (request, response, next)=> {
       if (loginError) next(loginError)
       // If user was trying to get to a specific page, redirect to it
       else if (request.body['attempted-url']) response.redirect(request.body['attempted-url'])
-      else response.send("YAY")
+      else response.redirect('/users')
     })
   })(request, response, next)
 })

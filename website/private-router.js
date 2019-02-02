@@ -14,16 +14,19 @@ let isLoggedIn = function (request, response, next) {
   }
 }
 
-router.get('/', (request, response)=> {
-  response.render('index')
+router.use(isLoggedIn)
+
+router.get('/screener-submissions', (request, response)=> {
+  response.render('screeners/submissions')
 })
 
 router.get('/users', (request, response)=> {
   response.render('users')
 })
 
-let loginRouter = require('./login/router')
-router.use(loginRouter)
+router.get(['/submissions'], (request, response)=> {
+  response.render('stub')
+})
 
 // Error Handling
 router.use((error, request, response, next)=> {

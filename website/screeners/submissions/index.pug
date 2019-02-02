@@ -1,0 +1,88 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Screener Submissions
+
+  #app.dash-boxes.container-fluid
+    .box.box-b
+      table.box-table.table
+        thead
+          tr
+            th Name
+            th Email
+            th Phone
+            th Location
+            th Primary Venue
+        tbody(is="submission-row" v-for="(submission, index) in submissions" v-bind:submission="submission" v-bind:key="index" @removed="remove")
+  
+  script#submission-row-template(type="text/x-template")
+    tbody
+      tr
+        td 
+          a(href="#" @click="visible=!visible") {{submission.name}}
+        td {{submission.email}}
+        td {{submission.phone}}
+        td {{submission.city}}, {{submission.state}}
+        td {{submission.homeTheater}}
+      tr(v-show="visible")
+        td(colspan=5)
+          h4 Tell us about yourself
+          p {{submission.aboutYou}}
+          h4 Why do you think you'd be a good screener?
+          p {{submission.whyYou}}
+          h4 Conflicts
+          p {{submission.conflicts}}
+          h4 Previous Experience
+          p {{submission.previousExperience}}
+          p
+            a.text-danger(href="#" @click="remove(submission.name, submission._id)") Delete Screener Submission
+
+  script.
+
+    Vue.component('submission-row', {
+      props: ['submission'],
+      template: "#submission-row-template",
+      data() { return {
+          visible: false
+      }},
+      methods: {
+        remove(name, id) {
+          let self = this
+          if(confirm("Delete " + name + "?")) {
+            axios.delete('/api/screener-submissions/' + id)
+              .then((response)=> {
+                self.$emit('removed', id)
+              })
+              .catch((error)=> {
+                console.log(error)
+              })
+          }
+        },
+      }
+    })
+
+    let vue = new Vue({
+      el: "#app",
+      data() { return {
+        messages: ["Hooray", "Wow!", "OMG"],
+        submissions: []
+      }},
+      methods: {
+        remove(id) {
+          alert("REMOVE " + id)
+          let index = this.submissions.findIndex(s=> s._id == id)
+          this.submissions.splice(index, 1)
+        }
+      },
+      created() {
+        let self = this
+        axios.get('/api/screener-submissions')
+          .then((response)=> {
+            self.submissions = response.data
+          })
+          .catch((error)=> {
+            console.log(error)
+          })
+      }
+    })

@@ -15,6 +15,9 @@ module.exports = {
       tap.end()
     })
   },
+  logIn(){
+    
+  },
   run(description, behavior) {
     tap.test(description, async tap=> {
       try { await behavior(tap) }

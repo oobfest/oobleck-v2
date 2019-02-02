@@ -3,15 +3,24 @@ html(lang="en")
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1")
-    link(rel="shortcut icon" type="image/png" href="img/favicon.png")
-    link(href="css/charming-blue.css" rel="stylesheet")
-    link(href="css/custom.css" rel="stylesheet")
-    title Hello, world!
-  body
-    script(src="js/vue.js")
-    script(src="js/axios.js")
-    block content
-    script(src="js/jquery.js")
-    script(src="js/popper.js")
-    script(src="js/bootstrap.js")
-    script(src="js/charming.js")
+    link(href="/img/favicon.png" rel="shortcut icon" type="image/png" )
+    link(href="/css/charming-green.css" rel="stylesheet")
+    link(href="/css/custom.css" rel="stylesheet")
+    title Out of Bounds Comedy Festival #{ title ? '| ' + title : ''}
+    script(src="/js/vue.js")
+    script(src="/js/axios.js")
+    script(src="/js/jquery.js")
+    script(src="/js/popper.js")
+    script(src="/js/bootstrap.js")
+    script(src="/js/charming.js")
+  if user
+    body
+      .dash.dash-fixed
+        include _layout/navigation
+        #dash-app.dash-app
+          include _layout/toolbar
+          main
+            block content
+  else
+    body.dark-background
+      block content

@@ -4,8 +4,32 @@ body {
   font-family: 'Raleway', sans-serif; 
 }
 
-.dark-background { 
-  background-color: #242524;
+/* IDK why it isn't white already */
+.btn-secondary {
+  color: white;
+}
+.btn-secondary:hover {
+  color: white;
+}
+
+/* The official background color for OoB */
+.dash-nav-accent-2, .dash-toolbar-accent-2 { 
+  background-color: #211d1e;
+}
+.dark-background {
+  background: url('/img/audience-dark.jpg') no-repeat bottom center fixed;
+  background-size: cover;
+}
+
+#oobleck-logo {
+  height: 72px;
+}
+
+.submission-logo {
+  width: 100%;
+  height: auto;
+  max-width: 547px;
+  padding-top: 2em;
 }
 
 .box-head-accent-oob {
@@ -14,4 +38,19 @@ body {
   background-color: #34bc48;
   border-color: #239834;
   color: #fff;
+}
+
+/* Red stars after required fields */
+label.required-field:after {
+  content:" *";
+  color:red;
+}
+
+/* Make those nav icons bloop! */
+.dash-nav-item .far { 
+  margin-right: 5px; 
+  transition: all .2s ease-in-out; 
+}
+.dash-nav-item:hover .far { 
+  transform: scale(1.25); 
 }

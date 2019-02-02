@@ -1,0 +1,27 @@
+nav#dash-nav.dash-nav.dash-nav-accent-2
+	header
+		.dash-nav-logo.text-center.w-100
+			img#oobleck-logo(src="/img/oob-logo-fire.jpg")
+			//a.dash-nav-logo-link(href="#") OoBleck
+		a.dash-nav-toggler
+			span.dash-nav-toggler-icon
+
+	link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/regular.css" integrity="sha384-avJt9MoJH2rB4PKRsJRHZv7yiFZn8LrnXuzvmZoD3fh1aL6aM6s0BBcnCvBe6XSD" crossorigin="anonymous")
+	link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/fontawesome.css" integrity="sha384-ozJwkrqb90Oa3ZNb+yKFW2lToAWYdTiF1vt8JiH5ptTGHTGcN7qdoR1F95e0kYyG" crossorigin="anonymous")
+
+	.dash-nav-list
+		- var isAdmin = user.roles.includes('admin')
+		- var isStaff = user.roles.includes('staff')
+		- var isPanelist = user.roles.includes('panelist') 
+		- var isStandupPanelist  = user.roles.includes('standup-panelist')
+
+		if isStaff || isAdmin
+			a.dash-nav-item(href="/screener-submissions")
+				span.far.fa-file.fa-lg.fa-fw.fa-bounce &nbsp;
+				|  Screener Submissions
+
+		if isAdmin
+			hr.dash-nav-divider
+			a.dash-nav-item(href="/users")
+				span.far.fa-id-card.fa-lg.fa-fw &nbsp;
+				|  Users
