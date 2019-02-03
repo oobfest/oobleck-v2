@@ -13,9 +13,16 @@ module.exports = {
     let email = {
       to: recipient,
       from: 'no-reply@oobfest.com',
-      subject: "[oob] " + subject,
+      subject: "[OoB] " + subject,
       html: htmlContent
     }
-    return transporter.sendMail(email)
+    return transporter
+      .sendMail(email)
+      .then((email)=> {
+        console.log("Email sent 💌", email.envelope)
+      })
+      .catch((error)=> {
+        console.log("Email error 💔", error)
+      })
   }
 }

@@ -1,7 +1,6 @@
 let express = require('express')
 let router = express.Router()
 
-
 router.get('/screener-submissions/apply', (request, response)=> {
   response.render('screeners/submissions/apply')
 })

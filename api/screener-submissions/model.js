@@ -2,7 +2,7 @@ let mongoose = require('mongoose')
 let schema = require('./schema')
 let createModel = require('../create-model')
 let nodemailer = require('../../utilities/nodemailer')
-let mongooseModel = mongoose.model('ScreenerSubmission', schema)
+let mongooseModel = mongoose.model('screener-submission', schema)
 
 let sendEmail = function(submission) {
   let emailContent = "<h1>New Screener Submission</h1><br>"

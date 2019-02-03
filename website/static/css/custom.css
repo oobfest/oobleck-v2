@@ -4,6 +4,14 @@ body {
   font-family: 'Raleway', sans-serif; 
 }
 
+a {
+  color: #13818d
+}
+
+a:hover {
+  color: #145962;
+}
+
 /* IDK why it isn't white already */
 .btn-secondary {
   color: white;

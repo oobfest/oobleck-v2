@@ -1,0 +1,64 @@
+// Issues: 
+// - How to generate "Performer" with overlapping submissions?
+// - What if one performer submits multiple shows? 
+
+
+Show Schema
+  venue: String,
+  start: Date,
+  end: Date,
+  capacity: Number,
+  price: Number,
+  slots: [slot schema]
+
+Slot Schema
+  type: {
+    type: String,
+    enum: ['regular', 'host', 'featured', 'headliner']
+  },
+  duration: Number, // (in minutes)
+  act: {
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: 'actModel'
+    required: true,
+  },
+  actModel: {
+    type: String,
+    enum: ['performer', 'troupe']
+    required: true,
+  }
+
+Performer Schema
+  name: String,
+  email: String,
+  image: String,
+  publicDescription: String,
+
+Troupe Schema
+  name: String,
+  image: String,
+  publicDescription: String,
+  performers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'performer'
+  ]}
+
+Submission Schema
+  name: { type: String, required: true },
+  performanceTitle: String
+  type: {
+    type: [String],
+    enum: [
+      'improv',
+      'sketch',
+      'stand-up', 
+      'podcast', 
+      'teacher', 
+      'musical',
+      'one-person-show',
+      'variety-show',
+      'other'
+    ]
+  },
+  privateDescription: String,
+

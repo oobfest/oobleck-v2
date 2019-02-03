@@ -2,29 +2,36 @@ let mongoose = require('mongoose')
 let schema = require('./schema')
 let createModel = require('../create-model')
 
-let mongooseModel = mongoose.model('User', schema)
+let mongooseModel = mongoose.model('user', schema)
 
 let overrides = {
   
   create(user) {
-    return new Promise((resolve, reject)=> {
+    if(user.password) {
       let userModel = new mongooseModel(user)
-      mongooseModel.register(userModel, user.password, (error, user)=> {
-        if(error) reject(error)
-        else resolve(user)
+      userModel.isPasswordSet = true
+      return new Promise((resolve, reject)=> {
+        mongooseModel.register(userModel, user.password, (error, user)=> {
+          if(error) reject(error)
+          else resolve(user)
+        })        
       })
-    })
+    }
+    else {
+      user.isPasswordSet = false
+      return mongooseModel.create(user)
+    }
   }, 
 
-  setPassword(objectId, password) {
+  setPassword(id, password) {
     return new Promise((resolve, reject)=> {
-      mongooseModel.get(objectId, (error, user)=> {
+      mongooseModel.findById(id, (error, user)=> {
         if(error) reject(error)
         if(user == null) reject(Error("User not found"))
         user.setPassword(password, (error)=> {
           if(error) reject(error)
           user.isPasswordSet = true
-          mongooseModel.save(user, (error, savedUser)=> {
+          user.save(user, (error, savedUser)=> {
             if(error) reject(error)
             else resolve(savedUser)
           })
@@ -33,14 +40,14 @@ let overrides = {
     })
   },
 
-  changePassword(objectId, oldPassword, newPassword) {
+  changePassword(id, oldPassword, newPassword) {
     return new Promise((resolve, reject)=> {
-      mongooseModel.get(objectId, (error, user)=> {
+      mongooseModel.findById(id, (error, user)=> {
         if(error) reject(error)
         if(user == null) reject(Error("User not found"))
         user.changePassword(oldPassword, newPassword, (error)=> {
           if(error) reject(error)
-          mongooseModel.save(user, (error, savedUser)=> {
+          user.save(user, (error, savedUser)=> {
             if(error) reject(error)
             else resolve(savedUser)
           })

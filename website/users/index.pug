@@ -14,19 +14,26 @@ block content
             th Email
             th Password Set
             th Roles
+            th
         tbody
           tr(v-for="user in users")
             td {{user.username}}
             td {{user.email}}
-            td {{user.isPasswordSet}}
+            td 
+              span(v-if="user.isPasswordSet") 
+                a(href="#" @click="changePassword(user._id)") Yes
+              span(v-else) 
+                a(href="#" @click="setPassword(user._id)") No
             td {{user.roles.join(", ")}}
+            td
+              button.btn.btn-xs.btn-danger(@click="remove(user.username, user._id)") Delete
 
     include _modal
 
   script.
     let vue = new Vue({
       el: "#app",
-      data: {
+      data() { return {
         users: [],
         newUser: {
           username: "",
@@ -34,9 +41,43 @@ block content
           email: "",
           roles: []
         }
-      },
+      }},
       methods: {
-        createUser() {
+        setPassword(id) {
+          let password = prompt("Password?")
+          axios.post('/api/users/password', {id, password})
+            .then((response)=> {
+              console.log(response)
+            })
+            .catch((error)=> {
+              console.log(error)
+            })
+        },
+        changePassword(id) {
+          let oldPassword = prompt("Current password?")
+          let newPassword = prompt("New password?")
+          axios.put('/api/users/password', {id, oldPassword, newPassword})
+            .then((response)=> {
+              console.log(response)
+            })
+            .catch((error)=> {
+              console.log(error)
+            })        
+        },
+        remove(username, id) {
+          if(confirm(`Delete ${username}?`)) {
+            axios
+              .delete('api/users/' + id)
+              .then((response)=> {
+                let index = this.users.findIndex(u=> u._id == id)
+                this.users.splice(index, 1)
+              })
+              .catch((error)=> {
+                console.log(error)
+              })          
+          }
+        },
+        create() {
           let self = this
           axios
             .post('/api/users', self.newUser)
