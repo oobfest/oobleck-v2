@@ -1,16 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:400,600');
-
-body { 
-  font-family: 'Raleway', sans-serif; 
-}
-
-a {
-  color: #13818d
-}
-
-a:hover {
-  color: #145962;
-}
+body { font-family: 'Raleway', sans-serif }
+p { white-space: pre-line }
+a { color: #13818d }
+a:hover { color: #145962 }
 
 /* IDK why it isn't white already */
 .btn-secondary {
