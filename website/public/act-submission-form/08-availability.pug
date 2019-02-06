@@ -1,0 +1,31 @@
+.box-block.box-bt
+  h3 Availability
+  p.help-text Which days of the festival are you able to attend? Availability beyond Friday &amp; Saturday will greatly increase your chances of being accepted into the festival.
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-tuesday.custom-control-input(type="checkbox" value="tuesday" name="available[]" v-model="submission.availability")
+      label.custom-control-label(for="available-tuesday") Tuesday, August 27th
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-wednesday.custom-control-input(type="checkbox" value="wednesday" name="available[]" v-model="submission.availability")
+      label.custom-control-label(for="available-wednesday") Wednesday, August 28th
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-thursday.custom-control-input(type="checkbox" value="thursday" name="available[]" v-model="submission.availability")
+      label.custom-control-label(for="available-thursday") Thursday, August 29th
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-friday.custom-control-input(type="checkbox" value="friday" name="available[]" v-model="submission.availability")
+      label.custom-control-label(for="available-friday") Friday, August 30th
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-saturday.custom-control-input(type="checkbox" value="saturday" name="available[]" v-model="submission.availability")
+      label.custom-control-label(for="available-saturday") Saturday, August 31st
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-sunday.custom-control-input(type="checkbox" value="sunday" name="available[]" v-model="submission.availability")
+      label.custom-control-label(for="available-sunday") Sunday, September 1st
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-monday.custom-control-input(type="checkbox" value="monday" name="available[]" v-model="submission.availability")
+      label.custom-control-label(for="available-monday") Monday, September 2nd

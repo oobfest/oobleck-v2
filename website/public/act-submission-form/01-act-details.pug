@@ -1,0 +1,53 @@
+.box-block.box-bt
+  h3.mb-4 Act Details
+  .form-group
+    label.col-form-label.required-field(for="act-name") Group or Performer Name
+    input#act-name.form-control(type="text" required autofocus name="act-name" maxlength="280" v-model="submission.name")
+  .form-group
+    label.col-form-label(for="show-title") Show Title 
+    small.form-text.text-muted Only fill this out if your show title should be different from your group or performer name.
+    input#show-title.form-control(type="text" required autofocus name="show-title" maxlength="280" v-model="submission.showTitle")
+  .form-group
+    label.col-form-label.required-field(for="show-type") Show Type
+    small.form-text.text-muted Select all that apply
+    .form-check
+      input#improv-checkbox.form-check-input(type="checkbox" value="improv" v-model="submission.showType")
+      label.form-check-label(for="improv-checkbox") Improv
+    .form-check
+      input#sketch-checkbox.form-check-input(type="checkbox" value="sketch" v-model="submission.showType")
+      label.form-check-label(for="sketch-checkbox") Sketch
+    .form-check
+      input#stand-up-checkbox.form-check-input(type="checkbox" value="standup" v-model="submission.showType")
+      label.form-check-label(for="stand-up-checkbox") Standup
+    .form-check
+      input#podcast-checkbox.form-check-input(type="checkbox" value="podcast" v-model="submission.showType")
+      label.form-check-label(for="podcast-checkbox") Podcast
+    .form-check
+      input#teacher-checkbox.form-check-input(type="checkbox" value="teacher" v-model="submission.showType")
+      label.form-check-label(for="teacher-checkbox") Teacher
+    .form-check
+      input#musical-checkbox.form-check-input(type="checkbox" value="musical" v-model="submission.showType")
+      label.form-check-label(for="musical-checkbox") Musical
+    .form-check
+      input#one-person-show-checkbox.form-check-input(type="checkbox" value="one-person-show" v-model="submission.showType")
+      label.form-check-label(for="one-person-show-checkbox") One-person Show
+    .form-check
+      input#variety-checkbox.form-check-input(type="checkbox" value="variety" v-model="submission.showType")
+      label.form-check-label(for="variety-checkbox") Hosted Variety or Panel Show
+    .form-check
+      input#other-checkbox.form-check-input(type="checkbox" value="other" v-model="submission.showType")
+      label.form-check-label(for="other-checkbox") Other
+  .form-group
+    label.col-form-label.required-field(for="informal-description") Describe Your Act to Us
+    small.form-text.text-muted This is meant to persuade reviewers and won't be visible to the public. What makes your act special?
+    textarea#informal-description.form-control(maxlength="1500" name="informal-description" required v-model="submission.privateDescription")
+  .form-group
+    label.col-form-label.required-field(for="public-description") Describe Your Act to the Public
+    small.form-text.text-muted Accepted acts will have this content published on our website and programs. Use third person active voice, e.g. "Miller &amp; Lies is..." 
+      a(tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Miller & Lies is a comedy duo that performs a single story with awkward, emotionally vulnerable oddball characters. They've been doing improv together for ten years. Come hang with them and feel your feelings." style="cursor:pointer") See an example
+      | .
+    textarea#public-description.form-control(maxlength="1400" name="public-description" required v-model="submission.publicDescription")
+  .form-group
+    label.col-form-label(for="accolades") Festival Apperances, Awards and Reviews
+    small.form-text.text-muted List any previous festival appearances, awards you've won, and any additional press materials (quotes, links to reviews, etc)
+    textarea#accolades.form-control(maxlength="1400" name="accolades" v-model="submission.accolades")

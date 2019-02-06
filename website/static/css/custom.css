@@ -3,6 +3,8 @@ body { font-family: 'Raleway', sans-serif }
 p { white-space: pre-line }
 a { color: #13818d }
 a:hover { color: #145962 }
+a.btn { color: white !important; }
+h5 { font-size: 1rem }
 
 /* IDK why it isn't white already */
 .btn-secondary {
@@ -54,3 +56,4 @@ label.required-field:after {
 .dash-nav-item:hover .far { 
   transform: scale(1.25); 
 }
+

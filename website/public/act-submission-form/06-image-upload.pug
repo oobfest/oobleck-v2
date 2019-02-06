@@ -1,0 +1,32 @@
+.box-block.box-bt
+  h3 Image Upload
+  p Accepted acts will have their submitted photo used for the festival website, trading cards and programs. 
+  h4 Image Criteria
+  ul
+    li At least ???dpi
+    li File size under 10MB
+    li Vertical or square, not horizontal
+    li No text
+
+  input#image-url(type="hidden" name="image-url" v-model="submission.image.url")
+  input#delete-image-url(type="hidden" name="delete-image-url" v-model="submission.image.deleteUrl")
+  
+  .custom-file(v-show="!submission.image.processed")
+    input#image-upload-input.custom-file-input(type="file" accept="image/*" @change="imageUpload")
+    label.custom-file-label.reqiured-field(for="file-input") Select Image
+  
+  p.form-text
+    em Image hosting powered by 
+      a(href="https://imgur.com/" target="_blank") Imgur
+      | .
+
+  .progress-block(v-show="!submission.image.processed")
+    .progress(v-show="submission.image.progress > 0")
+      .progress-bar.bg-primary(:style="{width: submission.image.progress + '%'}")
+    p(v-show="submission.image.progress == 100") Waiting for response from Imgur...
+
+  .box-banner(v-show="submission.image.processed")
+    img#image-preview.box-banner-image(:src="submission.image.url" alt="Image preview")
+
+  p.text-right.mt-2(v-show="submission.image.processed")
+    a.btn.btn-danger(:href="submission.image.deleteUrl" target="_blank" @click="removeImage") Delete

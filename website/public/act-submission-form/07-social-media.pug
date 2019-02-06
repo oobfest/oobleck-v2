@@ -1,0 +1,22 @@
+.box-block.box-bt
+  h3 Social Media
+  p Accepted acts will have their social media links listed on the festival website.
+  .social-media-item(v-for="socialMedia of submission.socialMedia" v-bind:key="socialMedia.id")
+    .form-group
+      .input-group
+        select.custom-select(name="social-media-type[]" v-model="socialMedia.type")
+          option Website
+          option Twitter
+          option Facebook
+          option YouTube
+          option Instagram
+          option Snapchat
+          option Other
+        //.input-group-append(v-show="socialMedia.type != 'Other' && socialMedia.type != 'Snapchat'")
+          span.input-group-text {{ socialMedia.type | formatSocialMediaUrl }}
+        input.form-control(:placeholder="socialMedia.type == 'Website' ? 'URL' : 'Username'" type="text" name="social-media-url[]" maxlength="280")
+    .form-group.text-right
+      button.btn.btn-danger(type="button" @click="removeSocialMedia(socialMedia.id)") Remove {{socialMedia.id}}
+    hr
+  .form-group
+    button.btn.btn-secondary(type="button" @click="addSocialMedia") Add Social Media

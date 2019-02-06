@@ -1,0 +1,19 @@
+.box-block.box-bt
+  h3 Primary Location
+  .form-group
+    include primary-location/countries-dropdown
+  .form-group(v-if="submission.country == 'US'")
+    include primary-location/states-dropdown
+  .form-group(v-else)
+    label.col-form-label.required-field(for="province") State / Territory / Province
+    input#province.form-control(type="text" name="province" required maxlength="280" v-model="submission.state")    
+  .form-group
+    label.col-form-label.required-field(for="city") City
+    input#city.form-control(type="text" name="city" required maxlength="280" v-model="submission.city")
+  //.form-group
+    label.col-form-label(for="other-locations") Other Locations
+    input#other-locations.form-control(type="text" name="other-locations")
+  .form-group
+    label.col-form-label(for="home-theater") What venue, theater or club are you associated with?
+    small.form-text.text-muted Leave blank if not applicable. Please do not write a short story about how and why no one place truly represents you.
+    input#home-theater.form-control(type="text" name="home-theater" maxlength="280" v-model="submission.home")

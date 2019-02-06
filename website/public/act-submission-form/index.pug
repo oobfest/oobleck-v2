@@ -1,0 +1,146 @@
+extends ../../../_layout
+block content
+  .text-center
+    img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    h1.p-3.text-light.font-weight-bold 2019 Application
+  #app.container-fluid
+    .row
+      .col-md-8.mx-auto.pb-5
+        .box-head.box-head-accent-oob
+        div(v-show="submitted==false")
+          .box-block(v-show="validationErrors.length > 0")
+            .alert.alert-danger
+              h4.alert-heading Errors
+              ul
+                  li(v-for="validationError in validationErrors") {{validationError}}
+
+          include 00-welcome
+          //include 01-act-details
+          //include 02-primary-location
+          //include 03-contact-information
+          //include 04-performance-requirements
+          //include 05-video-link
+          //include 06-image-upload
+          //include 07-social-media
+          //include 08-availability
+          //include 09-travel-agreement
+          include 10-fee
+
+  script.
+
+    let app = new Vue({
+      el: "#app",
+      data() { return {
+        key: 0,
+        uploadState: 0,
+        submitted: false,
+        validationErrors: [],
+        junk: 0,
+        submission: {
+          name: "",
+          showTitle: "",
+          showType: [],
+          privateDescription: "",
+          publicDescription: "",
+          accolades: "",
+          country: 'US',
+          state: "TX",
+          city: "",
+          home: "",
+          contact: {
+            name: "",
+            email: "",
+            phone: "",
+            role: "Performer",
+            attending: true,
+          },
+          minimumLength: 5,
+          maximumLength: 60,
+          specialRequirements: "",
+          messy: false,
+          videoUrls: ['', '', ''],
+          videoInfo: "",
+          image: {
+            processed: false,
+            progress: 0,
+            id: null,
+            url: null,
+            deleteUrl: null
+          },
+          socialMedia: [],
+          availability: [],
+          travelAgreement: null
+        }
+      }},
+      computed: {
+        isStandup() {
+          return this.submission.showType.includes('standup')
+        }
+      },
+      filters: {
+        formatSocialMediaUrl(socialMediaType) {
+          switch(socialMediaType) {
+            case 'Website': return 'https://'
+            case 'Twitter': return 'https://twitter.com/'
+            case 'YouTube': return 'https://www.youtube.com/user/'
+            case 'Instagram': return 'https://www.instagram.com/'
+            case 'Facebook': return 'https://facebook.com/'
+            case 'Other': return null
+          }
+        }
+      },
+      methods: {
+        addSocialMedia() {
+          this.submission.socialMedia.push({
+            id: this.key++,
+            type: "Website",
+            username: ""
+          })
+        },
+        removeSocialMedia(id) {
+          let index = this.submission.socialMedia.map(sm=> sm.id).indexOf(id)
+          Vue.delete(this.submission.socialMedia, index)
+        },
+        removeImage() {
+          this.submission.image.processed = false
+          this.submission.image.progress = 0
+          this.submission.image.id = null
+          this.submission.image.url = null
+          this.submission.image.deleteUrl = null
+        },
+        uploadProgress(event) {
+          if (event.lengthComputable) {
+            this.submission.image.progress = parseInt((event.loaded / event.total) * 100)
+          }
+        },
+        imageUpload(event) {
+          let image = event.target.files[0]
+          if(image.size > (1024 * 1000 * 10)) {
+            alert("Image cannot be larger than 10MB")
+          }
+          else {
+            formData = new FormData()
+            formData.append('image', image)
+            let url = 'https://imgur-apiv3.p.mashape.com/3/image'
+            let onUploadProgress = this.uploadProgress
+            let headers = {
+              'X-mashape-Key': 'MeRL1vcC70mshcx4yVw7R4jv88gnp11IPvPjsn4GKcdklk5FiE',
+              'Authorization': 'Client-ID c60e83c906306c5'
+            }
+            let self = this
+            axios.post(url, formData, { onUploadProgress, headers })
+              .then(function (response) {
+                let data = response.data.data  // lol
+                self.submission.image.deleteUrl = 'https://imgur.com/delete/' + data.deletehash
+                self.submission.image.id = data.id
+                self.submission.image.url = data.link
+                self.submission.image.processed = true
+              })
+              .catch(function (error) {
+                alert("Image upload failed 😭")
+                console.log(error)
+              })
+          }
+        }
+      }
+    })

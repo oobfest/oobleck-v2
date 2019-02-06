@@ -1,0 +1,8 @@
+.box-block.box-bt
+  h3 Travel Agreement
+  .form-group
+    p.required-field If you are from out of town, we will need your travel information at least 30 days before the festival. Will you be able to provide this? Failure to do so can result in your act being pulled.
+    select#travel-agreement.form-control(name="travel-agreement" v-model="submission.travelAgreement")
+      option --
+      option Yes
+      option We're local!

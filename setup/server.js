@@ -29,11 +29,9 @@ module.exports = port=> {
   setupMorgan(app)
 
   let apiRouter = require('../api/router')
-  let websitePublicRouter = require('../website/public-router')
-  let websitePrivateRouter = require('../website/private-router')
+  let websiteRouter = require('../website/router')
   app.use('/api', apiRouter)
-  app.use('/', websitePublicRouter)
-  app.use('/', websitePrivateRouter)
+  app.use('/', websiteRouter)
 
   let connection = app.listen(port)
   return new Promise((resolve, reject)=> {
