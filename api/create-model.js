@@ -1,12 +1,3 @@
-/*
-
-  Create
-  GetAll
-  GetById
-  Update
-  Destroy
-
-*/
 
 module.exports = (mongooseModel, overrides = {}) => {
 
