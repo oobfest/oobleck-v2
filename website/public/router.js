@@ -2,7 +2,7 @@ let express = require('express')
 let router = express.Router()
 
 router.get('/apply', (request, response)=> {
-  response.render('act-submission-form')
+  response.render('public/act-submission-form')
 })
 
 router.get('/apply-screener', (request, response)=> {

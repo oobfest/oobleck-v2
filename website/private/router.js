@@ -1,19 +1,34 @@
 let express = require('express')
+let userModel = require('../../api/users/model')
 let router = express.Router()
 
 // Don't router.use(isLoggedIn), it will catch for pages that don't exist
-let isLoggedIn = require('is-logged-in')
+let isLoggedIn = require('./is-logged-in')
+
+router.get('/act-submissions', isLoggedIn, (request, response)=> {
+  response.render('private/act-submissions')
+})
 
 router.get('/screener-submissions', isLoggedIn, (request, response)=> {
-  response.render('screener-submissions')
+  response.render('private/screener-submissions')
 })
 
 router.get('/users', isLoggedIn, (request, response)=> {
-  response.render('users')
+  response.render('private/users')
+})
+
+router.get('/users/:id', isLoggedIn, async (request, response, next)=> {
+  try {
+    let account = await userModel.read(request.params.id)
+    response.render('private/users/account', { account })
+  }
+  catch(error) {
+    next(error)
+  }
 })
 
 router.get(['/submissions'], isLoggedIn, (request, response)=> {
-  response.render('stub')
+  response.render('private/stub')
 })
 
 module.exports = router

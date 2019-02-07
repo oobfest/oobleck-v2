@@ -16,6 +16,9 @@ nav#dash-nav.dash-nav.dash-nav-accent-2
 		- var isStandupPanelist  = user.roles.includes('standup-panelist')
 
 		if isStaff || isAdmin
+			a.dash-nav-item(href="/act-submissions")
+				span.far.fa-file.fa-lg.fa-fw.fa-bounce &nbsp;
+				|  Act Submissions
 			a.dash-nav-item(href="/screener-submissions")
 				span.far.fa-file.fa-lg.fa-fw.fa-bounce &nbsp;
 				|  Screener Submissions

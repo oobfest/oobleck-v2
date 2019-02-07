@@ -1,4 +1,4 @@
-extends ../_layout
+extends ../../_layout
 block content
   header.dash-titlebar
     .mb-md-0.mb-3
@@ -17,7 +17,8 @@ block content
             th
         tbody
           tr(v-for="user in users")
-            td {{user.username}}
+            td 
+              a(:href="'users/' + user._id") {{user.username}}
             td {{user.email}}
             td 
               span(v-if="user.isPasswordSet") 

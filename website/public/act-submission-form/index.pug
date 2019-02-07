@@ -1,4 +1,4 @@
-extends ../../../_layout
+extends ../../_layout
 block content
   .text-center
     img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
@@ -10,22 +10,25 @@ block content
         div(v-show="submitted==false")
           .box-block(v-show="validationErrors.length > 0")
             .alert.alert-danger
-              h4.alert-heading Errors
+              h4#errors.alert-heading Errors
               ul
                   li(v-for="validationError in validationErrors") {{validationError}}
 
           include 00-welcome
-          //include 01-act-details
-          //include 02-primary-location
-          //include 03-contact-information
-          //include 04-performance-requirements
-          //include 05-video-link
-          //include 06-image-upload
-          //include 07-social-media
-          //include 08-availability
-          //include 09-travel-agreement
-          include 10-fee
-
+          include 01-act-details
+          include 02-primary-location
+          include 03-contact-information
+          include 04-performance-requirements
+          include 05-video-link
+          include 06-image-upload
+          include 07-social-media
+          include 08-availability
+          include 09-travel-agreement
+          //include 10-fee
+          include 11-submit
+        div(v-show="submitted")
+          p Thank you for applying! A confirmation email has been sent to 
+            code {{submission.contact.email}}
   script.
 
     let app = new Vue({
@@ -77,19 +80,42 @@ block content
           return this.submission.showType.includes('standup')
         }
       },
-      filters: {
-        formatSocialMediaUrl(socialMediaType) {
-          switch(socialMediaType) {
-            case 'Website': return 'https://'
-            case 'Twitter': return 'https://twitter.com/'
-            case 'YouTube': return 'https://www.youtube.com/user/'
-            case 'Instagram': return 'https://www.instagram.com/'
-            case 'Facebook': return 'https://facebook.com/'
-            case 'Other': return null
-          }
-        }
-      },
       methods: {
+        validate() {
+          let validationErrors = []
+          if(this.submission.name == '') validationErrors.push("Name is required")
+          if(this.submission.showType.length <= 0) validationErrors.push("Please select at least one show type")
+          if(this.submission.publicDescription == '') validationErrors.push("")
+          if(this.submission.privateDescription == '') validationErrors.push("")
+          if(this.submission.country == '') validationErrors.push("")
+          if(this.submission.state == '') validationErrors.push("")
+          if(this.submission.city == '') validationErrors.push("")
+          if(this.submission.messy == false) validationErrors.push("Can't be messy!")
+          if(this.submission.videoUrls.length <= 0) validationErrors.push("Video links are required")
+          if(this.submission.availability.length <= 0) validationErrors.push("Must be available for at least one day")
+          if(this.submission.travelAgreement == '') validationErrors.push("You must agree to our travel agreement")
+          return validationErrors
+        },
+        submit() {
+          let self = this
+          self.validationErrors = self.validate()
+          if(self.validationErrors.length == 0) {
+            axios
+              .post('/api/act-submissions', self.submission)
+              .then((response)=> {
+                self.submitted = true
+                console.log(response)
+              })
+              .then((error)=> {
+                console.log("ERROR")
+                console.log(error)
+              })
+          }
+          else {
+            let errorsElement = document.getElementById("errors")
+            errorsElement.scrollIntoView({behavior: "smooth"})
+          }
+        },
         addSocialMedia() {
           this.submission.socialMedia.push({
             id: this.key++,

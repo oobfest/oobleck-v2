@@ -1,0 +1,19 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title 
+        a(href="/users") Users
+        |  / Account
+
+  #app.dash-boxes.container-fluid
+      h3 Username
+      p=account.username
+
+      h3 Email
+      pre=account.email
+
+      h3 Roles
+      ul
+        for role in account.roles
+          li=role

@@ -3,6 +3,7 @@ html(lang="en")
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name="Content-Secruity-Policy" content="script-src *;")
     link(href="/img/favicon.png" rel="shortcut icon" type="image/png" )
     link(href="/css/charming-green.css" rel="stylesheet")
     link(href="/css/custom.css" rel="stylesheet")
@@ -16,9 +17,9 @@ html(lang="en")
   if user
     body
       .dash.dash-fixed
-        include _layout/navigation
+        include private/_layout/navigation
         #dash-app.dash-app
-          include _layout/toolbar
+          include private/_layout/toolbar
           main
             block content
   else

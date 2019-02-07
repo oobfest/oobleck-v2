@@ -17,7 +17,8 @@ let setupApp = async ()=> {
     else if (error.name == "MongoNetworkError") {
       console.error("MongoDB Connection Error")
     }
-    console.error("Error: ", error.name)
+    console.error("😵 Error")
+    console.error(`${error.name}: ${error.message}`)
     console.error("Exiting")
   }
 }

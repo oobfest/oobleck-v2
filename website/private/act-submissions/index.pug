@@ -2,8 +2,8 @@ extends ../../_layout
 block content
   header.dash-titlebar
     .mb-md-0.mb-3
-      span.dash-titlebar-title Screener Submissions
-    a.btn.btn-primary.ml-md-auto(href="/screener-submissions/apply") Apply
+      span.dash-titlebar-title Act Submissions
+    a.btn.btn-primary.ml-md-auto(href="/apply") Apply
 
   #app.dash-boxes.container-fluid
     .box.box-b
@@ -11,10 +11,7 @@ block content
         thead
           tr
             th Name
-            th Email
-            th Phone
-            th Location
-            th Primary Venue
+            th City
         tbody(is="submission-row" v-for="(submission, index) in submissions" v-bind:submission="submission" v-bind:key="index" @removed="remove")
   
   script#submission-row-template(type="text/x-template")
@@ -22,22 +19,11 @@ block content
       tr
         td 
           a(href="#" @click="visible=!visible") {{submission.name}}
-        td {{submission.email}}
-        td {{submission.phone}}
-        td {{submission.city}}, {{submission.state}}
-        td {{submission.homeTheater}}
+        td {{submission.city}}
       tr(v-show="visible")
         td(colspan=5)
-          h4 Tell us about yourself
-          p {{submission.aboutYou}}
-          h4 Why do you think you'd be a good screener?
-          p {{submission.whyYou}}
-          h4 Conflicts
-          p {{submission.conflicts}}
-          h4 Previous Experience
-          p {{submission.previousExperience}}
-          p
-            a.text-danger(href="#" @click="remove(submission.name, submission._id)") Delete Screener Submission
+          p Hello, world!
+          button.btn.btn-danger(@click="remove(submission.name, submission._id)") Delete
 
   script.
 
@@ -51,7 +37,7 @@ block content
         remove(name, id) {
           let self = this
           if(confirm("Delete " + name + "?")) {
-            axios.delete('/api/screener-submissions/' + id)
+            axios.delete('/api/act-submissions/' + id)
               .then((response)=> {
                 self.visible = false
                 self.$emit('removed', id)
@@ -77,7 +63,7 @@ block content
       },
       created() {
         let self = this
-        axios.get('/api/screener-submissions')
+        axios.get('/api/act-submissions')
           .then((response)=> {
             self.submissions = response.data
           })

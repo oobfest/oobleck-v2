@@ -7,7 +7,7 @@ router.get('/', (request, response)=> {
 })
 
 router.get('/login', (request, response)=> {
-  response.render('login')
+  response.render('public/login')
 })
 
 router.post('/login', (request, response, next)=> {

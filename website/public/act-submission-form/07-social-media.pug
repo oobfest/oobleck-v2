@@ -14,9 +14,9 @@
           option Other
         //.input-group-append(v-show="socialMedia.type != 'Other' && socialMedia.type != 'Snapchat'")
           span.input-group-text {{ socialMedia.type | formatSocialMediaUrl }}
-        input.form-control(:placeholder="socialMedia.type == 'Website' ? 'URL' : 'Username'" type="text" name="social-media-url[]" maxlength="280")
+        input.form-control(:placeholder="socialMedia.type == 'Website' || socialMedia.type == 'Other' ? 'URL' : 'Username'" type="text" name="social-media-url[]" maxlength="280")
     .form-group.text-right
-      button.btn.btn-danger(type="button" @click="removeSocialMedia(socialMedia.id)") Remove {{socialMedia.id}}
+      button.btn.btn-danger(type="button" @click="removeSocialMedia(socialMedia.id)") Remove
     hr
   .form-group
     button.btn.btn-secondary(type="button" @click="addSocialMedia") Add Social Media
