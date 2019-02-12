@@ -23,7 +23,8 @@ block content
       tr(v-show="visible")
         td(colspan=5)
           p Hello, world!
-          button.btn.btn-danger(@click="remove(submission.name, submission._id)") Delete
+          p
+            a.text-danger(href="#" @click="remove(submission.name, submission._id)") Delete Act Submission
 
   script.
 

@@ -27,8 +27,10 @@ block content
           //include 10-fee
           include 11-submit
         div(v-show="submitted")
-          p Thank you for applying! A confirmation email has been sent to 
-            code {{submission.contact.email}}
+          .box-block
+            h3 Thank you for applying! 
+            p A confirmation email has been sent to 
+              code {{submission.contact.email}}
   script.
 
     let app = new Vue({
@@ -39,6 +41,7 @@ block content
         submitted: false,
         validationErrors: [],
         junk: 0,
+        musicianRequired: false,
         submission: {
           name: "",
           showTitle: "",
@@ -60,7 +63,8 @@ block content
           minimumLength: 5,
           maximumLength: 60,
           specialRequirements: "",
-          messy: false,
+          musicianNeeds: "",
+          notMessy: false,
           videoUrls: ['', '', ''],
           videoInfo: "",
           image: {
@@ -85,15 +89,18 @@ block content
           let validationErrors = []
           if(this.submission.name == '') validationErrors.push("Name is required")
           if(this.submission.showType.length <= 0) validationErrors.push("Please select at least one show type")
-          if(this.submission.publicDescription == '') validationErrors.push("")
-          if(this.submission.privateDescription == '') validationErrors.push("")
-          if(this.submission.country == '') validationErrors.push("")
-          if(this.submission.state == '') validationErrors.push("")
-          if(this.submission.city == '') validationErrors.push("")
-          if(this.submission.messy == false) validationErrors.push("Can't be messy!")
+          if(this.submission.publicDescription == '') validationErrors.push("Public description is required")
+          if(this.submission.privateDescription == '') validationErrors.push("Private description is required")
+          if(this.submission.country == '') validationErrors.push("Country is required")
+          if(this.submission.state == '') validationErrors.push("State is required")
+          if(this.submission.city == '') validationErrors.push("City is required")
+          if(this.submission.notMessy == false) validationErrors.push("Your act cannot make a mess at Out of Bounds")
           if(this.submission.videoUrls.length <= 0) validationErrors.push("Video links are required")
           if(this.submission.availability.length <= 0) validationErrors.push("Must be available for at least one day")
           if(this.submission.travelAgreement == '') validationErrors.push("You must agree to our travel agreement")
+          
+          // Validate image
+
           return validationErrors
         },
         submit() {
@@ -106,7 +113,7 @@ block content
                 self.submitted = true
                 console.log(response)
               })
-              .then((error)=> {
+              .catch((error)=> {
                 console.log("ERROR")
                 console.log(error)
               })

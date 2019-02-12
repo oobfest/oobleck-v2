@@ -127,7 +127,7 @@ let SubmissionSchema = mongoose.Schema({
     required: false,
     type: String
   },
-  messy: {
+  notMessy: {
     required: true,
     type: Boolean
   },
