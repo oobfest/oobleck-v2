@@ -6,7 +6,7 @@ router.get('/apply', (request, response)=> {
 })
 
 router.get('/apply-screener', (request, response)=> {
-  response.render('screener-submission-form')
+  response.render('public/screener-submission-form')
 })
 
 // Login and Logout pages
