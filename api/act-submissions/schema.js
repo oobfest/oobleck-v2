@@ -141,7 +141,7 @@ let SubmissionSchema = mongoose.Schema({
   },
   image: {
     required:true,
-    type: {}//ImageSchema
+    type: ImageSchema
   },
   socialMedia: [],
   availability: {

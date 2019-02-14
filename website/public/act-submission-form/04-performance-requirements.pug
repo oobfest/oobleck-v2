@@ -6,7 +6,7 @@
     .row
       .col-4
         .input-group
-          input#minimum-show-length.form-control(type="number" min="0" max="2400" name="minimum-show-length" value=5 v-model.number="submission.minimumLength")
+          input#minimum-show-length.form-control(type="number" min="0" max="1440" name="minimum-show-length" value=5 v-model.number="submission.minimumLength")
           .input-group-append
             span.input-group-text minutes
 
@@ -15,7 +15,7 @@
     .row
       .col-4
         .input-group
-          input#maximum-show-length.form-control(type="number" min="0" max="2400" name="maximum-show-length" value=60 v-model.number="submission.maximumLength")
+          input#maximum-show-length.form-control(type="number" min="0" max="1440" name="maximum-show-length" value=60 v-model.number="submission.maximumLength")
           .input-group-append
             span.input-group-text minutes
   div(v-if="!isStandup")

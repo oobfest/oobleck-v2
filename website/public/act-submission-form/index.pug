@@ -133,7 +133,10 @@ block content
           if(this.submission.contact.phone == '') validationErrors.push("Submission contact phone is required")
 
           if(this.submission.minimumLength < 0) validationErrors.push("Minimum set length must be greater than zero")
+          if(this.submission.maximumLength < 0) validationErrors.push("Maximum set length must be greater than zero")
+          if(this.submission.minimumLength > 1440) validationErrors.push("Minimum set length can't be more than 24 hours")
           if(this.submission.maximumLength > 1440) validationErrors.push("Maximum set length can't be more than 24 hours")
+          if(this.submission.minimumLength > this.submission.maximumLength) validationErrors.push("Maximum set length can't be less than minimum set length")
           if(this.submission.notMessy == false) validationErrors.push("Under 'Performance Requirements' you must agree not to have a show with food or liquid")
           if(this.submission.videoUrls[0] == '') validationErrors.push("At least one URL to a submission video is required")
 

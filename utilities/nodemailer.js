@@ -1,5 +1,6 @@
 let nodemailer = require('nodemailer')
 let aws = require('aws-sdk')
+let emailLogger = require('./email-logger')
 
 // Be sure to include AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY & AWS_REGION
 // And `require('dotenv').config()`
@@ -18,11 +19,13 @@ module.exports = {
     }
     return transporter
       .sendMail(email)
-      .then((email)=> {
-        console.log("Email sent 💌", email.envelope)
+      .then((response)=> {
+        emailLogger.info(`Email sent 💌 "${email.subject}"`)
+        emailLogger.info(`From ${response.envelope.from} to ${response.envelope.to}`)
       })
       .catch((error)=> {
-        console.log("Email error 💔", error)
+        emailLogger.error("Email error 💔")
+        emailLogger.error(JSON.stringify(error))
       })
   }
 }
