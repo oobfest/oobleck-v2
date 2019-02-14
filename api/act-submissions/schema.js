@@ -94,7 +94,7 @@ let SubmissionSchema = mongoose.Schema({
     type: String
   },
   state: {
-    required: true,
+    required: false,
     type: String
   },
   city: {

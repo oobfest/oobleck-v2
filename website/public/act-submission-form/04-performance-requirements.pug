@@ -28,11 +28,11 @@
     .custom-control.custom-checkbox
       input#no-food.custom-control-input(type="checkbox" value="true" name="no-food" v-model="submission.notMessy")
       label.custom-control-label(for="no-food") This show does not include food, liquid or anything else that will make a mess on stage.
-    .form-group
-      .custom-control.custom-checkbox
-        input#musician-required-checkbox.custom-control-input(type="checkbox" value="musician-required" v-model="musicianRequired")
-        label.custom-control-label(for="musician-required-checkbox") We require a musician and will not be bringing our own. 
-    .form-group(v-show="musicianRequired")
-      label.col-form-label(for="musician-needs") What are your musician needs? 
-      input#musician-needs.form-control(type="text" name="musician-needs" maxlength=1400 v-model="submission.musicianNeeds")
+  .form-group
+    .custom-control.custom-checkbox
+      input#musician-required-checkbox.custom-control-input(type="checkbox" value="musician-required" v-model="musicianRequired")
+      label.custom-control-label(for="musician-required-checkbox") We require a musician and will not be bringing our own. 
+  .form-group(v-show="musicianRequired")
+    label.col-form-label(for="musician-needs") What are your musician needs? 
+    input#musician-needs.form-control(type="text" name="musician-needs" maxlength=1400 v-model="submission.musicianNeeds")
 

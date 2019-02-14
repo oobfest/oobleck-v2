@@ -6,7 +6,7 @@
     include primary-location/states-dropdown
   .form-group(v-else)
     label.col-form-label(for="province") State / Territory / Province
-    input#province.form-control(type="text" name="province" required maxlength="280" v-model="submission.state")    
+    input#province.form-control(type="text" name="province" maxlength="280" v-model="submission.state")    
   .form-group
     label.col-form-label.required-field(for="city") City
     input#city.form-control(type="text" name="city" required maxlength="280" v-model="submission.city")

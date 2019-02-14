@@ -127,12 +127,20 @@ block content
           if(this.submission.publicDescription == '') validationErrors.push("'Describe Your Act To The Public' cannot be blank")
           if(this.submission.country == '') validationErrors.push("Country is required")
           if(this.submission.city == '') validationErrors.push("City is required")
+
+          if(this.submission.contact.name == '') validationErrors.push("Submission contact name is required")
+          if(this.submission.contact.email == '') validationErrors.push("Submission contact email is required")
+          if(this.submission.contact.phone == '') validationErrors.push("Submission contact phone is required")
+
+          if(this.submission.minimumLength < 0) validationErrors.push("Minimum set length must be greater than zero")
+          if(this.submission.maximumLength > 1440) validationErrors.push("Maximum set length can't be more than 24 hours")
           if(this.submission.notMessy == false) validationErrors.push("Under 'Performance Requirements' you must agree not to have a show with food or liquid")
-          if(this.submission.videoUrls[0] == '') validationErrors.push("A URL to a submission video is required")
-          if(this.submission.availability.length <= 0) validationErrors.push("Must be available for at least one day")
-          if(this.submission.travelAgreement == '') validationErrors.push("Under 'Availability' you have no days selected")
-          
-          // Validate image
+          if(this.submission.videoUrls[0] == '') validationErrors.push("At least one URL to a submission video is required")
+
+          if(this.submission.image.id == null) validationErrors.push("Submission must include uploaded image")
+
+          if(this.submission.availability.length <= 0) validationErrors.push("Under 'Availability' no days are selected")
+          if(this.submission.travelAgreement == '') validationErrors.push("A response to the travel agreement is required")
 
           return validationErrors
         },
