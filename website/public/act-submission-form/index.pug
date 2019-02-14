@@ -10,7 +10,7 @@ block content
         div(v-show="submitted==false")
           .box-block(v-show="validationErrors.length > 0")
             .alert.alert-danger
-              h4#errors.alert-heading Errors
+              h4#errors.alert-heading Required Fields Missing
               ul
                   li(v-for="validationError in validationErrors") {{validationError}}
 
@@ -32,6 +32,40 @@ block content
             p A confirmation email has been sent to 
               code {{submission.contact.email}}
   script.
+
+    let autofill = function() {
+      app.submission.name = "Auto Group"
+      app.submission.showTitle = "Auto show title"
+      app.submission.showType = ["improv", "musical"]
+      app.submission.privateDescription = "Auto private description"
+      app.submission.publicDescription = "Auto public description"
+      app.submission.accolades = "Auto accolades"
+      app.submission.country = "US"
+      app.submission.state = "TX"
+      app.submission.city = "Austin"
+      app.submission.home = "ColdZone"
+      app.submission.contact.name = "Dr. Example"
+      app.submission.contact.email = "example@example.com"
+      app.submission.contact.phone = "555-555-5555"
+      app.submission.contact.role = "Crew"
+      app.submission.contact.attending = true
+      app.submission.minimumLength = 12
+      app.submission.maximumLength = 34
+      app.submission.specialRequirements = "Auto special requirements"
+      app.musicianRequired = true
+      app.submission.musicianNeeds = "Auto musician needs"
+      app.submission.notMessy = true
+      app.submission.videoUrls = ['google.com', 'othergoogle.com', 'goople.com']
+      app.submission.videoInfo = "Auto video info"
+      app.submission.image.processed = true
+      app.submission.image.progress = 100
+      app.submission.image.id = "dicokAv"
+      app.submission.image.url = "https://i.imgur.com/dicokAv.png"
+      app.submission.image.deleteUrl = "https://imgur.com/delete/gd622m8PBfIk1tQ"
+      app.submission.socialMedia = []
+      app.submission.availability = ['monday', 'tuesday']
+      app.submission.travelAgreement = "Yes"
+    }
 
     let app = new Vue({
       el: "#app",
@@ -76,7 +110,7 @@ block content
           },
           socialMedia: [],
           availability: [],
-          travelAgreement: null
+          travelAgreement: ''
         }
       }},
       computed: {
@@ -87,17 +121,16 @@ block content
       methods: {
         validate() {
           let validationErrors = []
-          if(this.submission.name == '') validationErrors.push("Name is required")
+          if(this.submission.name == '') validationErrors.push("Group or performer name is required")
           if(this.submission.showType.length <= 0) validationErrors.push("Please select at least one show type")
-          if(this.submission.publicDescription == '') validationErrors.push("Public description is required")
-          if(this.submission.privateDescription == '') validationErrors.push("Private description is required")
+          if(this.submission.privateDescription == '') validationErrors.push("'Describe Your Act To Us' cannot be blank")
+          if(this.submission.publicDescription == '') validationErrors.push("'Describe Your Act To The Public' cannot be blank")
           if(this.submission.country == '') validationErrors.push("Country is required")
-          if(this.submission.state == '') validationErrors.push("State is required")
           if(this.submission.city == '') validationErrors.push("City is required")
-          if(this.submission.notMessy == false) validationErrors.push("Your act cannot make a mess at Out of Bounds")
-          if(this.submission.videoUrls.length <= 0) validationErrors.push("Video links are required")
+          if(this.submission.notMessy == false) validationErrors.push("Under 'Performance Requirements' you must agree not to have a show with food or liquid")
+          if(this.submission.videoUrls[0] == '') validationErrors.push("A URL to a submission video is required")
           if(this.submission.availability.length <= 0) validationErrors.push("Must be available for at least one day")
-          if(this.submission.travelAgreement == '') validationErrors.push("You must agree to our travel agreement")
+          if(this.submission.travelAgreement == '') validationErrors.push("Under 'Availability' you have no days selected")
           
           // Validate image
 
@@ -120,6 +153,7 @@ block content
           }
           else {
             let errorsElement = document.getElementById("errors")
+            window.scrollTo({top: 0})
             errorsElement.scrollIntoView({behavior: "smooth"})
           }
         },

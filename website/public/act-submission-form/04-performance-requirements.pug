@@ -24,10 +24,10 @@
     .form-group
       label.col-form-label(for="special-requirements") What are the essential requirements you'll need from us for your act? Examples include video projection, sound effects, props (that you can't bring yourself) furniture and equipment. Please be specific!
       textarea#special-requirements.form-control(maxlength="1500" name="special-requirements" rows=4 v-model="submission.specialRequirements")
-    .form-group
-      .custom-control.custom-checkbox
-        input#no-food.custom-control-input(type="checkbox" value="true" name="no-food" v-model="submission.notMessy")
-        label.custom-control-label(for="no-food") Our show does not include food, liquid or anything else that will create a mess on stage.
+  .form-group
+    .custom-control.custom-checkbox
+      input#no-food.custom-control-input(type="checkbox" value="true" name="no-food" v-model="submission.notMessy")
+      label.custom-control-label(for="no-food") This show does not include food, liquid or anything else that will make a mess on stage.
     .form-group
       .custom-control.custom-checkbox
         input#musician-required-checkbox.custom-control-input(type="checkbox" value="musician-required" v-model="musicianRequired")
