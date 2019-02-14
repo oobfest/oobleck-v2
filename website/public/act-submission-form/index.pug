@@ -17,15 +17,16 @@ block content
           include 00-welcome
           include 01-act-details
           include 02-primary-location
-          include 03-contact-information
-          include 04-performance-requirements
-          include 05-video-link
-          include 06-image-upload
-          include 07-social-media
-          include 08-availability
-          include 09-travel-agreement
-          //include 10-fee
-          include 11-submit
+          include 03-image-upload
+          include 04-contact-information
+          include 05-personnel
+          include 06-performance-requirements
+          include 07-video-link
+          include 08-social-media
+          include 09-availability
+          include 10-travel-agreement
+          //include 11-fee
+          include 12-submit
         div(v-show="submitted")
           .box-block
             h3 Thank you for applying! 
@@ -55,7 +56,7 @@ block content
       app.musicianRequired = true
       app.submission.musicianNeeds = "Auto musician needs"
       app.submission.notMessy = true
-      app.submission.videoUrls = ['google.com', 'othergoogle.com', 'goople.com']
+      app.submission.videoUrl = 'google.com'
       app.submission.videoInfo = "Auto video info"
       app.submission.image.processed = true
       app.submission.image.progress = 100
@@ -70,7 +71,10 @@ block content
     let app = new Vue({
       el: "#app",
       data() { return {
-        key: 0,
+        seeExample: false,
+        socialMediaKey: 0,
+        videoUrlKey: 0,
+        personnelKey: 0,
         uploadState: 0,
         submitted: false,
         validationErrors: [],
@@ -94,12 +98,14 @@ block content
             role: "Performer",
             attending: true,
           },
+          personnel: [],
           minimumLength: 5,
           maximumLength: 60,
           specialRequirements: "",
           musicianNeeds: "",
           notMessy: false,
-          videoUrls: ['', '', ''],
+          videoUrl: '',
+          extraVideoUrls: [],
           videoInfo: "",
           image: {
             processed: false,
@@ -131,6 +137,7 @@ block content
           if(this.submission.contact.name == '') validationErrors.push("Submission contact name is required")
           if(this.submission.contact.email == '') validationErrors.push("Submission contact email is required")
           if(this.submission.contact.phone == '') validationErrors.push("Submission contact phone is required")
+          if(this.submission.personnel.length <= 0) validationErrors.push("You must list everyone attending the festival under 'Cast & Crew'")
 
           if(this.submission.minimumLength < 0) validationErrors.push("Minimum set length must be greater than zero")
           if(this.submission.maximumLength < 0) validationErrors.push("Maximum set length must be greater than zero")
@@ -138,7 +145,7 @@ block content
           if(this.submission.maximumLength > 1440) validationErrors.push("Maximum set length can't be more than 24 hours")
           if(this.submission.minimumLength > this.submission.maximumLength) validationErrors.push("Maximum set length can't be less than minimum set length")
           if(this.submission.notMessy == false) validationErrors.push("Under 'Performance Requirements' you must agree not to have a show with food or liquid")
-          if(this.submission.videoUrls[0] == '') validationErrors.push("At least one URL to a submission video is required")
+          if(this.submission.videoUrl == '') validationErrors.push("At least one URL to a submission video is required")
 
           if(this.submission.image.id == null) validationErrors.push("Submission must include uploaded image")
 
@@ -168,16 +175,53 @@ block content
             errorsElement.scrollIntoView({behavior: "smooth"})
           }
         },
+        addPersonnel() {
+          this.submission.personnel.push({
+            id: this.personnelKey++,
+            name: "",
+            role: "Performer",
+            email: ""
+          })
+        },
+        removePersonnel(id) {
+          let index = this.submission.personnel.map(p=> p.id).indexOf(id)
+          Vue.delete(this.submission.personnel, index)
+        },
         addSocialMedia() {
           this.submission.socialMedia.push({
-            id: this.key++,
+            id: this.socialMediaKey++,
             type: "Website",
-            username: ""
+            url: "",
+            placeholder: "https://"
           })
+        },
+        updateSocialMedia(socialMedia) {
+          if(socialMedia.type == 'Website') socialMedia.placeholder = 'https://'
+          if(socialMedia.type == 'Twitter') socialMedia.placeholder = 'https://twitter.com/'
+          if(socialMedia.type == 'Facebook') socialMedia.placeholder = 'https://www.facebook.com/'
+          if(socialMedia.type == 'YouTube') socialMedia.placeholder = 'https://www.youtube.com/channel/'
+          if(socialMedia.type == 'Instagram') socialMedia.placeholder = 'https://www.instagram.com/'
+          if(socialMedia.type == 'Snapchat') socialMedia.placeholder = 'https://www.snapchat.com/add/'
+          if(socialMedia.type == 'Other') socialMedia.placeholder = 'https://'
         },
         removeSocialMedia(id) {
           let index = this.submission.socialMedia.map(sm=> sm.id).indexOf(id)
           Vue.delete(this.submission.socialMedia, index)
+        },
+        addExtraVideoUrl() {
+          this.submission.extraVideoUrls.push({
+            id: this.videoUrlKey++,
+            value: ""
+          })
+        },
+        removeExtraVideoUrl(id) {
+          let index = this.submission.extraVideoUrls.map(evu=> evu.id).indexOf(id)
+          Vue.delete(this.submission.extraVideoUrls, index)
+        },
+        uploadProgress(event) {
+          if (event.lengthComputable) {
+            this.submission.image.progress = parseInt((event.loaded / event.total) * 100)
+          }
         },
         removeImage() {
           this.submission.image.processed = false
@@ -185,11 +229,6 @@ block content
           this.submission.image.id = null
           this.submission.image.url = null
           this.submission.image.deleteUrl = null
-        },
-        uploadProgress(event) {
-          if (event.lengthComputable) {
-            this.submission.image.progress = parseInt((event.loaded / event.total) * 100)
-          }
         },
         imageUpload(event) {
           let image = event.target.files[0]

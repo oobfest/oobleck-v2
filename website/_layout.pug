@@ -10,10 +10,11 @@ html(lang="en")
     title Out of Bounds Comedy Festival #{ title ? '| ' + title : ''}
     script(src="/js/vue.js")
     script(src="/js/axios.js")
-    script(src="/js/jquery.js")
-    script(src="/js/popper.js")
-    script(src="/js/bootstrap.js")
-    script(src="/js/charming.js")
+    if user
+      script(src="/js/jquery.js")
+      script(src="/js/popper.js")
+      script(src="/js/bootstrap.js")
+      script(src="/js/charming.js")
   if user
     body
       .dash.dash-fixed

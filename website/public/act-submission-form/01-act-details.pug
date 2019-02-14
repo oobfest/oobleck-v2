@@ -43,9 +43,9 @@
     textarea#informal-description.form-control(maxlength="1500" name="informal-description" required v-model="submission.privateDescription")
   .form-group
     label.col-form-label.required-field(for="public-description") Describe Your Act to the Public
-    small.form-text.text-muted Accepted acts will have this content published on our website and programs. Use third person active voice, e.g. "Miller &amp; Lies is..." 
-      a(tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Miller & Lies is a comedy duo that performs a single story with awkward, emotionally vulnerable oddball characters. They've been doing improv together for ten years. Come hang with them and feel your feelings." style="cursor:pointer") See an example
-      | .
+    small.form-text.text-muted Accepted acts will have this content published on our website and programs. Use third person active voice, e.g. "Miller &amp; Lies is..."  
+      a(href="#" @click.prevent="seeExample = !seeExample") See an example
+    small.form-text.font-italic(v-show="seeExample") "Miller &amp; Lies is a comedy duo that performs a single story with awkward, emotionally vulnerable oddball characters. They've been doing improv together for ten years. Come hang with them and feel your feelings."
     textarea#public-description.form-control(maxlength="1400" name="public-description" required v-model="submission.publicDescription")
   .form-group
     label.col-form-label(for="accolades") Festival Apperances, Awards and Reviews

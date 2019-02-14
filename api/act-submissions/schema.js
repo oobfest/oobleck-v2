@@ -1,50 +1,9 @@
 let mongoose = require('mongoose')
 
-let ContactSchema = mongoose.Schema({
-  name: {
-    required: true,
-    type: String
-  },
-  email: {
-    required: true,
-    type: String
-  },
-  phone: {
-    required: true,
-    type: String
-  },
-  role: {
-    required: true,
-    lowercase: true,
-    type: String,
-    enum: [
-      'performer',
-      'crew',
-      'director',
-      'producer',
-      'other'
-    ]
-  },
-  attending: {
-    required: true,
-    type: Boolean
-  },
-})
-
-let ImageSchema = mongoose.Schema({
-  id: {
-    required: true,
-    type: String
-  },
-  url:{
-    required: true,
-    type: String
-  },
-  deleteUrl: {
-    required: true,
-    type: String
-  }
-})
+let ContactSchema = require('./schemas/contact')
+let ImageSchema = require('./schemas/image')
+let PersonnelSchema = require('./schemas/personnel')
+let SocialMediaSchema = require('./schemas/social-media')
 
 let SubmissionSchema = mongoose.Schema({
   submissionDate: {
@@ -109,6 +68,10 @@ let SubmissionSchema = mongoose.Schema({
     required: true,
     type: ContactSchema
   },
+  personnel: {
+    required: true,
+    type: PersonnelSchema
+  },
   minimumLength: {
     required: true,
     default: 0,
@@ -131,8 +94,12 @@ let SubmissionSchema = mongoose.Schema({
     required: true,
     type: Boolean
   },
-  videoUrls: {
+  videoUrl: {
     required: true,
+    type: String
+  },
+  extraVideoUrls: {
+    required: false,
     type: [String]
   },
   videoInfo: {
@@ -143,7 +110,10 @@ let SubmissionSchema = mongoose.Schema({
     required:true,
     type: ImageSchema
   },
-  socialMedia: [],
+  socialMedia: {
+    required: false,
+    type: [SocialMediaSchema]
+  },
   availability: {
     required: true,
     type: [{

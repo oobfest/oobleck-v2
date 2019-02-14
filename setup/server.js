@@ -26,7 +26,9 @@ module.exports = port=> {
   setupPassport(app)
 
   // Morgan
-  setupMorgan(app)
+  if(process.env.NODE_ENV != 'production') {
+    setupMorgan(app)
+  }
 
   let apiRouter = require('../api/router')
   let websiteRouter = require('../website/router')

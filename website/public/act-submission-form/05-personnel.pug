@@ -1,0 +1,23 @@
+.box-block.box-bt
+  h3 Cast and Crew
+  p Please list everyone that will be attending the festival
+  div(v-for="person in submission.personnel" v-bind:key="person.id")
+    .form-group.row
+      label.col-form-label.col-2.required-field Name
+      input.form-control.col-10(type="text"  required maxlength="280" v-model="person.name")
+    .form-group.row
+      label.col-form-label.col-2.required-field Email
+      input.form-control.col-10(type="email" required maxlength="280" v-model="person.email")
+    .form-group.row
+      label.col-form-label.col-2 Role
+      select.form-control.col-10(v-model="person.role")
+        option Performer
+        option Crew
+        option Director
+        option Producer
+        option Other
+    .form-group.text-right
+      button.btn.btn-danger(type="button" @click="removePersonnel(person.id)") Remove
+    hr
+  .form-group
+    button.btn.btn-secondary(@click="addPersonnel") Add Person

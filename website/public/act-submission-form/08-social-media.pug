@@ -3,8 +3,9 @@
   p Accepted acts will have their social media links listed on the festival website.
   .social-media-item(v-for="socialMedia of submission.socialMedia" v-bind:key="socialMedia.id")
     .form-group
+      small.form-text.text-muted Enter a full URL (including https), not just a username
       .input-group
-        select.custom-select(name="social-media-type[]" v-model="socialMedia.type")
+        select.custom-select(name="social-media-type[]" v-model="socialMedia.type" @change="updateSocialMedia(socialMedia)")
           option Website
           option Twitter
           option Facebook
@@ -12,9 +13,7 @@
           option Instagram
           option Snapchat
           option Other
-        //.input-group-append(v-show="socialMedia.type != 'Other' && socialMedia.type != 'Snapchat'")
-          span.input-group-text {{ socialMedia.type | formatSocialMediaUrl }}
-        input.form-control(:placeholder="socialMedia.type == 'Website' || socialMedia.type == 'Other' ? 'URL' : 'Username'" type="text" name="social-media-url[]" maxlength="280")
+        input.form-control(:placeholder="socialMedia.placeholder" type="text" name="social-media-url[]" maxlength="280" v-model="socialMedia.url")
     .form-group.text-right
       button.btn.btn-danger(type="button" @click="removeSocialMedia(socialMedia.id)") Remove
     hr
