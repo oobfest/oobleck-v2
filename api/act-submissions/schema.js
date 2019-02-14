@@ -70,7 +70,7 @@ let SubmissionSchema = mongoose.Schema({
   },
   personnel: {
     required: true,
-    type: PersonnelSchema
+    type: [PersonnelSchema]
   },
   minimumLength: {
     required: true,
@@ -94,12 +94,8 @@ let SubmissionSchema = mongoose.Schema({
     required: true,
     type: Boolean
   },
-  videoUrl: {
+  videoUrls: {
     required: true,
-    type: String
-  },
-  extraVideoUrls: {
-    required: false,
     type: [String]
   },
   videoInfo: {
@@ -134,6 +130,11 @@ let SubmissionSchema = mongoose.Schema({
   travelAgreement: {
     required: true,
     type: String
+  },
+  paid: {
+    required: true,
+    type: Boolean,
+    default: false
   }
 })
 

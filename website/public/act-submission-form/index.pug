@@ -157,6 +157,17 @@ block content
         submit() {
           let self = this
           self.validationErrors = self.validate()
+
+          // Format Video URLs
+          let data = self.submission
+          data.videoUrls = []
+          data.videoUrls.push(data.videoUrl)
+          for(let url of data.extraVideoUrls) {
+            data.videoUrls.push(url.value)
+          }
+
+          console.log(data, self.submission)
+
           if(self.validationErrors.length == 0) {
             axios
               .post('/api/act-submissions', self.submission)
