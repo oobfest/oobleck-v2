@@ -3,10 +3,13 @@
   p Accepted acts will have their submitted photo used for the festival website, trading cards and programs. 
   h4 Image Criteria
   ul
-    //li At least ???dpi
-    li File size under 10MB
-    li Vertical or square, not horizontal
-    li No text
+    li Image should be very large, 
+      em at least
+      |  600 &times; 600 pixels
+    li The uploaded file size needs to be under 10MB (use JPEG!)
+    li Photos preferred; graphics or logos are fine but 
+      em no text
+      | .
 
   input#image-url(type="hidden" name="image-url" v-model="submission.image.url")
   input#delete-image-url(type="hidden" name="delete-image-url" v-model="submission.image.deleteUrl")

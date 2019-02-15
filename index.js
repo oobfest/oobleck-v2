@@ -19,6 +19,7 @@ let setupApp = async ()=> {
     }
     console.error("😵 Error")
     console.error(`${error.name}: ${error.message}`)
+    console.log(error)
     console.error("Exiting")
   }
 }

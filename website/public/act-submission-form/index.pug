@@ -3,8 +3,8 @@ block content
   .text-center
     img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
     h1.p-3.text-light.font-weight-bold 2019 Application
-  #app.container-fluid
-    .row
+  .container-fluid
+    .row#app
       .col-md-8.mx-auto.pb-5
         .box-head.box-head-accent-oob
         div(v-show="submitted==false")
@@ -18,24 +18,49 @@ block content
           include 01-act-details
           include 02-primary-location
           include 03-image-upload
-          include 04-contact-information
-          include 05-personnel
+          include 04-personnel
+          include 05-contact-information
           include 06-performance-requirements
           include 07-video-link
           include 08-social-media
           include 09-availability
           include 10-travel-agreement
-          //include 11-fee
-          include 12-submit
-        div(v-show="submitted")
+          include 11-next
+        div(v-show="submitted && !submission.paid")
+         include 12-fee
+        div(v-show="submission.paid")
           .box-block
             h3 Thank you for applying! 
             p A confirmation email has been sent to 
               code {{submission.contact.email}}
+
   script.
 
+    let handler = StripeCheckout.configure({
+      key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',  
+      // key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
+      image: '/img/oob-logo-fire.jpg',
+      locale: 'auto',
+      zipCode: true,
+      currency: 'usd',
+      allowRememberMe: false,
+      token: function(token) {
+        let data = { token, submissionId: app.submission.id, submissionSize: app.submission.personnel.length }
+        axios
+          .post('/api/stripe/submission/' + app.submission.id, data)
+          .then((response)=> {
+            if(response.data.paid) app.submission.paid = true
+            else alert("Payment failed 😟")
+          })
+          .catch((error)=> {
+            console.log("ERROR :(")
+            console.log(error)
+          })
+      }
+    })
+
     let autofill = function() {
-      app.submission.name = "Auto Group"
+      app.submission.name = "Auto Group " + Math.floor(Math.random() * 100)
       app.submission.showTitle = "Auto show title"
       app.submission.showType = ["improv", "musical"]
       app.submission.privateDescription = "Auto private description"
@@ -46,7 +71,7 @@ block content
       app.submission.city = "Austin"
       app.submission.home = "ColdZone"
       app.submission.contact.name = "Dr. Example"
-      app.submission.contact.email = "example@example.com"
+      app.submission.contact.email = "sld.potato@gmail.com"
       app.submission.contact.phone = "555-555-5555"
       app.submission.contact.role = "Crew"
       app.submission.contact.attending = true
@@ -56,7 +81,7 @@ block content
       app.musicianRequired = true
       app.submission.musicianNeeds = "Auto musician needs"
       app.submission.notMessy = true
-      app.submission.videoUrl = 'google.com'
+      app.submission.videoUrl = 'https://www.youtube.com/watch?v=GV5y4yTDtBI'
       app.submission.videoInfo = "Auto video info"
       app.submission.image.processed = true
       app.submission.image.progress = 100
@@ -66,11 +91,50 @@ block content
       app.submission.socialMedia = []
       app.submission.availability = ['monday', 'tuesday']
       app.submission.travelAgreement = "Yes"
+      app.submission.personnel.push({
+        id: app.personnelKey++,
+        name: 'Garfield',
+        email: 'garf@lasagna.com',
+        role: 'Performer'
+      })
+      app.submission.personnel.push({
+        id: app.personnelKey++,
+        name: 'Odie',
+        email: 'odie@lasagna.com',
+        role: 'Performer'
+      })
+      app.submission.personnel.push({
+        id: app.personnelKey++,
+        name: 'Nermal',
+        email: 'nermal@lasagna.com',
+        role: 'Crew'
+      })
+      app.submission.socialMedia.push({
+        id: app.socialMediaKey++,
+        type: "Snapchat",
+        url: "https://snapchat.com/"
+      })
+      app.submission.socialMedia.push({
+        id: app.socialMediaKey++,
+        type: "Twitter",
+        url: "https://twitter.com/"
+      })
+      app.submission.extraVideoUrls.push({
+        id: app.videoUrlKey++,
+        value: "https://www.youtube.com/watch?v=BLTnQko_Lz4"
+      })
+      app.submission.extraVideoUrls.push({
+        id: app.videoUrlKey++,
+        value: "https://www.youtube.com/watch?v=vBf0TLf9V1E"
+      })
+
     }
 
     let app = new Vue({
       el: "#app",
       data() { return {
+        promoCode: "",
+        hasPromoCode: false,
         seeExample: false,
         socialMediaKey: 0,
         videoUrlKey: 0,
@@ -81,6 +145,7 @@ block content
         junk: 0,
         musicianRequired: false,
         submission: {
+          id: null,
           name: "",
           showTitle: "",
           showType: [],
@@ -98,6 +163,7 @@ block content
             role: "Performer",
             attending: true,
           },
+          paid: false,
           personnel: [],
           minimumLength: 5,
           maximumLength: 60,
@@ -120,11 +186,32 @@ block content
         }
       }},
       computed: {
+        charge() {
+          return this.submission.personnel.length > 2 ? 3500 : 1500
+        },
         isStandup() {
           return this.submission.showType.includes('standup')
         }
       },
       methods: {
+        promoCodeHandler() {
+          axios
+            .post('/api/act-submissions/promo-code/', {submissionId: this.submission.id, promoCode: this.promoCode})
+            .then(response=> {
+              if(response.data.paid) this.submission.paid = true
+              else alert("Promo code is invalid")
+            })
+            .catch(error=> {
+              console.log(error)
+            })
+        },
+        stripeHandler() {
+          handler.open({
+            name: 'Out Of Bounds Comedy',
+            description: 'Application Fee',
+            amount: app.charge
+          })
+        },
         validate() {
           let validationErrors = []
           if(this.submission.name == '') validationErrors.push("Group or performer name is required")
@@ -133,6 +220,8 @@ block content
           if(this.submission.publicDescription == '') validationErrors.push("'Describe Your Act To The Public' cannot be blank")
           if(this.submission.country == '') validationErrors.push("Country is required")
           if(this.submission.city == '') validationErrors.push("City is required")
+
+          if(this.submission.image.id == null) validationErrors.push("Submission must include uploaded image")
 
           if(this.submission.contact.name == '') validationErrors.push("Submission contact name is required")
           if(this.submission.contact.email == '') validationErrors.push("Submission contact email is required")
@@ -147,7 +236,9 @@ block content
           if(this.submission.notMessy == false) validationErrors.push("Under 'Performance Requirements' you must agree not to have a show with food or liquid")
           if(this.submission.videoUrl == '') validationErrors.push("At least one URL to a submission video is required")
 
-          if(this.submission.image.id == null) validationErrors.push("Submission must include uploaded image")
+          for(let socialMedia of this.submission.socialMedia) {
+            if(socialMedia.url == '') validationErrors.push(`The "${socialMedia.type}" social media field cannot be left blank`)
+          }
 
           if(this.submission.availability.length <= 0) validationErrors.push("Under 'Availability' no days are selected")
           if(this.submission.travelAgreement == '') validationErrors.push("A response to the travel agreement is required")
@@ -166,14 +257,12 @@ block content
             data.videoUrls.push(url.value)
           }
 
-          console.log(data, self.submission)
-
           if(self.validationErrors.length == 0) {
             axios
               .post('/api/act-submissions', self.submission)
               .then((response)=> {
                 self.submitted = true
-                console.log(response)
+                self.submission.id = response.data._id
               })
               .catch((error)=> {
                 console.log("ERROR")

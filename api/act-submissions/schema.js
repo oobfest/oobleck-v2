@@ -50,7 +50,8 @@ let SubmissionSchema = mongoose.Schema({
   },
   country: {
     required: true,
-    type: String
+    type: String,
+    uppercase: true
   },
   state: {
     required: false,
@@ -135,6 +136,17 @@ let SubmissionSchema = mongoose.Schema({
     required: true,
     type: Boolean,
     default: false
+  },
+  usedPromo: {
+    required: false,
+    type: Boolean,
+    default: false
+  },
+  payment: {
+    required: false,
+    type: {},
+    default: null,
+    select: false   // add .select('+payment') to query to get
   }
 })
 

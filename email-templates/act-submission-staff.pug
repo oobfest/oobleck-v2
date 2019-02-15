@@ -1,0 +1,65 @@
+h1 #{name}
+if showTitle
+  h2 "#{showTitle}"
+
+p From 
+  if home
+    span #{home}, 
+  if city
+    span #{city}
+  if state
+    span , #{state}
+  if country != 'US'
+    span , #{country}
+
+h4 Show Type
+ul
+  each value in showType
+    li=value
+
+h4 Private Description
+p=privateDescription
+
+h4 Public Description
+p=publicDescription
+
+if accolades
+  h4 Accolades
+  p=accolades
+
+h3 Contact
+ul
+  li Name: #{contact.name}
+  li Email: #{contact.email}
+  li Phone: #{contact.phone}
+  li Role: #{contact.role}
+  li Attending: #{contact.attending}
+
+h3 Cast &amp; Crew
+ul
+  each person in personnel
+    li #{person.name} (#{person.role}) 
+      code #{person.email}
+h3 Needs
+ul
+  li Minimum Length: #{minimumLength} minutes
+  li Maximum Length: #{maximumLength} minutes
+  if specialRequirements
+    li Special Requirements: #{specialRequirements}
+
+h3 Video URLs
+ul
+  each videoUrl in videoUrls
+    li=videoUrl
+if videoInfo
+  p=videoInfo
+
+h3 Image
+ul
+  li URL: #{image.url}
+  li Delete URL: #{image.deleteUrl}
+
+h3 Availability
+ul
+  each day in availability
+    li=day

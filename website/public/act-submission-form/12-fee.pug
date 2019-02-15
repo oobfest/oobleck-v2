@@ -1,0 +1,18 @@
+.box-block
+  h3 Application Fee
+  p You're almost done! Your application fee is 
+    code ${{charge/100}}
+    | .
+  p 
+    a(href="#" @click.prevent="hasPromoCode = !hasPromoCode") {{ hasPromoCode ? 'Pay with Card' : 'I have a promo code!' }} 
+  
+  div(v-if="hasPromoCode")
+    .form-group
+      input#promo-code.form-control(type="text" v-model="promoCode" placeholder="Promo Code") 
+    .form-group.text-center
+      button.btn.btn-lg.btn-primary(type="button" @click.prevent="promoCodeHandler") Submit
+  div(v-else)
+    .form-group.text-center
+      button#stripe-button.btn.btn-lg.btn-primary(@click.prevent="stripeHandler") Pay via Stripe
+      span &nbsp;
+      img(src="img/powered-by-stripe.svg" height="50px")

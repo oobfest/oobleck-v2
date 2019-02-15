@@ -7,9 +7,13 @@ router.route('/')
   .get(isLoggedIn, controller.read)
   .post(controller.create)
 
+router.route('/promo-code/')
+  .post(controller.addPromoCode)
+
 router.route('/:id')
   .get(isLoggedIn, controller.read)
   .put(isLoggedIn, controller.update)
   .delete(isLoggedIn, controller.destroy)
+
 
 module.exports = router

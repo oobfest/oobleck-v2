@@ -2,43 +2,47 @@ let mongoose = require('mongoose')
 let schema = require('./schema')
 let createModel = require('../create-model')
 let nodemailer = require('../../utilities/nodemailer')
-
+let submissionEmailTemplate = require('../../email-templates/compile')('act-submission-staff')
+let confirmationEmailTemplate = require('../../email-templates/compile')('act-submission-confirmation')
 let mongooseModel = mongoose.model('act-submission', schema)
 
 let sendStaffEmail = function(submission) {
-
-  let emailContent = "<h1>New Act Submission</h1>"
-  for(let key in submission) {
-    if(key != 'contact' && key != 'image')
-    emailContent += `<b>${key}:</b>${submission[key]}<br>`
-  }
-  
-  emailContent += '<h2>Contact</h2>'
-  for(let key in submission.contact) {
-    emailContent += `<b>${key}:</b>${submission.contact[key]}<br>`
-  }
-  
-  emailContent += '<h2>Image</h2>'
-  for(let key in submission.image) {
-    emailContent += `<b>${key}:</b>${submission.image[key]}<br>`
-  }
-
+  let emailContent = submissionEmailTemplate(submission)
   nodemailer.sendEmail(process.env.SUBMISSION_EMAIL, `New Act Submission: ${submission.name}`, emailContent)
 }
 
 let sendConfirmationEmail = function(submission) {
-  let emailContent = `${submission.contact.name},<br>We have recieved your application for ${submission.name}`
-  nodemailer.sendEmail(submission.contact.email, `Application for ${submission.name} recieved`)
+  let emailContent = confirmationEmailTemplate(submission)
+  nodemailer.sendEmail(submission.contact.email, `Application for ${submission.name} recieved`, emailContent)
 }
 
 let overrides = {
-  create(submission) {
-    // Send emails
+
+  async addPayment(submissionId, payment) {
+    let submissionDocument = await mongooseModel.findById(submissionId).exec()
+    submissionDocument.paid = true
+    submissionDocument.payment = payment
+    let submission = submissionDocument.toObject()
     sendStaffEmail(submission)
     sendConfirmationEmail(submission)
-    // Save submission
-    return mongooseModel.create(submission)
+    return submissionDocument.save()
+  },
+
+  async addPromoCode(submissionId, code) {
+    if(code == process.env.OOB_PROMO_CODE) {
+      let submissionDocument = await mongooseModel.findById(submissionId).exec()
+      submissionDocument.paid = true
+      submissionDocument.usedPromo = true
+      let submission = submissionDocument.toObject()
+      sendStaffEmail(submission)
+      sendConfirmationEmail(submission)
+      return submissionDocument.save()
+    }
+    else return ({error: "Bad promo code", paid: false})
   }
+
 }
+
+
 
 module.exports = createModel(mongooseModel, overrides)
