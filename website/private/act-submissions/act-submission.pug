@@ -1,0 +1,106 @@
+extends ../_layout
+block content
+  #app
+    header.dash-titlebar
+      .mb-md-0.mb-3
+        span.dash-titlebar-title 
+          a.text-muted(href="/submissions/acts/") Acts
+          |  /
+          | {{name}}
+      a.btn.btn-secondary.ml-md-auto(href="/act-submissions/edit/") Edit Submission
+
+
+    .dash-boxes
+      //.row.justify-content-center
+        .col-lg-8
+          .box.box-b
+            .box-head.box-bb
+              .row
+                .col.text-center
+                  if typeof submission.imageUrl != 'undefined' && submission.imageUrl != ''
+                    img(alt="Submission Photo" src=submission.imageUrl.substr(0, submission.imageUrl.length-4) + 'b.jpeg')
+                  else
+                    small [no picture]
+                  h2.block-title #{submission.actName} 
+                  h3.block-subtitle #{submission.showType} from #{submission.city}, #{submission.state}, #{submission.country}
+                  h4.block-subtitle=submission.homeTheater
+            .box-block.box-bb
+              .row
+                .col
+                  h3 Bio
+                  p.font-italic=submission.publicDescription          
+
+                  h3 How Do You Describe Your Act?
+                  p=submission.informalDescription
+
+                  if submission.accolades
+                    h3 Accolades
+                    p=submission.accolades
+            .box-block.box-bb
+                  if submission.videoUrls
+                    h3 Video Links
+                    for videoUrl in submission.videoUrls
+                      pre
+                        a(href=videoUrl)=videoUrl
+                  if submission.videoInfo
+                    h3 Video Info
+                    p=submission.videoInfo
+            .box-block.box-bb
+              h3 Contacts
+              .mb-0 #{submission.primaryContactName}, #{submission.primaryContactRole}  
+                span.badge.badge-info #{submission.primaryContactAttending ? '' : 'Not Attending'}
+              pre.mb-0=submission.primaryContactEmail
+              pre=submission.primaryContactPhone
+
+              for contact in submission.additionalMembers
+                .mb-0 #{contact.name}, #{contact.role}  
+                  span.badge.badge-info #{contact.attending ? '' : 'Not Attending'}
+                pre.mb-0=contact.email
+                pre=contact.phone
+
+            .box-block.box-bb
+              h3 Show Length
+              p From #{submission.minimumShowLength} to #{submission.maximumShowLength} minutes.
+              
+              if submission.specialNeeds
+                h3 Special Needs
+                p=submission.specialNeeds
+
+            .box-block.box-bb
+              h3 Payment Info
+              if (submission.paymentInfo === true)
+                p Payment waived
+              else if (submission.paymentInfo != null)
+                - var payment = submission.paymentInfo
+                | Payment ID
+                pre=payment.transactions[0].related_resources[0].sale.id
+                | Email
+                pre=payment.payer.payer_info.email
+                | Amount
+                pre $#{payment.transactions[0].amount.total}
+                | Time of Payment
+                pre= new Date(payment.create_time).toLocaleString("en-US", {timeZone: 'America/Chicago'})
+              else
+                p Unpaid
+
+  script.
+
+    let vue = new Vue({
+      el: "#app",
+      data() { return {
+        submission: {}
+      }},
+      methods: {
+      },
+      created() {
+        let self = this
+        let id = null
+        axios.get('/api/act-submissions/')
+          .then((response)=> {
+            
+          })
+          .catch((error)=> {
+            console.log(error)
+          })
+      }
+    })

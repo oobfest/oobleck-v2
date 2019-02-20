@@ -1,0 +1,71 @@
+script#submission-row-template(type="text/x-template")
+  tbody
+    tr
+      td 
+        a(href="#" @click="visible=!visible") {{name}}
+      td Scores
+      td {{showType.join(', ')}}
+      td {{city}}
+      td {{home}}
+    tr(v-show="visible")
+      td(colspan=5)
+        .text-center
+          img(:src="imageUrl")
+          h3.mt-2 {{name}}
+          h4(v-if="showTitle") {{showTitle}} 
+          p  
+            strong {{showType.join(', ')}} 
+          p
+            em 
+              span(v-if="home") {{home}}, 
+              | {{city}}, 
+              span(v-if="state") {{state}}, 
+              | {{country}}
+        h4 Private Description
+        p {{privateDescription}}
+
+        h4 Public Description
+        p {{publicDescription}}
+
+        div(v-if="accolades")
+          h4 Accolades
+          p {{accolades}}
+
+        h4 Contact
+        ul
+          li {{contact.name}} ({{contact.role}}) 
+          li {{contact.attending ? 'Attending':'Not Attending'}} 
+          li 
+            code {{contact.email}}
+          li
+            code {{contact.phone}}
+
+        h4 Cast &amp; Crew
+        ul
+          li(v-for="person in personnel") {{person.name}}
+            ul
+              li {{person.role.toLowerCase()}}
+              li 
+                code {{person.email}}
+
+        h4 Needs
+        ul
+          li Minimum Length: {{minimumLength}} minutes
+          li Maximum Length: {{maximumLength}} minutes
+          li(v-if="specialRequirements") Special Requirements: {{specialRequirements}}
+
+        h4 Video Links
+        p 
+          strong Info: 
+          |  {{videoInfo}}
+        ul
+          li(v-for="videoUrl in videoUrls")
+            code
+              a(:href="videoUrl") {{videoUrl}}
+
+        h4 Availability
+        ul
+          li(v-for="day in availability") {{day}}
+
+        //p
+          a.text-danger(href="#" @click="remove(name, _id)") Delete Act Submission

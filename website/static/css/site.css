@@ -1,0 +1,31 @@
+
+nav {
+  font-family: 'gotham-book', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.nav-link {
+  display: inline;
+}
+a.nav-link:hover {
+  box-shadow: 0 2px 0 white, 0px 1px 0 white;
+}
+
+li.nav-item {
+  margin-left: 1rem;
+}
+
+.svg-inline {
+  width: 1em;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 576px) {
+  .oob-icon { max-width: 80%; }
+}
+
+.sketch  { color: #13818d }
+.standup { color: #f04c23 }
+.improv  { color: #f9a11b }
+.variety { color: #6d8e3b }

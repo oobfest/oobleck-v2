@@ -23,17 +23,17 @@ let SubmissionSchema = mongoose.Schema({
     type: [{
       required: true,
       type: String,
-      enum: [
-        'improv', 
-        'sketch', 
-        'standup', 
-        'podcast', 
-        'teacher', 
-        'musical', 
-        'one-person-show', 
-        'variety', 
-        'other'
-      ]
+      // enum: [
+      //   'Improv', 
+      //   'Sketch', 
+      //   'Standup', 
+      //   'Podcast', 
+      //   'Teacher', 
+      //   'Musical', 
+      //   'One-person-show', 
+      //   'Variety', 
+      //   'Other'
+      // ]
     }],
   },
   privateDescription: {

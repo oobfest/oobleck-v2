@@ -9,6 +9,10 @@ router.get('/act-submissions', isLoggedIn, (request, response)=> {
   response.render('private/act-submissions')
 })
 
+router.get('/act-submission/:id', isLoggedIn, (request, response)=> {
+  response.render('private/act-submissions/act-submission')
+})
+
 router.get('/screener-submissions', isLoggedIn, (request, response)=> {
   response.render('private/screener-submissions')
 })

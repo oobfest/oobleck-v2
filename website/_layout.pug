@@ -7,6 +7,8 @@ html(lang="en")
     link(href="/img/favicon.png" rel="shortcut icon" type="image/png" )
     link(href="/css/charming-green.css" rel="stylesheet")
     link(href="/css/custom.css" rel="stylesheet")
+    if alt
+      link(href="/css/site.css" rel="stylesheet")
     title Out of Bounds Comedy Festival #{ title ? '| ' + title : ''}
     script(src="/js/vue.js")
     script(src="/js/axios.js")
@@ -27,5 +29,12 @@ html(lang="en")
           main
             block content
   else
-    body.dark-background
-      block content
+    
+    if alt
+      body.shannon-background
+        include _header
+        block content
+        include _footer
+    else
+      body.dark-background
+        block content

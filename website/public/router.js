@@ -1,6 +1,10 @@
 let express = require('express')
 let router = express.Router()
 
+router.get('/', (request, response)=> {
+  response.render('public', {alt: true})
+})
+
 router.get('/apply', (request, response)=> {
   response.render('public/act-submission-form')
 })
