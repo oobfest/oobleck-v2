@@ -10,12 +10,27 @@ block content
       table.box-table.table
         thead
           tr
-            th Name
-            th Email
+            th 
+              a(href="#" @click.prevent="sortField='name'") Name
+            th 
+              a(href="#" @click.prevent="sortField='email'") Email
             th Phone
-            th Location
-            th Primary Venue
-        tbody(is="submission-row" v-for="(submission, index) in submissions" v-bind:submission="submission" v-bind:key="index" @removed="remove")
+            th 
+              a(href="#" @click.prevent="sortField='city'") City
+            th 
+              a(href="#" @click.prevent="sortField='homeTheater'") Home
+          tr
+            td
+              input.form-control(type="text" v-model="nameSearch")
+            td 
+              input.form-control(type="text" v-model="emailSearch")
+            td
+            td
+              input.form-control(type="text" v-model="citySearch")
+            td
+              input.form-control(type="text" v-model="homeSearch")
+
+        tbody(is="submission-row" v-for="(submission, index) in filteredSubmissions" v-bind:submission="submission" v-bind:key="index" @removed="remove")
   
   script#submission-row-template(type="text/x-template")
     tbody
@@ -67,8 +82,33 @@ block content
     let vue = new Vue({
       el: "#app",
       data() { return {
+        nameSearch: "",
+        emailSearch: "",
+        citySearch: "",
+        homeSearch: "",
+        sortField: "name",
         submissions: []
       }},
+      computed: {
+        filteredSubmissions() {
+          let filteredSubmissions = this.submissions
+
+          if(this.nameSearch) filteredSubmissions = filteredSubmissions.filter(s=> s.name.includes(this.nameSearch))
+          if(this.emailSearch) filteredSubmissions = filteredSubmissions.filter(s=> s.email.includes(this.emailSearch))
+          if(this.citySearch) filteredSubmissions = filteredSubmissions.filter(s=> s.city.includes(this.citySearch))
+          if(this.homeSearch) filteredSubmissions = filteredSubmissions.filter(s=> s.homeTheater.includes(this.homeSearch))
+
+          filteredSubmissions.sort((a, b)=> {
+            let textA = a[this.sortField].toUpperCase()
+            let textB = b[this.sortField].toUpperCase()
+            if(textA < textB) return -1
+            else if (textA > textB) return 1
+            else return 0
+          })
+
+          return filteredSubmissions
+        }
+      },
       methods: {
         remove(id) {
           let index = this.submissions.findIndex(s=> s._id == id)
