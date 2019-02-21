@@ -25,6 +25,7 @@ li.nav-item {
   .oob-icon { max-width: 80%; }
 }
 
+.oob-icon { max-width: 250px; }
 .sketch  { color: #13818d }
 .standup { color: #f04c23 }
 .improv  { color: #f9a11b }

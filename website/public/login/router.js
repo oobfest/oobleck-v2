@@ -13,7 +13,7 @@ router.get('/login', (request, response)=> {
 router.post('/login', (request, response, next)=> {
   passport.authenticate('local', (authenticationError, user, info)=> {
     if(authenticationError) next(authenticationError)
-    else if (!user) response.render('login', {info})
+    else if (!user) response.render('public/login', {info})
     else request.logIn(user, (loginError)=> {
       if (loginError) next(loginError)
       // If user was trying to get to a specific page, redirect to it
@@ -25,7 +25,7 @@ router.post('/login', (request, response, next)=> {
 
 router.get('/logout', (request, response)=> {
   request.logout()
-  response.render('login', { info: { message: "You have been logged out!" } })
+  response.render('public/login', { info: { message: "You have been logged out!" } })
 })
 
 module.exports = router

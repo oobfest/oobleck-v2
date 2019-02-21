@@ -18,7 +18,7 @@ router.get('/screener-submissions', isLoggedIn, (request, response)=> {
 })
 
 router.get('/users', isLoggedIn, (request, response)=> {
-  response.render('private/users')
+  response.render('private/users', {key: process.env.PASSWORD_KEY})
 })
 
 router.get('/users/:id', isLoggedIn, async (request, response, next)=> {

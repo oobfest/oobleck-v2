@@ -12,21 +12,20 @@ block content
           tr
             th Name
             th Email
-            th Password Set
+            th Password
             th Roles
-            th
+            //th
         tbody
           tr(v-for="user in users")
             td 
               a(:href="'users/' + user._id") {{user.username}}
             td {{user.email}}
             td 
-              span(v-if="user.isPasswordSet") 
-                a(href="#" @click="changePassword(user._id)") Yes
+              span(v-if="user.isPasswordSet") Set
               span(v-else) 
-                a(href="#" @click="setPassword(user._id)") No
+                a(:href="getPasswordUrl(user._id)") Not Set
             td {{user.roles.join(", ")}}
-            td
+            //td
               button.btn.btn-xs.btn-danger(@click="remove(user.username, user._id)") Delete
 
     include _modal
@@ -44,6 +43,9 @@ block content
         }
       }},
       methods: {
+        getPasswordUrl(id) {
+          return '/set-password/' + id + '/#{key}'
+        },
         setPassword(id) {
           let password = prompt("Password?")
           axios.post('/api/users/password', {id, password})
