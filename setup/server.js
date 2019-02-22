@@ -19,7 +19,7 @@ module.exports = port=> {
 
   app.use(express.urlencoded({ extended: true }))
   app.use(express.json())
-  app.use(express.static('website/static'))
+//  app.use(express.static('website/static'))
   app.use(helmet())
 
   // Passport.js
