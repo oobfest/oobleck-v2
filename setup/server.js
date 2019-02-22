@@ -19,7 +19,12 @@ module.exports = port=> {
 
   app.use(express.urlencoded({ extended: true }))
   app.use(express.json())
-  app.use(express.static('website/static'))
+
+  // Use NGiNX for static if not in production
+  if(process.env.NODE_ENV != 'production')
+    app.use(express.static('website/static'))
+
+  // IN THE MEANTIME
   app.use(helmet())
 
   // Passport.js
