@@ -30,14 +30,14 @@ block content
          include 12-fee
         div(v-show="submission.paid")
           .box-block
-            h3 Thank you for applying! 
-            p A confirmation email has been sent to 
+            h3 Thank you for applying!
+            p A confirmation email has been sent to
               code {{submission.contact.email}}
 
   script.
 
     let handler = StripeCheckout.configure({
-      //key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',  
+      //key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
       key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
       image: '/img/oob-logo-fire.jpg',
       locale: 'auto',
@@ -187,7 +187,7 @@ block content
       }},
       computed: {
         charge() {
-          return this.submission.personnel.length > 2 ? 3500 : 1500
+          return this.submission.personnel.length > 2 ? 4500 : 2500
         },
         isStandup() {
           return this.submission.showType.includes('standup')

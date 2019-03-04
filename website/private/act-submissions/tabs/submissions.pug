@@ -1,0 +1,36 @@
+#submissions.tab-pane.fade.show.active(v-show="tab=='submissions'")
+  .box
+    p Total submissions: {{submissions.length}}
+  .box.box-b
+    table.box-table.table
+      thead
+        tr
+          th
+            a(href="#" @click.prevent="sortField='name'") Name
+          th Scores
+          th Type
+          th
+            a(href="#" @click.prevent="sortField='city'") City
+          th
+            a(href="#" @click.prevent="sortField='home'") Home
+        tr
+          td
+            input.form-control(type="text" v-model="nameSearch")
+          td &nbsp;
+          td
+            select.form-control(v-model="typeSearch")
+              option(selected value="") All
+              option Improv
+              option Sketch
+              option Standup
+              option Variety
+              option Podcast
+              option(value="One-person-show") Individual
+              option Musical
+              option Other
+          td
+            input.form-control(type="text" v-model="citySearch")
+          td
+            input.form-control(type="text" v-model="homeSearch")
+
+      tbody(is="submission-row" v-for="(submission, index) in filteredSubmissions" v-bind="submission" v-bind:key="submission._id" @removed="remove")

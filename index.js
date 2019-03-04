@@ -11,16 +11,20 @@ let setupApp = async ()=> {
   }
   catch(error) {
     if(error.name == "Error") {
-      if (error.code == "EADDRINUSE") console.error(`Port ${process.env.PORT} is already in use`)
+      if (error.code == "EADDRINUSE") {
+        console.error(`Port ${process.env.PORT} is already in use`)
+      }
       else console.error("Server connection error \n", error)
     }
     else if (error.name == "MongoNetworkError") {
       console.error("MongoDB Connection Error")
     }
-    console.error("😵 Error")
-    console.error(`${error.name}: ${error.message}`)
-    console.log(error)
-    console.error("Exiting")
+    else {
+      console.error("😵 Error")
+      console.error(`${error.name}: ${error.message}`)
+      console.log(error)
+      console.error("Exiting")
+    }
   }
 }
 

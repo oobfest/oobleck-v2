@@ -1,0 +1,111 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title
+        a.text-muted(href="/act-submissions/review") Review Submissions
+        |  /
+        | Review Submission
+  #app.dash-boxes
+    .row.justify-content-center
+      .col-lg-8
+        .box.box-b
+          .box-head.box-bb
+            .row
+              .col.text-center
+                img(:src="'https://i.imgur.com/' + submission.image.id + 'm.jpg'" alt="Submission Photo")
+                h2.block-title {{submission.name}}
+                h3.block-subtitle {{submission.showType.join(', ')}}
+                h3.block-subtitle From {{submission.city}}, {{submission.state}}, {{submission.country}}
+                h4.block-subtitle {{submission.home}}
+          .box-block.box-bb
+            .row
+              .col
+                h3 Bio
+                p.font-italic {{submission.publicDescription}}
+
+                h3 How Do You Describe Your Act?
+                p {{submission.privateDescription}}
+
+                div(v-if="submission.accolades")
+                  h3 Accolades
+                  p {{submission.accolades}}
+
+                h3 Members
+                ul
+                  li(v-for="person in submission.personnel") {{person.name}}, {{person.role}}
+
+          .box-block.box-bb
+            .row
+              .col
+                h3 Video Links
+                ul
+                  li(v-for="videoUrl in submission.videoUrls")
+                    pre.alsert.alert-light
+                      a(:href="videoUrl" target="_blank") {{videoUrl}}
+                div(v-if="submission.videoInfo")
+                  h3 Video Information
+                  p.alert.alert-light {{submission.videoInfo}}
+          //- var review = submission.reviews.find(review => review.userId == user._id) || { score: null, notes: null };
+          .box-block.box-bb
+            .row
+              .col
+                h3 Your Score
+                .row
+                  .col-sm-3
+                    label.display-2(for="yes").mb-0 😍
+                    .custom-control.custom-radio.mb-4
+                      input#yes.custom-control-input(type="radio" name="score" value="2")
+                      label.custom-control-label.h4(for="yes") Yes!
+                  .col-sm-3
+                    label.display-2(for="meh").mb-0 😬
+                    .custom-control.custom-radio.mb-4
+                      input#meh.custom-control-input(type="radio" name="score" value="1")
+                      label.custom-control-label.h4(for="meh") Meh
+                  .col-sm-3
+                    label.display-2(for="nah").mb-0 😕
+                    .custom-control.custom-radio.mb-4
+                      input#nah.custom-control-input(type="radio" name="score" value="0")
+                      label.custom-control-label.h4(for="nah") Nah
+                  .col-sm-3
+                    label.display-2(for="veto").mb-0 😡
+                    .custom-control.custom-radio.mb-4
+                      input#veto.custom-control-input(type="radio" name="score" value="-1")
+                      label.custom-control-label.h4(for="veto") Veto
+          .box-block.box-bb
+            .row
+              .col
+                h3 Notes
+                em What was the best part? What was the worst part?  Why should they be in the festival?  Why should they not be in the festival?
+                textarea#notes.form-control(name="notes" rows="3")
+          .box-block
+            .row
+              .col
+                .text-right.m-2
+                  button.btn.btn-primary(type="button") Save
+  script.
+    let app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          submissionId: '#{submissionId}',
+          submission: { image: ""},
+          review: {
+            userId: '#{user._id}',
+            username: '#{user.username}',
+            score: null,
+            notes: ""
+          }
+        }
+      },
+      created() {
+        let self = this
+        axios.get('/api/act-submissions/' + this.submissionId)
+          .then((response)=> {
+            self.submission = response.data
+          })
+          .catch((error)=> {
+            console.log(error)
+          })
+      }
+    })

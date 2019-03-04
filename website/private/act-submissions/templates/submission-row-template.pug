@@ -1,9 +1,10 @@
 script#submission-row-template(type="text/x-template")
   tbody
     tr
-      td 
-        a(href="#" @click="visible=!visible") {{name}}
-      td Scores
+      td
+        a(href="#" @click.prevent="visible=!visible") {{name}}
+      td
+        a(:href="'act-submission/review/' + _id") Scores
       td {{showType.join(', ')}}
       td {{city}}
       td {{home}}
@@ -12,14 +13,14 @@ script#submission-row-template(type="text/x-template")
         .text-center
           img(:src="imageUrl")
           h3.mt-2 {{name}}
-          h4(v-if="showTitle") {{showTitle}} 
-          p  
-            strong {{showType.join(', ')}} 
+          h4(v-if="showTitle") {{showTitle}}
           p
-            em 
-              span(v-if="home") {{home}}, 
-              | {{city}}, 
-              span(v-if="state") {{state}}, 
+            strong {{showType.join(', ')}}
+          p
+            em
+              span(v-if="home") {{home}},
+              | {{city}},
+              span(v-if="state") {{state}},
               | {{country}}
         h4 Private Description
         p {{privateDescription}}
@@ -33,9 +34,9 @@ script#submission-row-template(type="text/x-template")
 
         h4 Contact
         ul
-          li {{contact.name}} ({{contact.role}}) 
-          li {{contact.attending ? 'Attending':'Not Attending'}} 
-          li 
+          li {{contact.name}} ({{contact.role}})
+          li {{contact.attending ? 'Attending':'Not Attending'}}
+          li
             code {{contact.email}}
           li
             code {{contact.phone}}
@@ -45,7 +46,7 @@ script#submission-row-template(type="text/x-template")
           li(v-for="person in personnel") {{person.name}}
             ul
               li {{person.role.toLowerCase()}}
-              li 
+              li
                 code {{person.email}}
 
         h4 Needs
@@ -55,8 +56,8 @@ script#submission-row-template(type="text/x-template")
           li(v-if="specialRequirements") Special Requirements: {{specialRequirements}}
 
         h4 Video Links
-        p 
-          strong Info: 
+        p
+          strong Info:
           |  {{videoInfo}}
         ul
           li(v-for="videoUrl in videoUrls")
@@ -66,6 +67,10 @@ script#submission-row-template(type="text/x-template")
         h4 Availability
         ul
           li(v-for="day in availability") {{day}}
+
+        h4 Payment
+        p(v-if="usedPromo") Used promo code
+        p(v-else) Paid with Stripe
 
         //p
           a.text-danger(href="#" @click="remove(name, _id)") Delete Act Submission

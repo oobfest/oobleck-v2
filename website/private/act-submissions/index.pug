@@ -9,72 +9,35 @@ block content
     .dash-boxes.container-fluid
       .row
         .col
+
           ul.nav.nav-pills
             li.nav-item
-              a.nav-link.active(data-toggle="tab" href="#submissions") Submissions
-            //li.nav-item
-              a.nav-link(data-toggle="tab" href="#charts") Charts
-            //li.nav-item
-              a.nav-link(data-toggle="tab" href="#reviews") Reviews
+              a.nav-link(:class="tab=='submissions' ? 'active' : ''" href="#" @click.prevent="tab='submissions'") Submissions
+            li.nav-item
+              a.nav-link(:class="tab=='charts' ? 'active' : ''" href="#" @click.prevent="tab='charts'") Charts
+
           .tab-content
-            
-            #submissions.tab-pane.fade.show.active
-              .box.box-b
-                table.box-table.table
-                  thead
-                    tr
-                      th 
-                        a(href="#" @click.prevent="sortField='name'") Name
-                      th Scores
-                      th Type
-                      th 
-                        a(href="#" @click.prevent="sortField='city'") City
-                      th 
-                        a(href="#" @click.prevent="sortField='home'") Home
-                    tr
-                      td
-                        input.form-control(type="text" v-model="nameSearch")
-                      td &nbsp;
-                      td
-                        select.form-control(v-model="typeSearch")
-                          option(selected value="") All
-                          option Improv
-                          option Sketch
-                          option Standup
-                          option Variety
-                          option Podcast
-                          option(value="One-person-show") Individual
-                          option Musical
-                          option Other
-                      td
-                        input.form-control(type="text" v-model="citySearch")
-                      td
-                        input.form-control(type="text" v-model="homeSearch")
-
-                  tbody(is="submission-row" v-for="(submission, index) in filteredSubmissions" v-bind="submission" v-bind:key="submission._id" @removed="remove")
-            
-            #charts.tab-pane.fade
-              p Charts
-
-            #reviews.tab-pane.fade
-              p Reviews
+            include tabs/submissions
+            include tabs/charts
 
   include templates/submission-row-template
+  include templates/charts-scripts
+
 
   script.
 
     Vue.component('submission-row', {
       props: [
-      '_id', 
-      'name', 
-      'showTitle', 
-      'home', 
-      'city', 
-      'state', 
-      'country', 
-      'showType', 
-      'privateDescription', 
-      'publicDescription', 
+      '_id',
+      'name',
+      'showTitle',
+      'home',
+      'city',
+      'state',
+      'country',
+      'showType',
+      'privateDescription',
+      'publicDescription',
       'accolades',
       'contact',
       'personnel',
@@ -84,7 +47,9 @@ block content
       'videoUrls',
       'videoInfo',
       'availability',
-      'image'
+      'image',
+      'usedPromo',
+      'payment'
       ],
       template: "#submission-row-template",
       data() { return {

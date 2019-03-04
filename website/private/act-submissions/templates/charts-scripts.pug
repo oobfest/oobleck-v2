@@ -1,0 +1,94 @@
+script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
+script.
+
+  google.charts.load('current', {'packages':['corechart']})
+  google.charts.setOnLoadCallback(drawCharts)
+
+  let typeChart = {chart: null, data: null, filter: false}
+  let cityChart = {chart: null, data: null, filter: false}
+  let theaterChart = {chart: null, data: null, filter: false}
+
+  function drawCharts() {
+    axios
+      .get('/api/act-submissions')
+      .then(function(response) {
+        let submissions = response.data
+
+        let showTypes = {}
+        let locations = {}
+        let theaters = {}
+
+        for(let submission of submissions) {
+
+          // Show Types
+          for(let showType of submission.showType)
+            if(showTypes[showType] === 'undefined') showTypes[showType] = 1
+            else showTypes[showType]++
+
+          // Locations
+          let location = submission.city + ", " + submission.state
+          if (typeof locations[location] === 'undefined') locations[location] = 1
+          else locations[location]++
+
+          // Theaters
+          let theater = submission.homeTheater
+          if (typeof theaters[theater] === 'undefined') theaters[theater] = 1
+          else theaters[theater] += 1
+        }
+
+        // Ignore blank entries
+        delete theaters['']
+
+        typeChart.data = createDataTable(showTypes)
+        cityChart.data = createDataTable(locations)
+        theaterChart.data = createDataTable(theaters)
+
+        typeChart.chart = new google.visualization.PieChart(document.getElementById('type-chart'))
+        cityChart.chart = new google.visualization.PieChart(document.getElementById('hometown-chart'))
+        theaterChart.chart = new google.visualization.PieChart(document.getElementById('theater-chart'))
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+  }
+
+  function createDataTable(data) {
+    let dataTable = new google.visualization.DataTable()
+    dataTable.addColumn('string')
+    dataTable.addColumn('number')
+    let keys = Object.keys(data)
+    dataTable.addRows(keys.length)
+    keys.forEach(function(key, index) {
+      dataTable.setValue(index, 0, key)
+      dataTable.setValue(index, 1, data[key])
+    })
+    return dataTable
+  }
+
+  function createDataView(data, filter) {
+    let dataView = new google.visualization.DataView(data)
+    //if (filter) dataView.setRows(dataView.getFilteredRows([{column: 1, minValue: filter}]))
+    return dataView
+  }
+
+  function drawChart(chart, view) {
+    chart.draw(view, {
+      width: 1200,
+      height: 600,
+      is3D: true,
+      titleTextStyle: {fontSize: 32},
+      backgroundColor: '#f6f6f6',
+      chartArea: {'width': '100%', 'height': '100%'},
+      'legend':'left',
+    })
+  }
+
+  $('#type-chart-link').on('click', function() {
+    drawChart(typeChart.chart, createDataView(typeChart.data, 1))
+  })
+  $('#hometown-chart-link').on('shown.bs.tab', function() {
+    drawChart(cityChart.chart, createDataView(cityChart.data, 1))
+  })
+  $('#theater-chart-link').on('shown.bs.tab', function() {
+    drawChart(theaterChart.chart, createDataView(theaterChart.data, 1))
+  })

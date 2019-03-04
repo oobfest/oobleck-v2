@@ -39,8 +39,20 @@ let overrides = {
       return submissionDocument.save()
     }
     else return ({error: "Bad promo code", paid: false})
-  }
+  },
 
+  async createReview(submissionId, review) {
+    let submissionDocument = await mongooseModel.findById(submissionId).exec()
+    return submissionDocument.update({$push: {reviews: review}})
+
+    //submissionDocument.reviews.push(review)
+    //return submissionDocument.save()
+  },
+
+  async removeReview(submissionId, userId) {
+    let submissionDocument = await mongooseModel.findById(submissionId).exec()
+    return submissionDocument.update({$pull: {reviews: {userId: userId}}})
+  }
 }
 
 

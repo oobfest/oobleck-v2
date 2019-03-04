@@ -42,8 +42,8 @@ module.exports = port=> {
 
   let connection = app.listen(port)
   return new Promise((resolve, reject)=> {
-    let connectionPort = connection.address().port
     connection.on('listening', ()=> {
+      let connectionPort = connection.address().port
       console.log(`💫 Server listening on port ${connectionPort}`)
       resolve(connection)
     })
@@ -52,5 +52,4 @@ module.exports = port=> {
       console.log(`Closed port ${connectionPort}`)
     })
   })
-
 }

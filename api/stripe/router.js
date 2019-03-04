@@ -13,7 +13,7 @@ router.post('/submission/:submissionId', async (request, response)=> {
       card: request.body.token.id
     })
     let payment = await stripe.charges.create({
-      amount: submissionSize > 2 ? 3500 : 1500,
+      amount: submissionSize > 2 ? 4500 : 2500,
       currency: 'usd',
       customer: customer.id
     })

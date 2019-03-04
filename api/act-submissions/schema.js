@@ -4,34 +4,36 @@ let ContactSchema = require('./schemas/contact')
 let ImageSchema = require('./schemas/image')
 let PersonnelSchema = require('./schemas/personnel')
 let SocialMediaSchema = require('./schemas/social-media')
+let ReviewSchema = require('./schemas/review')
+
 
 let SubmissionSchema = mongoose.Schema({
   submissionDate: {
     type: Date,
     default: Date.now
   },
-  name: { 
-    required: true, 
+  name: {
+    required: true,
     type: String
   },
   showTitle: {
     required: false,
-    type: String  
+    type: String
   },
-  showType: { 
+  showType: {
     required: true,
     type: [{
       required: true,
       type: String,
       // enum: [
-      //   'Improv', 
-      //   'Sketch', 
-      //   'Standup', 
-      //   'Podcast', 
-      //   'Teacher', 
-      //   'Musical', 
-      //   'One-person-show', 
-      //   'Variety', 
+      //   'Improv',
+      //   'Sketch',
+      //   'Standup',
+      //   'Podcast',
+      //   'Teacher',
+      //   'Musical',
+      //   'One-person-show',
+      //   'Variety',
       //   'Other'
       // ]
     }],
@@ -147,6 +149,10 @@ let SubmissionSchema = mongoose.Schema({
     type: {},
     default: null,
     select: false   // add .select('+payment') to query to get
+  },
+  reviews: {
+    required: false,
+    type: [ReviewSchema]
   }
 })
 
