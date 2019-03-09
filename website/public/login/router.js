@@ -18,7 +18,13 @@ router.post('/login', (request, response, next)=> {
       if (loginError) next(loginError)
       // If user was trying to get to a specific page, redirect to it
       else if (request.body['attempted-url']) response.redirect(request.body['attempted-url'])
-      else response.redirect('/users')
+      else {
+        if(user.roles.includes('admin')) response.redirect('/users')
+        else if (user.roles.includes('staff')) response.redirect('/act-submissions')
+        else if (user.roles.includes('reviewer')) response.redirect('/act-submissions/review')
+        else if (user.roles.includes('standup-reviewer')) response.redirect('/act-submissions/review')
+        else next(Error("Role not found"))
+      }
     })
   })(request, response, next)
 })

@@ -13,7 +13,7 @@ block content
           ul.nav.nav-pills
             li.nav-item
               a.nav-link(:class="tab=='submissions' ? 'active' : ''" href="#" @click.prevent="tab='submissions'") Submissions
-            li.nav-item
+            //li.nav-item
               a.nav-link(:class="tab=='charts' ? 'active' : ''" href="#" @click.prevent="tab='charts'") Charts
 
           .tab-content
@@ -49,7 +49,8 @@ block content
       'availability',
       'image',
       'usedPromo',
-      'payment'
+      'payment',
+      'reviews'
       ],
       template: "#submission-row-template",
       data() { return {
@@ -60,7 +61,22 @@ block content
           return `https://i.imgur.com/${this.image.id}s.jpg`
         }
       },
+      filters: {
+        emojify(value) {
+          switch(value) {
+            case -1: return '😡'
+            case  0: return '😕'
+            case  1: return '😬'
+            case  2: return '🙂'
+            case  3: return '😍'
+            default: return ''
+          }
+        }
+      },
       methods: {
+        getScores() {
+          return this.reviews.map(r=> r.score)
+        },
         remove(name, id) {
           let self = this
           if(confirm("Delete " + name + "?")) {

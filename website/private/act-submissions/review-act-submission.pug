@@ -9,13 +9,16 @@ block content
   #app.dash-boxes
     .row.justify-content-center
       .col-lg-8
-        .box.box-b
+        form.box.box-b(method="POST" action="/act-submissions/review/" + submissionId)
+          input(:value="submission._id" type="hidden" name="submissionId")
+          input(type="hidden" name="userId" value=user._id)
+          input(type="hidden" name="username" value=user.username)
           .box-head.box-bb
             .row
               .col.text-center
                 img(:src="'https://i.imgur.com/' + submission.image.id + 'm.jpg'" alt="Submission Photo")
                 h2.block-title {{submission.name}}
-                h3.block-subtitle {{submission.showType.join(', ')}}
+                h3.block-subtitle(v-if="submission.showType") {{submission.showType.join(', ')}}
                 h3.block-subtitle From {{submission.city}}, {{submission.state}}, {{submission.country}}
                 h4.block-subtitle {{submission.home}}
           .box-block.box-bb
@@ -46,43 +49,48 @@ block content
                 div(v-if="submission.videoInfo")
                   h3 Video Information
                   p.alert.alert-light {{submission.videoInfo}}
-          //- var review = submission.reviews.find(review => review.userId == user._id) || { score: null, notes: null };
           .box-block.box-bb
             .row
               .col
                 h3 Your Score
-                .row
-                  .col-sm-3
+                .row.text-center.score-row
+                  .col-md
                     label.display-2(for="yes").mb-0 😍
                     .custom-control.custom-radio.mb-4
-                      input#yes.custom-control-input(type="radio" name="score" value="2")
+                      input#yes.custom-control-input(type="radio" name="score" value="3" v-model="review.score")
                       label.custom-control-label.h4(for="yes") Yes!
-                  .col-sm-3
+                  if !user.roles.includes('standup-reviewer')
+                    .col-md
+                      label.display-2(for="good").mb-0 🙂
+                      .custom-control.custom-radio.mb-4
+                        input#good.custom-control-input(type="radio" name="score" value="2" v-model="review.score")
+                        label.custom-control-label.h4(for="good") Good
+                  .col-md
                     label.display-2(for="meh").mb-0 😬
                     .custom-control.custom-radio.mb-4
-                      input#meh.custom-control-input(type="radio" name="score" value="1")
+                      input#meh.custom-control-input(type="radio" name="score" value="1" v-model="review.score")
                       label.custom-control-label.h4(for="meh") Meh
-                  .col-sm-3
+                  .col-md
                     label.display-2(for="nah").mb-0 😕
                     .custom-control.custom-radio.mb-4
-                      input#nah.custom-control-input(type="radio" name="score" value="0")
+                      input#nah.custom-control-input(type="radio" name="score" value="0" v-model="review.score")
                       label.custom-control-label.h4(for="nah") Nah
-                  .col-sm-3
+                  .col-md
                     label.display-2(for="veto").mb-0 😡
                     .custom-control.custom-radio.mb-4
-                      input#veto.custom-control-input(type="radio" name="score" value="-1")
+                      input#veto.custom-control-input(type="radio" name="score" value="-1" v-model="review.score")
                       label.custom-control-label.h4(for="veto") Veto
           .box-block.box-bb
             .row
               .col
                 h3 Notes
                 em What was the best part? What was the worst part?  Why should they be in the festival?  Why should they not be in the festival?
-                textarea#notes.form-control(name="notes" rows="3")
+                textarea#notes.form-control(name="notes" rows="3" v-model="review.notes")
           .box-block
             .row
               .col
                 .text-right.m-2
-                  button.btn.btn-primary(type="button") Save
+                  button.btn.btn-primary(type="submit") Save
   script.
     let app = new Vue({
       el: "#app",
@@ -103,6 +111,8 @@ block content
         axios.get('/api/act-submissions/' + this.submissionId)
           .then((response)=> {
             self.submission = response.data
+            let review = self.submission.reviews.find(r=> r.userId == '#{user._id}')
+            self.review = review ? review : {}
           })
           .catch((error)=> {
             console.log(error)

@@ -41,17 +41,37 @@ let overrides = {
     else return ({error: "Bad promo code", paid: false})
   },
 
+  async getSubmissionsForReview(userId, userRole) {
+    let query = {paid: true}
+    if(userRole == 'reviewer') query = {paid: true, showType: {$ne: 'Standup'}}
+    if(userRole == 'standup-reviewer') query = {paid: true, showType: {$in: 'Standup'}}
+    try {
+      let submissionDocuments = await mongooseModel.find(query, '_id name reviews').exec()
+      return submissionDocuments.map(s=> { return {
+        _id: s._id,
+        name: s.name,
+        reviewCount: s.reviews.length,
+        userReview: s.reviews.find(r=> r.userId == userId)
+      }})
+    }
+    catch(error) {
+      console.log(error)
+    }
+  },
+
   async createReview(submissionId, review) {
     let submissionDocument = await mongooseModel.findById(submissionId).exec()
-    return submissionDocument.update({$push: {reviews: review}})
-
-    //submissionDocument.reviews.push(review)
-    //return submissionDocument.save()
+    let previousReviewIndex = submissionDocument.reviews.findIndex(r=> r.userId == review.userId)
+    if (previousReviewIndex != -1) {
+      submissionDocument.reviews[previousReviewIndex] = review
+      return submissionDocument.save()
+    }
+    else return submissionDocument.updateOne({$push: {reviews: review}})
   },
 
   async removeReview(submissionId, userId) {
     let submissionDocument = await mongooseModel.findById(submissionId).exec()
-    return submissionDocument.update({$pull: {reviews: {userId: userId}}})
+    return submissionDocument.updateOne({$pull: {reviews: {userId: userId}}})
   }
 }
 

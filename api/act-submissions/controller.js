@@ -15,6 +15,18 @@ let overrides = {
     }
   },
 
+  async getSubmissionsForReview(request, response) {
+    try {
+      let userId = request.params.userId
+      let userRole = request.user.roles[0] // Cheating!
+      let data = await model.getSubmissionsForReview(userId, userRole)
+      response.json(data)
+    }
+    catch(error) {
+      response.status(500).send("Error on getSubmissionsForReview()")
+    }
+  },
+
   async createReview(request, response) {
     try {
       let submissionId = request.body.submissionId

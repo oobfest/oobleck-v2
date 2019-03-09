@@ -5,7 +5,9 @@ let User = mongoose.Schema({
   username: String,
   isPasswordSet: Boolean,
   email: String,
-  roles: [String],
+
+  // admin, staff, reviewer, standup-reviewer
+  roles: [String]
 })
 
 // This adds "hash" and "salt" properties for securely storing User's password

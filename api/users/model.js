@@ -5,7 +5,7 @@ let createModel = require('../create-model')
 let mongooseModel = mongoose.model('user', schema)
 
 let overrides = {
-  
+
   create(user) {
     if(user.password) {
       let userModel = new mongooseModel(user)
@@ -14,14 +14,14 @@ let overrides = {
         mongooseModel.register(userModel, user.password, (error, user)=> {
           if(error) reject(error)
           else resolve(user)
-        })        
+        })
       })
     }
     else {
       user.isPasswordSet = false
       return mongooseModel.create(user)
     }
-  }, 
+  },
 
   setPassword(id, password) {
     return new Promise((resolve, reject)=> {
@@ -52,7 +52,7 @@ let overrides = {
             else resolve(savedUser)
           })
         })
-      })      
+      })
     })
   },
 }

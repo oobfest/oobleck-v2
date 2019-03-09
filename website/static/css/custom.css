@@ -26,8 +26,11 @@ h5 { font-size: 1rem }
 }
 
 /* The official background color for OoB */
-.dash-nav-accent-2, .dash-toolbar-accent-2 { 
+.dash-nav-accent-2, .dash-toolbar-accent-2 {
   background-color: #211d1e;
+}
+.dash-nav-accent1, .dash-toolbar-accent-1 {
+  background-color: #2284fe;
 }
 .dark-background {
   background: url('/img/audience-dark.jpg') no-repeat bottom center fixed;
@@ -64,11 +67,18 @@ label.required-field:after {
 }
 
 /* Make those nav icons bloop! */
-.dash-nav-item .far { 
-  margin-right: 5px; 
-  transition: all .2s ease-in-out; 
+.dash-nav-item .far {
+  margin-right: 5px;
+  transition: all .2s ease-in-out;
 }
-.dash-nav-item:hover .far { 
-  transform: scale(1.25); 
+.dash-nav-item:hover .far {
+  transform: scale(1.25);
 }
 
+.score-row label {
+  cursor: pointer;
+}
+
+.badge-warning {
+  color:  white;
+}

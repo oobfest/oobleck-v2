@@ -17,15 +17,15 @@ block content
             //th
         tbody
           tr(v-for="user in users")
-            td 
+            td
               a(:href="'users/' + user._id") {{user.username}}
             td {{user.email}}
-            td 
+            td
               span(v-if="user.isPasswordSet") Set
-              span(v-else) 
+              span(v-else)
                 a(:href="getPasswordUrl(user._id)") Not Set
             td {{user.roles.join(", ")}}
-            //td
+            td
               button.btn.btn-xs.btn-danger(@click="remove(user.username, user._id)") Delete
 
     include _modal
@@ -65,7 +65,7 @@ block content
             })
             .catch((error)=> {
               console.log(error)
-            })        
+            })
         },
         remove(username, id) {
           if(confirm(`Delete ${username}?`)) {
@@ -77,7 +77,7 @@ block content
               })
               .catch((error)=> {
                 console.log(error)
-              })          
+              })
           }
         },
         create() {

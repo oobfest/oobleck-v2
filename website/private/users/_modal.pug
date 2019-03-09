@@ -23,17 +23,11 @@
           input#staff-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="staff" v-model="newUser.roles")
           label.form-check-label(for="staff-role-checkbox") Staff
         .form-check
-          input#schedule-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="schedule" v-model="newUser.roles")
-          label.form-check-label(for="schedule-role-checkbox") Schedule
+          input#reviewer-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="reviewer" v-model="newUser.roles")
+          label.form-check-label(for="reviewer-role-checkbox") Reviewer
         .form-check
-          input#standup-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="standup" v-model="newUser.roles")
-          label.form-check-label(for="standup-role-checkbox") Standup
-        .form-check
-          input#panelist-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="panelist" v-model="newUser.roles")
-          label.form-check-label(for="panelist-role-checkbox") Panelist
-        .form-check
-          input#standup-panelist-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="standup-panelist" v-model="newUser.roles")
-          label.form-check-label(for="standup-panelist-role-checkbox") Standup Panelist
+          input#standup-reviewer-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="standup-reviewer" v-model="newUser.roles")
+          label.form-check-label(for="standup-reviewer-role-checkbox") Standup Reviewer
       .modal-footer
         button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
         button#add-user-button.btn.btn-primary(type="submit" @click.prevent="create" data-dismiss="modal") Save

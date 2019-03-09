@@ -1,13 +1,8 @@
-header.dash-toolbar.dash-toolbar-accent-2
-	//(style=(settings.env !== 'production' ? 'background-color: #00B9FF' : ''))
+header.dash-toolbar.justify-content-between(class=(settings.env !== 'development' ? 'dash-toolbar-accent-2' : 'dash-toolbar-accent-1'))
 	a.dash-nav-toggler
 		span.dash-nav-toggler-icon
 
-	.dropdown.dash-toolbar-dropdown
-		a.dropdown-toggle(href="#" data-toggle="dropdown")
-			span.d-none.d-md-inline-block=user.username
-			span.d-md-none
-				span=user.username
-		.dropdown-menu.dropdown-menu-right
-			a.dropdown-item(href='users/' + user.id) Account
-			a.dropdown-item(href="/logout") Logout
+	div
+		span=user.username
+		span &nbsp;|&nbsp;
+		a.dropdown-link(href="/logout" style="color:white") log out

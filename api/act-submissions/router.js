@@ -10,6 +10,9 @@ router.route('/')
 router.route('/promo-code/')
   .post(controller.addPromoCode)
 
+router.route('/review/:userId')
+  .get(isLoggedIn, controller.getSubmissionsForReview)
+
 router.route('/reviews/:id')
   .post(isLoggedIn, controller.createReview)
   //.put(isLoggedIn, conttroller.updateReview)

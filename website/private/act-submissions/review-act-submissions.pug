@@ -1,1 +1,94 @@
-p Todo
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Review Submissions
+
+  #app.dash-boxes.container-fluid
+    .dash-boxes.container-fluid
+      .row
+        .col-md
+          .card.text-center.mb-3
+            .card-body.text-success
+              p.card-title Yes 😍
+              h3.card-text {{ votes(3) }}
+        if !user.roles.includes('standup-reviewer')
+          .col-md
+            .card.text-center.mb-3
+              .card-body.text-success
+                p.card-title Good 🙂
+                h3.card-text {{ votes(2) }}
+        .col-md
+          .card.text-center.mb-3.border-success
+            .card-body.text-success
+              p.card-title Meh 😬
+              h3.card-text {{ votes(1) }}
+        .col-md
+          .card.text-center.mb-3.border-success
+            .card-body.text-success
+              p.card-title Nah 😕
+              h3.card-text {{ votes(0) }}
+        .col-md
+          .card.text-center.mb-3
+            .card-body
+              p.card-title Veto 😡
+              h3.card-text {{ votes(-1) }}
+      .row
+        .col
+          .box.box-b
+            table.table.box-table
+              thead
+                tr
+                  th
+                  th Act Name
+                  th Review Count
+              tbody
+                tr(v-for="submission in submissions")
+                  td.text-center
+                    span(v-if="submission.userReview") {{ submission.userReview.score | emojify }}
+                  td
+                    a(:href="'/act-submissions/review/'+submission._id" ) {{submission.name}}
+                  td
+                    span.badge.badge-danger(v-if="submission.reviewCount==0") No Reviews
+                    span.badge.badge-warning(v-else-if="submission.reviewCount==1") {{submission.reviewCount}} Review
+                    span.badge.badge-warning(v-else-if="submission.reviewCount<5") {{submission.reviewCount}} Reviews
+                    span.badge.badge-danger(v-if="submission.reviewCount>=5") Success! {{submission.reviewCount}} Reviews
+
+
+  script.
+
+    let vue = new Vue({
+      el: "#app",
+      data() { return {
+        submissions: []
+      }},
+      filters: {
+        emojify(value) {
+          switch(value) {
+            case -1: return '😡'
+            case  0: return '😕'
+            case  1: return '😬'
+            case  2: return '🙂'
+            case  3: return '😍'
+            default: return ''
+          }
+        }
+      },
+      computed: {
+        votes() {
+          return score => this.submissions.filter(s=> s.userReview && s.userReview.score == score).length
+        }
+      },
+      methods: {
+      },
+      created() {
+        let self = this
+        axios.get('/api/act-submissions/review/' + '#{user.id}')
+          .then(response=> {
+            self.submissions = response.data
+          })
+          .catch((error)=> {
+            console.log(error)
+          })
+      }
+    })

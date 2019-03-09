@@ -12,8 +12,8 @@ nav#dash-nav.dash-nav.dash-nav-accent-2
 	.dash-nav-list
 		- var isAdmin = user.roles.includes('admin')
 		- var isStaff = user.roles.includes('staff')
-		- var isPanelist = user.roles.includes('panelist') 
-		- var isStandupPanelist  = user.roles.includes('standup-panelist')
+		- var isReviewer = user.roles.includes('reviewer')
+		- var isStandupReviewer  = user.roles.includes('standup-reviewer')
 
 		if isStaff || isAdmin
 			a.dash-nav-item(href="/act-submissions")
@@ -23,8 +23,13 @@ nav#dash-nav.dash-nav.dash-nav-accent-2
 				span.far.fa-file.fa-lg.fa-fw.fa-bounce &nbsp;
 				|  Screener Submissions
 
+		a.dash-nav-item(href="/act-submissions/review")
+			span.far.fa-star.fa-lg.fa-fw.fa-bounce &nbsp;
+			|  Review Submissions
+
 		if isAdmin
 			hr.dash-nav-divider
 			a.dash-nav-item(href="/users")
 				span.far.fa-id-card.fa-lg.fa-fw &nbsp;
 				|  Users
+
