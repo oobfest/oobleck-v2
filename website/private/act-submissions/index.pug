@@ -13,16 +13,18 @@ block content
           ul.nav.nav-pills
             li.nav-item
               a.nav-link(:class="tab=='submissions' ? 'active' : ''" href="#" @click.prevent="tab='submissions'") Submissions
-            //li.nav-item
+            li.nav-item
               a.nav-link(:class="tab=='charts' ? 'active' : ''" href="#" @click.prevent="tab='charts'") Charts
+            li.nav-item
+              a.nav-link(:class="tab=='performers' ? 'active' : ''" href="#" @click.prevent="tab='performers'") Performers
 
           .tab-content
             include tabs/submissions
             include tabs/charts
+            include tabs/performers
 
   include templates/submission-row-template
   include templates/charts-scripts
-
 
   script.
 
@@ -101,10 +103,28 @@ block content
         typeSearch: "",
         citySearch: "",
         homeSearch: "",
+        hometownFilter: 1,
+        theaterFilter: 1,
         sortField: "name",
         submissions: []
       }},
       computed: {
+        performers() {
+          let performers = []
+          for (let submission of this.submissions) {
+            for(let performer of submission.personnel) {
+              performers.push({
+                name: performer.name,
+                email: performer.email,
+                role: performer.role,
+                showName: submission.name,
+                showType: submission.showType.join(', '),
+                location: submission.city + ", " + submission.state
+              })
+            }
+          }
+          return performers
+        },
         filteredSubmissions() {
           let filteredSubmissions = this.submissions
           if(this.nameSearch) filteredSubmissions = filteredSubmissions.filter(s=> s.name.includes(this.nameSearch))
@@ -121,6 +141,14 @@ block content
           })
 
           return filteredSubmissions
+        }
+      },
+      watch: {
+        hometownFilter: function(value) {
+          drawChart(cityChart.chart, createDataView(cityChart.data, parseInt(value)))
+        },
+        theaterFilter: function(value) {
+          drawChart(theaterChart.chart, createDataView(theaterChart.data, parseInt(value)))
         }
       },
       methods: {

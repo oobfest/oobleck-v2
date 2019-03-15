@@ -10,14 +10,12 @@
             a#hometown-chart-link.nav-link(data-toggle="tab" href="#hometown-chart-pane") Hometown
           li.nav-item
             a#theater-chart-link.nav-link(data-toggle="tab" href="#theater-chart-pane") Theater
-          li.nav-item
-            a#performers-link.nav-link(data-toggle="tab" href="#performers-pane") Performers
         .tab-content
           #type-chart-pane.tab-pane.fade
             .m-3
             #type-chart
           #hometown-chart-pane.tab-pane.fade
-            //.btn-group.btn-group-toggle.m-3
+            .btn-group.btn-group-toggle.m-3
               label.btn.btn-secondary(:class="{active: hometownFilter==1}" for="hometown-filter-1")
                 input#hometown-filter-1.form-check-input(type="radio" value="1" v-model="hometownFilter")
                 | Show All
@@ -30,9 +28,13 @@
               label.btn.btn-secondary(:class="{active: hometownFilter==4}" for="hometown-filter-4")
                 input#hometown-filter-4.form-check-input(type="radio" value="4" v-model="hometownFilter")
                 | 4+
+              label.btn.btn-secondary(:class="{active: hometownFilter==5}" for="hometown-filter-5")
+                input#hometown-filter-5.form-check-input(type="radio" value="5" v-model="hometownFilter")
+                | 5+
+
             #hometown-chart
           #theater-chart-pane.tab-pane.fade
-            //.btn-group.btn-group-toggle.m-3
+            .btn-group.btn-group-toggle.m-3
               label.btn.btn-secondary(:class="{active: theaterFilter==1}" for="theater-filter-1")
                 input#theater-filter-1.form-check-input(type="radio" value="1" v-model="theaterFilter")
                 | Show All
@@ -45,24 +47,7 @@
               label.btn.btn-secondary(:class="{active: theaterFilter==4}" for="theater-filter-4")
                 input#theater-filter-4.form-check-input(type="radio" value="4" v-model="theaterFilter")
                 | 4+
+              label.btn.btn-secondary(:class="{active: theaterFilter==5}" for="theater-filter-5")
+                input#theater-filter-5.form-check-input(type="radio" value="5" v-model="theaterFilter")
+                | 5+
             #theater-chart
-          #performers-pane.tab-pane.fade
-            hr
-            //button.btn.btn-primary(type="button" @click="downloadPerformerSpreadsheet") Download Spreadsheet
-            .box.box-b
-              table.table.box-table
-                thead
-                  tr
-                    th Name
-                    th Role
-                    th Act
-                    th Type
-                    th Location
-
-                tbody
-                  tr
-                    td [performer.performerName]
-                    td [performer.role]
-                    td [performer.actName]
-                    td [performer.actType]
-                    td [performer.location]g

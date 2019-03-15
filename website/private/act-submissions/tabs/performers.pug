@@ -1,0 +1,23 @@
+#charts.tab-pane.show.active(v-show="tab=='performers'")
+  .dash-boxes.container-fluid
+    .row
+      .col
+        .box.box-b
+          table.table.box-table
+            thead
+              tr
+                th Name
+                th Email
+                th Role
+                th Act
+                th Type
+                th Location
+
+            tbody
+              tr(v-for="performer in performers")
+                td {{performer.name}}
+                td {{performer.email}}
+                td {{performer.role}}
+                td {{performer.showName}}
+                td {{performer.showType}}
+                td {{performer.location}}

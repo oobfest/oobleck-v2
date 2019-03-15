@@ -14,16 +14,26 @@ script.
       .then(function(response) {
         let submissions = response.data
 
-        let showTypes = {}
+        let showTypes = {
+          "Improv": 0,
+          "Sketch": 0,
+          "Standup": 0,
+          "Podcast": 0,
+          "Teacher": 0,
+          "Musical": 0,
+          "One-person-show": 0,
+          "Variety": 0,
+          "Other": 0
+        }
         let locations = {}
         let theaters = {}
 
         for(let submission of submissions) {
 
           // Show Types
-          for(let showType of submission.showType)
-            if(showTypes[showType] === 'undefined') showTypes[showType] = 1
-            else showTypes[showType]++
+          for(let showType of submission.showType) {
+            showTypes[showType]++
+          }
 
           // Locations
           let location = submission.city + ", " + submission.state
@@ -31,7 +41,7 @@ script.
           else locations[location]++
 
           // Theaters
-          let theater = submission.homeTheater
+          let theater = submission.home
           if (typeof theaters[theater] === 'undefined') theaters[theater] = 1
           else theaters[theater] += 1
         }
@@ -46,6 +56,10 @@ script.
         typeChart.chart = new google.visualization.PieChart(document.getElementById('type-chart'))
         cityChart.chart = new google.visualization.PieChart(document.getElementById('hometown-chart'))
         theaterChart.chart = new google.visualization.PieChart(document.getElementById('theater-chart'))
+
+        drawChart(typeChart.chart, createDataView(typeChart.data, 1))
+        drawChart(cityChart.chart, createDataView(cityChart.data, 1))
+        drawChart(theaterChart.chart, createDataView(theaterChart.data, 1))
       })
       .catch(function(error) {
         console.log(error)
@@ -67,7 +81,7 @@ script.
 
   function createDataView(data, filter) {
     let dataView = new google.visualization.DataView(data)
-    //if (filter) dataView.setRows(dataView.getFilteredRows([{column: 1, minValue: filter}]))
+    if (filter) dataView.setRows(dataView.getFilteredRows([{column: 1, minValue: filter}]))
     return dataView
   }
 
@@ -82,13 +96,3 @@ script.
       'legend':'left',
     })
   }
-
-  $('#type-chart-link').on('click', function() {
-    drawChart(typeChart.chart, createDataView(typeChart.data, 1))
-  })
-  $('#hometown-chart-link').on('shown.bs.tab', function() {
-    drawChart(cityChart.chart, createDataView(cityChart.data, 1))
-  })
-  $('#theater-chart-link').on('shown.bs.tab', function() {
-    drawChart(theaterChart.chart, createDataView(theaterChart.data, 1))
-  })

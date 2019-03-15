@@ -20,7 +20,8 @@ block content
           tbody
             tr(v-for="review, key in submission.reviews")
               td
-                a(:href="'/submissions/reviews-by-user/'+review.username") {{review.username}}
+                | {{review.username}}
+                //a(:href="'/submissions/reviews-by-user/'+review.username") {{review.username}}
               td {{review.score | emojify}}
               td {{review.notes}}
               td
