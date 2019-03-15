@@ -85,7 +85,11 @@ block content
         let self = this
         axios.get('/api/act-submissions/review/' + '#{user.id}')
           .then(response=> {
-            self.submissions = response.data
+            self.submissions = response.data.sort((a, b)=> {
+              if(a.reviewCount < b.reviewCount) return -1
+              else if (a.reviewCount > b.reviewCount) return 1
+              else return 0
+            })
           })
           .catch((error)=> {
             console.log(error)
