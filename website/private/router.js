@@ -15,6 +15,9 @@ router.get('/act-submission/:id', isLoggedIn, (request, response)=> {
   response.render('private/act-submissions/act-submission')
 })
 
+router.get('/act-submission/reviews/:id', isLoggedIn, (request, response)=> {
+  response.render('private/act-submissions/act-submission-reviews', {submissionId: request.params.id})
+})
 
 router.get('/act-submissions/review/', isLoggedIn, (request, response)=> {
   response.render('private/act-submissions/review-act-submissions')
@@ -40,6 +43,7 @@ router.post('/act-submissions/review/:id', isLoggedIn, (request, response)=> {
     next(error)
   }
 })
+
 
 router.get('/screener-submissions', isLoggedIn, (request, response)=> {
   response.render('private/screener-submissions')

@@ -1,0 +1,79 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title
+        a.text-muted(href="/act-submissions") Act Submissions
+        |  /
+        | Reviews for Submission
+
+  .dash-boxes.container-fluid
+    #vue-submission-reviews
+      .box.box-b
+        table.box-table.table
+          thead
+            tr
+              th Reviewer
+              th Score
+              th Notes
+              th Delete
+          tbody
+            tr(v-for="review, key in submission.reviews")
+              td
+                a(:href="'/submissions/reviews-by-user/'+review.username") {{review.username}}
+              td {{review.score | emojify}}
+              td {{review.notes}}
+              td
+                button.btn.btn-danger(@click="deleteReview(review.userId, key)" type="button") Delete Review
+
+  script(src="/js/vue.js")
+  script(src="/js/axios.min.js")
+  script.
+
+    let vm = new Vue({
+      el: "#vue-submission-reviews",
+      data() {
+        return {
+          submission: {reviews: []}
+        }
+      },
+      methods: {
+        deleteReview(userId, reviewIndex) {
+          if (confirm('Delete this review?')) {
+            let self = this
+            let url = '/api/submissions/delete-review/'
+            axios
+              .post(url, {submissionId: self.submission._id, userId: userId})
+              .then(function(response) {
+                self.submission.reviews.splice(reviewIndex,1)
+              })
+              .catch(function(error) {
+                console.log(error)
+              })
+          }
+        }
+      },
+      filters: {
+        emojify(value) {
+          switch(value) {
+            case -1: return '😡 Veto'
+            case  0: return '😕 Nah'
+            case  1: return '😬 Meh'
+            case  2: return '🙂 Good'
+            case  3: return '😍 Yes!'
+            default: return 'n/a'
+          }
+        }
+      },
+
+      mounted() {
+        let self = this
+        axios.get('/api/act-submissions/#{submissionId}')
+          .then(function(response) {
+            self.submission = response.data
+          })
+          .catch(function(error) {
+            self.submission = null
+          })
+      }
+    })
