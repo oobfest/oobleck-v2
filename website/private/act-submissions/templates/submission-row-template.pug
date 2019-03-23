@@ -8,7 +8,8 @@ script#submission-row-template(type="text/x-template")
           span(v-for="score in getScores()") {{score | emojify}}
       td {{showType.join(', ')}}
       td {{city}}
-      td {{home}}
+      td
+        a(href="#" @click.prevent="updateHome") {{home}}
     tr(v-show="visible")
       td(colspan=5)
         .text-center
@@ -70,8 +71,11 @@ script#submission-row-template(type="text/x-template")
           li(v-for="day in availability") {{day}}
 
         h4 Payment
-        p(v-if="usedPromo") Used promo code
-        p(v-else) Paid with Stripe
+        div(v-if="paid")
+          p(v-if="usedPromo") Used promo code
+          p(v-else) Paid with Stripe
+        div(v-else)
+          p Not paid
 
         //p
           a.text-danger(href="#" @click="remove(name, _id)") Delete Act Submission

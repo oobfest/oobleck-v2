@@ -1,6 +1,13 @@
 #submissions.tab-pane.fade.show.active(v-show="tab=='submissions'")
   .box
-    p Total submissions: {{submissions.length}}
+    p Total submissions: {{filteredSubmissions.length}}
+    .form-check.form-check-inline
+      input#show-paid.form-check-input(:value="true" type="radio" v-model="showPaid")
+      label.form-check-label(for="show-paid") Paid
+    .form-check.form-check-inline
+      input#show-unpaid.form-check-input(:value="false" type="radio" v-model="showPaid")
+      label.form-check-label(for="show-unpaid") Unpaid
+
   .box.box-b
     table.box-table.table
       thead

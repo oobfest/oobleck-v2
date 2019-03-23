@@ -14,12 +14,15 @@ block content
             li.nav-item
               a.nav-link(:class="tab=='submissions' ? 'active' : ''" href="#" @click.prevent="tab='submissions'") Submissions
             li.nav-item
+              a.nav-link(:class="tab=='hometowns' ? 'active' : ''" href="#" @click.prevent="tab='hometowns'") Hometowns
+            li.nav-item
               a.nav-link(:class="tab=='charts' ? 'active' : ''" href="#" @click.prevent="tab='charts'") Charts
             li.nav-item
               a.nav-link(:class="tab=='performers' ? 'active' : ''" href="#" @click.prevent="tab='performers'") Performers
 
           .tab-content
             include tabs/submissions
+            include tabs/hometowns
             include tabs/charts
             include tabs/performers
 
@@ -27,6 +30,51 @@ block content
   include templates/charts-scripts
 
   script.
+
+    let vm = new Vue({
+      //el: "#vue-app",
+      data() {
+        return {
+          submissions: [],
+          hasChanged: []
+        }
+      },
+      methods: {
+        standardize(submission, key) {
+          let objectId = submission.objectId
+          let city = submission.city
+          let state = submission.state
+          let theater = submission.homeTheater
+          axios
+            .post('/api/submissions/standardize', {objectId: submission._id, city: city, state: state, theater: theater})
+            .then((response)=> {
+              Vue.set(this.hasChanged, key, false)
+            })
+            .catch((error)=> {alert("Failed to update 😖"); console.log(error)})
+        },
+        trackChange(key) {
+          Vue.set(this.hasChanged, key, true)
+         }
+      },
+      filters: {
+        shorten(value, characters) {
+        return value.length > characters
+          ? value.substring(0,characters)+'...'
+          : value
+        }
+      },
+      mounted() {
+        let self = this
+        axios
+          .get('/api/submissions/getAllPaid')
+          .then(function(response) {
+            self.submissions = response.data
+          })
+          .catch(function(error) {
+            self.submissions = []
+          })
+      }
+    })
 
     Vue.component('submission-row', {
       props: [
@@ -51,7 +99,7 @@ block content
       'availability',
       'image',
       'usedPromo',
-      'payment',
+      'paid',
       'reviews'
       ],
       template: "#submission-row-template",
@@ -76,6 +124,13 @@ block content
         }
       },
       methods: {
+        updateHome() {
+          this._id
+          let newHome = prompt(`Change the hometown of "${this.name}"`, this.home)
+          if(newHome != null) {
+            alert(newHome)
+          }
+        },
         getScores() {
           return this.reviews.map(r=> r.score)
         },
@@ -99,6 +154,7 @@ block content
       el: "#app",
       data() { return {
         tab: "submissions",
+        showPaid: true,
         nameSearch: "",
         typeSearch: "",
         citySearch: "",
@@ -106,7 +162,8 @@ block content
         hometownFilter: 1,
         theaterFilter: 1,
         sortField: "name",
-        submissions: []
+        submissions: [],
+        hasChanged: []
       }},
       computed: {
         performers() {
@@ -126,7 +183,7 @@ block content
           return performers
         },
         filteredSubmissions() {
-          let filteredSubmissions = this.submissions
+          let filteredSubmissions = this.submissions.filter(s=> s.paid == this.showPaid)
           if(this.nameSearch) filteredSubmissions = filteredSubmissions.filter(s=> s.name.includes(this.nameSearch))
           if(this.typeSearch) filteredSubmissions = filteredSubmissions.filter(s=> s.showType.includes(this.typeSearch))
           if(this.citySearch) filteredSubmissions = filteredSubmissions.filter(s=> s.city.includes(this.citySearch))
@@ -155,7 +212,21 @@ block content
         remove(id) {
           let index = this.submissions.findIndex(s=> s._id == id)
           this.submissions.splice(index, 1)
-        }
+        },
+        standardize(submission, key) {
+          let city = submission.city
+          let state = submission.state
+          let home = submission.home
+          axios
+            .put('/api/act-submissions/' + submission._id, {city, state, home})
+            .then((response)=> {
+              Vue.set(this.hasChanged, key, false)
+            })
+            .catch((error)=> {alert("Failed to update 😖"); console.log(error)})
+        },
+        trackChange(key) {
+          Vue.set(this.hasChanged, key, true)
+         }
       },
       created() {
         let self = this
