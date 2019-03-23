@@ -18,6 +18,10 @@ let sendConfirmationEmail = function(submission) {
 
 let overrides = {
 
+  async getPublic(submissionId) {
+    return mongooseModel.findById(submissionId, '-payment -reviews').lean().exec()
+  },
+
   async addPayment(submissionId, payment) {
     let submissionDocument = await mongooseModel.findById(submissionId).exec()
     submissionDocument.paid = true

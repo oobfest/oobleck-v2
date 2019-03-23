@@ -1,0 +1,271 @@
+extends ../../_layout
+block content
+  .container-fluid
+    .row#app
+      .col-md-8.mx-auto.pb-5.mt-5
+        .box-head.box-head-accent-oob
+        .box-block(v-if="found")
+          h3 {{submission.name}}
+          p(v-show="found") Submitted on {{Date.parse(submission.submissionDate)}}
+
+          include ../act-submission-form/01-act-details
+          include ../act-submission-form/02-primary-location
+          include ../act-submission-form/03-image-upload
+          include ../act-submission-form/04-personnel
+          include ../act-submission-form/05-contact-information
+          include ../act-submission-form/06-performance-requirements
+          include ../act-submission-form/07-video-link
+          include ../act-submission-form/08-social-media
+          include ../act-submission-form/09-availability
+          include ../act-submission-form/10-travel-agreement
+
+          .box-block.box-bt
+            .text-center
+              button.btn.btn-lg.btn-primary(@click="submit" type="button") Update
+
+  script.
+
+    let app = new Vue({
+      el: "#app",
+      data() { return {
+        found: false,
+        seeExample: false,
+        socialMediaKey: 0,
+        videoUrlKey: 0,
+        personnelKey: 0,
+        uploadState: 0,
+        submitted: false,
+        validationErrors: [],
+        junk: 0,
+        musicianRequired: false,
+        submission: {
+          submissionDate: null,
+          id: null,
+          name: "",
+          showTitle: "",
+          showType: [],
+          privateDescription: "",
+          publicDescription: "",
+          accolades: "",
+          country: 'US',
+          state: "TX",
+          city: "",
+          home: "",
+          contact: {
+            name: "",
+            email: "",
+            phone: "",
+            role: "Performer",
+            attending: true,
+          },
+          paid: false,
+          personnel: [],
+          minimumLength: 5,
+          maximumLength: 60,
+          specialRequirements: "",
+          musicianNeeds: "",
+          notMessy: false,
+          videoUrl: '',
+          extraVideoUrls: [],
+          videoInfo: "",
+          image: {
+            processed: false,
+            progress: 0,
+            id: null,
+            url: null,
+            deleteUrl: null
+          },
+          socialMedia: [],
+          availability: [],
+          travelAgreement: ''
+        }
+      }},
+      computed: {
+        charge() {
+          return this.submission.personnel.length > 2 ? 4500 : 2500
+        },
+        isStandup() {
+          return this.submission.showType.includes('Standup')
+        }
+      },
+      methods: {
+        promoCodeHandler() {
+          axios
+            .post('/api/act-submissions/promo-code/', {submissionId: this.submission.id, promoCode: this.promoCode})
+            .then(response=> {
+              if(response.data.paid) this.submission.paid = true
+              else alert("Promo code is invalid")
+            })
+            .catch(error=> {
+              console.log(error)
+            })
+        },
+        stripeHandler() {
+          handler.open({
+            name: 'Out Of Bounds Comedy',
+            description: 'Application Fee',
+            amount: app.charge
+          })
+        },
+        validate() {
+          let validationErrors = []
+          if(this.submission.name == '') validationErrors.push("Group or performer name is required")
+          if(this.submission.showType.length <= 0) validationErrors.push("Please select at least one show type")
+          if(this.submission.privateDescription == '') validationErrors.push("'Describe Your Act To Us' cannot be blank")
+          if(this.submission.publicDescription == '') validationErrors.push("'Describe Your Act To The Public' cannot be blank")
+          if(this.submission.country == '') validationErrors.push("Country is required")
+          if(this.submission.city == '') validationErrors.push("City is required")
+
+          if(this.submission.image.id == null) validationErrors.push("Submission must include uploaded image")
+
+          if(this.submission.contact.name == '') validationErrors.push("Submission contact name is required")
+          if(this.submission.contact.email == '') validationErrors.push("Submission contact email is required")
+          if(this.submission.contact.phone == '') validationErrors.push("Submission contact phone is required")
+          if(this.submission.personnel.length <= 0) validationErrors.push("You must list everyone attending the festival under 'Cast & Crew'")
+
+          if(this.submission.minimumLength < 0) validationErrors.push("Minimum set length must be greater than zero")
+          if(this.submission.maximumLength < 0) validationErrors.push("Maximum set length must be greater than zero")
+          if(this.submission.minimumLength > 1440) validationErrors.push("Minimum set length can't be more than 24 hours")
+          if(this.submission.maximumLength > 1440) validationErrors.push("Maximum set length can't be more than 24 hours")
+          if(this.submission.minimumLength > this.submission.maximumLength) validationErrors.push("Maximum set length can't be less than minimum set length")
+          if(this.submission.notMessy == false) validationErrors.push("Under 'Performance Requirements' you must agree not to have a show with food or liquid")
+          if(this.submission.videoUrl == '') validationErrors.push("At least one URL to a submission video is required")
+
+          for(let socialMedia of this.submission.socialMedia) {
+            if(socialMedia.url == '') validationErrors.push(`The "${socialMedia.type}" social media field cannot be left blank`)
+          }
+
+          if(this.submission.availability.length <= 0) validationErrors.push("Under 'Availability' no days are selected")
+          if(this.submission.travelAgreement == '') validationErrors.push("A response to the travel agreement is required")
+
+          return validationErrors
+        },
+        submit() {
+          let self = this
+          self.validationErrors = self.validate()
+
+          // Format Video URLs
+          let data = self.submission
+          data.videoUrls = []
+          data.videoUrls.push(data.videoUrl)
+          for(let url of data.extraVideoUrls) {
+            data.videoUrls.push(url.value)
+          }
+
+          if(self.validationErrors.length == 0) {
+            axios
+              .post('/api/act-submissions', self.submission)
+              .then((response)=> {
+                self.submitted = true
+                self.submission.id = response.data._id
+              })
+              .catch((error)=> {
+                console.log("ERROR")
+                console.log(error)
+              })
+          }
+          else {
+            let errorsElement = document.getElementById("errors")
+            window.scrollTo({top: 0})
+            errorsElement.scrollIntoView({behavior: "smooth"})
+          }
+        },
+        addPersonnel() {
+          this.submission.personnel.push({
+            id: this.personnelKey++,
+            name: "",
+            role: "Performer",
+            email: ""
+          })
+        },
+        removePersonnel(id) {
+          let index = this.submission.personnel.map(p=> p.id).indexOf(id)
+          Vue.delete(this.submission.personnel, index)
+        },
+        addSocialMedia() {
+          this.submission.socialMedia.push({
+            id: this.socialMediaKey++,
+            type: "Website",
+            url: "",
+            placeholder: "https://"
+          })
+        },
+        updateSocialMedia(socialMedia) {
+          if(socialMedia.type == 'Website') socialMedia.placeholder = 'https://'
+          if(socialMedia.type == 'Twitter') socialMedia.placeholder = 'https://twitter.com/'
+          if(socialMedia.type == 'Facebook') socialMedia.placeholder = 'https://www.facebook.com/'
+          if(socialMedia.type == 'YouTube') socialMedia.placeholder = 'https://www.youtube.com/channel/'
+          if(socialMedia.type == 'Instagram') socialMedia.placeholder = 'https://www.instagram.com/'
+          if(socialMedia.type == 'Snapchat') socialMedia.placeholder = 'https://www.snapchat.com/add/'
+          if(socialMedia.type == 'Other') socialMedia.placeholder = 'https://'
+        },
+        removeSocialMedia(id) {
+          let index = this.submission.socialMedia.map(sm=> sm.id).indexOf(id)
+          Vue.delete(this.submission.socialMedia, index)
+        },
+        addExtraVideoUrl() {
+          this.submission.extraVideoUrls.push({
+            id: this.videoUrlKey++,
+            value: ""
+          })
+        },
+        removeExtraVideoUrl(id) {
+          let index = this.submission.extraVideoUrls.map(evu=> evu.id).indexOf(id)
+          Vue.delete(this.submission.extraVideoUrls, index)
+        },
+        uploadProgress(event) {
+          if (event.lengthComputable) {
+            this.submission.image.progress = parseInt((event.loaded / event.total) * 100)
+          }
+        },
+        removeImage() {
+          this.submission.image.processed = false
+          this.submission.image.progress = 0
+          this.submission.image.id = null
+          this.submission.image.url = null
+          this.submission.image.deleteUrl = null
+        },
+        imageUpload(event) {
+          let image = event.target.files[0]
+          if(image.size > (1024 * 1000 * 10)) {
+            alert("Image cannot be larger than 10MB")
+          }
+          else {
+            formData = new FormData()
+            formData.append('image', image)
+            let url = 'https://imgur-apiv3.p.mashape.com/3/image'
+            let onUploadProgress = this.uploadProgress
+            let headers = {
+              'X-mashape-Key': 'MeRL1vcC70mshcx4yVw7R4jv88gnp11IPvPjsn4GKcdklk5FiE',
+              'Authorization': 'Client-ID c60e83c906306c5'
+            }
+            let self = this
+            axios.post(url, formData, { onUploadProgress, headers })
+              .then(function (response) {
+                let data = response.data.data  // lol
+                self.submission.image.deleteUrl = 'https://imgur.com/delete/' + data.deletehash
+                self.submission.image.id = data.id
+                self.submission.image.url = data.link
+                self.submission.image.processed = true
+              })
+              .catch(function (error) {
+                alert("Image upload failed 😭")
+                console.log(error)
+              })
+          }
+        }
+      },
+      created() {
+        let self = this
+        axios.get('/api/act-submissions/edit/#{submissionId}')
+          .then((response)=> {
+            if(response.data != null) {
+              self.found = true
+              self.submission = response.data
+            }
+          })
+          .catch((error)=> {
+            console.log(error)
+          })
+      }
+    })

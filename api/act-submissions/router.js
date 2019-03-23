@@ -7,6 +7,9 @@ router.route('/')
   .get(isLoggedIn, controller.read)
   .post(controller.create)
 
+router.route('/edit/:id')
+  .get(controller.getPublic)
+
 router.route('/promo-code/')
   .post(controller.addPromoCode)
 

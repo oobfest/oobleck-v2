@@ -2,6 +2,19 @@ let model = require('./model')
 let createController = require('../create-controller')
 
 let overrides = {
+
+  async getPublic(request, response) {
+    try {
+      let submissionId = request.params.id
+      let data = await model.getPublic(submissionId)
+      response.json(data)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on getPublic()")
+    }
+  },
+
   async addPromoCode(request, response) {
     try {
       let submissionId = request.body.submissionId

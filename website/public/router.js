@@ -36,6 +36,11 @@ router.post('/set-password/', async (request, response)=> {
   }
 })
 
+router.get('/edit-application/:submissionId', (request, response)=> {
+  let submissionId = request.params.submissionId
+  response.render('public/act-submission-edit', {submissionId})
+})
+
 router.get('/apply', (request, response)=> {
   response.render('public/act-submission-form')
 })
@@ -47,9 +52,9 @@ router.get('/apply-screener', (request, response)=> {
 let stripe = require('stripe')(process.env.STRIPE_TEST_SECRET_KEY)
 router.post('/stripe', async (request, response)=> {
   try {
-    let customerData = { 
-      email: request.body.stripeEmail, 
-      source: request.body.stripeToken 
+    let customerData = {
+      email: request.body.stripeEmail,
+      source: request.body.stripeToken
     }
     let customer = await stripe.customers.create(customerData)
     let chargeData = {
@@ -64,7 +69,7 @@ router.post('/stripe', async (request, response)=> {
   catch(error) {
     next(error)
   }
-  
+
 })
 
 
