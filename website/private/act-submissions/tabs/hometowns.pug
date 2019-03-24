@@ -5,14 +5,14 @@
     table.table.box-table
       thead
         tr
-          th Act
+          th Name
           th City
           th State
           th Theater
           th(style="visibility: hidden")
             button.btn.btn-primary Update
       tbody
-        tr(v-for="submission, key in submissions")
+        tr(v-for="submission, key in paidSubmissions")
           td {{ submission.name }}
           td
             input.form-control(type="text" v-model="submission.city" @input="trackChange(key)")

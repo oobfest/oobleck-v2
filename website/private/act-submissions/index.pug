@@ -31,51 +31,6 @@ block content
 
   script.
 
-    let vm = new Vue({
-      //el: "#vue-app",
-      data() {
-        return {
-          submissions: [],
-          hasChanged: []
-        }
-      },
-      methods: {
-        standardize(submission, key) {
-          let objectId = submission.objectId
-          let city = submission.city
-          let state = submission.state
-          let theater = submission.homeTheater
-          axios
-            .post('/api/submissions/standardize', {objectId: submission._id, city: city, state: state, theater: theater})
-            .then((response)=> {
-              Vue.set(this.hasChanged, key, false)
-            })
-            .catch((error)=> {alert("Failed to update 😖"); console.log(error)})
-        },
-        trackChange(key) {
-          Vue.set(this.hasChanged, key, true)
-         }
-      },
-      filters: {
-        shorten(value, characters) {
-        return value.length > characters
-          ? value.substring(0,characters)+'...'
-          : value
-        }
-      },
-      mounted() {
-        let self = this
-        axios
-          .get('/api/submissions/getAllPaid')
-          .then(function(response) {
-            self.submissions = response.data
-          })
-          .catch(function(error) {
-            self.submissions = []
-          })
-      }
-    })
-
     Vue.component('submission-row', {
       props: [
       '_id',
@@ -121,16 +76,14 @@ block content
             case  3: return '😍'
             default: return ''
           }
+        },
+        shorten(value, characters) {
+        return value.length > characters
+          ? value.substring(0,characters)+'...'
+          : value
         }
       },
       methods: {
-        updateHome() {
-          this._id
-          let newHome = prompt(`Change the hometown of "${this.name}"`, this.home)
-          if(newHome != null) {
-            alert(newHome)
-          }
-        },
         getScores() {
           return this.reviews.map(r=> r.score)
         },
@@ -166,6 +119,9 @@ block content
         hasChanged: []
       }},
       computed: {
+        paidSubmissions() {
+          return this.submissions.filter(s=> s.paid)
+        },
         performers() {
           let performers = []
           for (let submission of this.submissions) {

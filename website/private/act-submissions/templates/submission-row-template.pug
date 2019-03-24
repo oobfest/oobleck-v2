@@ -2,18 +2,17 @@ script#submission-row-template(type="text/x-template")
   tbody
     tr
       td
-        a(href="#" @click.prevent="visible=!visible") {{name}}
+        a(href="#" @click.prevent="visible=!visible") {{ name | shorten(42) }}
       td
         a(:href="'/act-submission/reviews/' + _id")
           span(v-for="score in getScores()") {{score | emojify}}
       td {{showType.join(', ')}}
       td {{city}}
-      td
-        a(href="#" @click.prevent="updateHome") {{home}}
+      td {{home}}
     tr(v-show="visible")
       td(colspan=5)
         .text-center
-          img(:src="imageUrl")
+          img(:src="imageUrl" v-if="visible")
           h3.mt-2 {{name}}
           h4(v-if="showTitle") {{showTitle}}
           p
