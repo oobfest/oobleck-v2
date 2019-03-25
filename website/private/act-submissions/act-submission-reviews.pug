@@ -9,6 +9,7 @@ block content
 
   .dash-boxes.container-fluid
     #vue-submission-reviews
+      h2 {{submission.name}}
       .box.box-b
         table.box-table.table
           thead
@@ -35,7 +36,7 @@ block content
       el: "#vue-submission-reviews",
       data() {
         return {
-          submission: {reviews: []}
+          submission: {name: "", reviews: []}
         }
       },
       methods: {

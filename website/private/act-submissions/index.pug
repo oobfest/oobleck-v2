@@ -14,6 +14,8 @@ block content
             li.nav-item
               a.nav-link(:class="tab=='submissions' ? 'active' : ''" href="#" @click.prevent="tab='submissions'") Submissions
             li.nav-item
+              a.nav-link(:class="tab=='reviews' ? 'active' : ''" href="#" @click.prevent="tab='reviews'") Reviews
+            li.nav-item
               a.nav-link(:class="tab=='hometowns' ? 'active' : ''" href="#" @click.prevent="tab='hometowns'") Hometowns
             li.nav-item
               a.nav-link(:class="tab=='charts' ? 'active' : ''" href="#" @click.prevent="tab='charts'") Charts
@@ -22,6 +24,7 @@ block content
 
           .tab-content
             include tabs/submissions
+            include tabs/reviews
             include tabs/hometowns
             include tabs/charts
             include tabs/performers
@@ -108,6 +111,7 @@ block content
       data() { return {
         tab: "submissions",
         showPaid: true,
+        showReviewDetails: false,
         nameSearch: "",
         typeSearch: "",
         citySearch: "",
@@ -118,7 +122,29 @@ block content
         submissions: [],
         hasChanged: []
       }},
+      filters: {
+        emojify(value) {
+          switch(value) {
+            case -1: return '😡'
+            case  0: return '😕'
+            case  1: return '😬'
+            case  2: return '🙂'
+            case  3: return '😍'
+            default: return ''
+          }
+        },
+      },
       computed: {
+        reviews() {
+          let reviews = [0, 0, 0]
+          for(let submission of this.submissions) {
+            let reviewCount = submission.reviews.length
+            if(reviewCount == 0) reviews[0]++
+            else if(reviewCount > 0 && reviewCount < 5) reviews[1]++
+            else reviews[2]++
+          }
+          return reviews
+        },
         paidSubmissions() {
           return this.submissions.filter(s=> s.paid)
         },

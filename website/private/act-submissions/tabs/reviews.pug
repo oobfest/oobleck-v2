@@ -1,0 +1,29 @@
+#hometowns.tab-pane.fade.show.active(v-if="tab=='reviews'")
+  .box
+    ul
+      li
+        code {{reviews[0]}}
+        |  submissions with no reviews
+      li
+        code {{reviews[1]}}
+        |  submissions with 1 to 4 reviews
+      li
+        code {{reviews[2]}}
+        |  submissions with 5 or more reviews
+
+    .progress(style="height: 2em")
+      .progress-bar.bg-succesXs(:style="'width: ' + reviews[2]/submissions.length * 100 + '%'") All
+      .progress-bar.bg-warning(:style="'width: ' + reviews[1]/submissions.length * 100 + '%'") Some
+      .progress-bar.bg-danger(:style="'width: ' + reviews[0]/submissions.length * 100 + '%'") None
+
+  .box.box-b
+    table.table.box-table
+      thead
+        tr
+          th Name
+      tbody
+        tr(v-for="submission, key in paidSubmissions")
+          td {{ submission.name }}
+          td
+            ul.list-inline.mb-0
+              li.list-inline-item(v-for="review in submission.reviews") {{review.score | emojify }}

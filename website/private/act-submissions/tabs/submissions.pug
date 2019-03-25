@@ -1,4 +1,5 @@
-#submissions.tab-pane.fade.show.active(v-show="tab=='submissions'")
+#submissions.tab-pane.fade.show.active(v-if="tab=='submissions'")
+
   .box
     p Total submissions: {{filteredSubmissions.length}}
     .form-check.form-check-inline
