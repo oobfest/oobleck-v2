@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "nodemon",
-    "test": "node spawn-test"
+    "test": "node spawn-test",
+    "open": "open http://localhost:9000/login"
   },
   "license": "GPL-3.0",
   "repository": "github:oobfest/oobleck-v2",
