@@ -4,7 +4,7 @@
     label.col-form-label.required-field(for="act-name") Group or Performer Name
     input#act-name.form-control(type="text" required autofocus name="act-name" maxlength="280" v-model="submission.name")
   .form-group
-    label.col-form-label(for="show-title") Show Title 
+    label.col-form-label(for="show-title") Show Title
     small.form-text.text-muted Only fill this out if your show title should be different from your group or performer name.
     input#show-title.form-control(type="text" required autofocus name="show-title" maxlength="280" v-model="submission.showTitle")
   .form-group
@@ -22,7 +22,7 @@
     .form-check
       input#podcast-checkbox.form-check-input(type="checkbox" value="Podcast" v-model="submission.showType")
       label.form-check-label(for="podcast-checkbox") Podcast
-    .form-check
+    //.form-check
       input#teacher-checkbox.form-check-input(type="checkbox" value="Teacher" v-model="submission.showType")
       label.form-check-label(for="teacher-checkbox") Teacher
     .form-check
@@ -43,7 +43,7 @@
     textarea#informal-description.form-control(maxlength="1500" name="informal-description" required v-model="submission.privateDescription")
   .form-group
     label.col-form-label.required-field(for="public-description") Describe Your Act to the Public
-    small.form-text.text-muted Accepted acts will have this content published on our website and programs. Use third person active voice, e.g. "Miller &amp; Lies is..."  
+    small.form-text.text-muted Accepted acts will have this content published on our website and programs. Use third person active voice, e.g. "Miller &amp; Lies is..."
       a(href="#" @click.prevent="seeExample = !seeExample") See an example
     small.form-text.font-italic(v-show="seeExample") "Miller &amp; Lies is a comedy duo that performs a single story with awkward, emotionally vulnerable oddball characters. They've been doing improv together for ten years. Come hang with them and feel your feelings."
     textarea#public-description.form-control(maxlength="1400" name="public-description" required v-model="submission.publicDescription")
