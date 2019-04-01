@@ -15,7 +15,8 @@ block content
               ul
                   li(v-for="validationError in validationErrors") {{validationError}}
 
-          include 00-welcome
+          //include 00-welcome
+          include 00-welcome-late
           include 01-act-details
           include 02-primary-location
           include 03-image-upload
@@ -188,7 +189,7 @@ block content
       }},
       computed: {
         charge() {
-          return this.submission.personnel.length > 2 ? 4500 : 2500
+          return this.submission.personnel.length > 2 ? 5500 : 3500
         },
         isStandup() {
           return this.submission.showType.includes('Standup')
