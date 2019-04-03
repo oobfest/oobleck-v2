@@ -215,7 +215,11 @@ block content
         axios.get('/api/act-submissions')
           .then((response)=> {
             self.submissions = response.data
+
+            // This is for the charts tab
+            // To avoid calling the API twice
             google.charts.setOnLoadCallback(drawCharts)
+
           })
           .catch((error)=> {
             console.log(error)

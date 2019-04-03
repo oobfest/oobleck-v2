@@ -4,9 +4,9 @@ module.exports = function (request, response, next) {
     next()
   }
   else {
-    response.render('login', {
+    response.render('public/login', {
       info: { message: "You must be logged in to view " + request.originalUrl },
       attemptedUrl: request.originalUrl
-    })    
+    })
   }
 }
