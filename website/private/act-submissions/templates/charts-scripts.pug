@@ -2,17 +2,20 @@ script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
 script.
 
   google.charts.load('current', {'packages':['corechart']})
-  google.charts.setOnLoadCallback(drawCharts)
+
+  /* This code is executed in the Vue instance created() hook */
+  /* google.charts.setOnLoadCallback(drawCharts) */
 
   let typeChart = {chart: null, data: null, filter: false}
   let cityChart = {chart: null, data: null, filter: false}
   let theaterChart = {chart: null, data: null, filter: false}
 
   function drawCharts() {
-    axios
-      .get('/api/act-submissions')
-      .then(function(response) {
-        let submissions = response.data
+
+    //axios
+      //.get('/api/act-submissions')
+      //.then(function(response) {
+        let submissions = vue.paidSubmissions
 
         let showTypes = {
           "Improv": 0,
@@ -60,10 +63,10 @@ script.
         drawChart(typeChart.chart, createDataView(typeChart.data, 1))
         drawChart(cityChart.chart, createDataView(cityChart.data, 1))
         drawChart(theaterChart.chart, createDataView(theaterChart.data, 1))
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
+      //})
+      //.catch(function(error) {
+      //  console.log(error)
+      //})
   }
 
   function createDataTable(data) {

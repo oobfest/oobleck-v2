@@ -215,6 +215,7 @@ block content
         axios.get('/api/act-submissions')
           .then((response)=> {
             self.submissions = response.data
+            google.charts.setOnLoadCallback(drawCharts)
           })
           .catch((error)=> {
             console.log(error)
