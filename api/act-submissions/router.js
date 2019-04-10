@@ -16,7 +16,7 @@ router.route('/promo-code/')
 router.route('/review/:userId')
   .get(isLoggedIn, controller.getSubmissionsForReview)
 
-router.route('/reviews/:id')
+router.route('/reviews/:userId/:submissionId')
   .post(isLoggedIn, controller.createReview)
   //.put(isLoggedIn, conttroller.updateReview)
   .delete(isLoggedIn, controller.removeReview)

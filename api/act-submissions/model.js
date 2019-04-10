@@ -72,10 +72,16 @@ let overrides = {
     }
     else return submissionDocument.updateOne({$push: {reviews: review}})
   },
-
   async removeReview(submissionId, userId) {
-    let submissionDocument = await mongooseModel.findById(submissionId).exec()
-    return submissionDocument.updateOne({$pull: {reviews: {userId: userId}}})
+    console.log(`s: ${submissionId}\tu: ${userId}`)
+    try {
+      let submissionDocument = await mongooseModel.findById(submissionId).exec()
+      return submissionDocument.updateOne({$pull: {reviews: {userId: userId}}})
+    }
+    catch(error) {
+      console.log(error)
+      return "Error"
+    }
   }
 }
 

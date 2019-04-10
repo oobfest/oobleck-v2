@@ -21,15 +21,12 @@ block content
           tbody
             tr(v-for="review, key in submission.reviews")
               td
-                | {{review.username}}
-                //a(:href="'/submissions/reviews-by-user/'+review.username") {{review.username}}
+                a(:href="'/user/reviews/'+review.username") {{review.username}}
               td {{review.score | emojify}}
               td {{review.notes}}
               td
                 button.btn.btn-danger(@click="deleteReview(review.userId, key)" type="button") Delete Review
 
-  script(src="/js/vue.js")
-  script(src="/js/axios.min.js")
   script.
 
     let vm = new Vue({
@@ -43,9 +40,9 @@ block content
         deleteReview(userId, reviewIndex) {
           if (confirm('Delete this review?')) {
             let self = this
-            let url = '/api/submissions/delete-review/'
+            let url = '/api/act-submissions/reviews/' + userId + '/' + self.submission._id
             axios
-              .post(url, {submissionId: self.submission._id, userId: userId})
+              .delete(url)
               .then(function(response) {
                 self.submission.reviews.splice(reviewIndex,1)
               })

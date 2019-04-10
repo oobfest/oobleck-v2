@@ -59,8 +59,8 @@ let overrides = {
 
   async removeReview(request, response) {
     try {
-      let submissionId = request.body.submissionId
-      let userId = request.body.userId
+      let submissionId = request.params.submissionId
+      let userId = request.params.userId
       let data = await model.removeReview(submissionId, userId)
       response.json(data)
     }

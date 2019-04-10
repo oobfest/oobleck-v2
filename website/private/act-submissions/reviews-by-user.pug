@@ -1,0 +1,47 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title
+        a.text-muted(href="/act-submissions") Submissions
+        |  /
+        | Reviews by User
+
+  .dash-boxes.container-fluid
+    .row
+      .col-md
+        .card.text-center.mb-3(class=(votes.yes <= 12) ?'border-success' :'border-danger')
+          .card-body.text-success(class=(votes.yes <= 12) ?'text-success' :'text-danger')
+            p.card-title Yes 😍
+            h3.card-text=votes.yes
+      .col-md
+        .card.text-center.mb-3.border-success
+          .card-body.text-success
+            p.card-title Meh 😬
+            h3.card-text=votes.meh
+      .col-md
+        .card.text-center.mb-3.border-success
+          .card-body.text-success
+            p.card-title Nah 😕
+            h3.card-text=votes.nah
+      .col-md
+        .card.text-center.mb-3(class=(votes.veto <= 5) ?'border-success' :'border-danger')
+          .card-body(class=(votes.veto <= 5) ?'text-success' :'text-danger')
+            p.card-title Veto 😡
+            h3.card-text=votes.veto
+    h2 #{username}
+    .box.box-b
+      table.box-table.table
+        thead
+          tr
+            th Act Name
+            th Review Score
+            th Review Notes
+        tbody
+          for submission in submissions
+            - var review = submission.reviews.find(function(review){ return review.username == username})
+            tr
+              td
+                a(href="/act-submission/reviews/" + submission._id)=submission.name
+              td=review.score
+              td=review.notes

@@ -44,9 +44,29 @@ router.post('/act-submissions/review/:id', isLoggedIn, (request, response)=> {
   }
 })
 
-
 router.get('/screener-submissions', isLoggedIn, (request, response)=> {
   response.render('private/screener-submissions')
+})
+
+router.get('/user/reviews/:username', isLoggedIn, isRole(['admin', 'staff']), async (request, response)=> {
+  let username = request.params.username
+  let submissions = await submissionModel.read()
+  let releventSubmissions = []
+  let votes = {yes:0, meh:0, nah:0, veto:0}
+  for(let i=0; i<submissions.length; i++) {
+    for(let j=0; j<submissions[i].reviews.length; j++) {
+      if (submissions[i].reviews[j].username === username) {
+        releventSubmissions.push(submissions[i])
+        switch(submissions[i].reviews[j].score) {
+          case  2: votes.yes++;  break;
+          case  1: votes.meh++;  break;
+          case  0: votes.nah++;  break;
+          case -1: votes.veto++; break;
+        }
+      }
+    }
+  }
+  response.render('private/act-submissions/reviews-by-user', {submissions: releventSubmissions, username: username, votes: votes})
 })
 
 router.get('/users', isLoggedIn, isRole(['admin', 'staff']), (request, response)=> {

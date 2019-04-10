@@ -3,19 +3,24 @@ let controller = require('./controller')
 let router = express.Router()
 let isLoggedIn = require('../is-logged-in')
 
-router.use(isLoggedIn)
 
 router.route('/')
-  .get(controller.read)
-  .post(controller.create)
+  .get(isLoggedIn, controller.read)
+  .post(isLoggedIn, controller.create)
+
+router.route('/login')
+  .post(controller.login)
+
+router.route('/logout')
+  .post(controller.logout)
 
 router.route('/password')
-  .post(controller.setPassword)
-  .put(controller.changePassword)
+  .post(isLoggedIn, controller.setPassword)
+  .put(isLoggedIn, controller.changePassword)
 
 router.route('/:id')
-  .get(controller.read)
-  .put(controller.update)
-  .delete(controller.destroy)
+  .get(isLoggedIn, controller.read)
+  .put(isLoggedIn, controller.update)
+  .delete(isLoggedIn, controller.destroy)
 
 module.exports = router

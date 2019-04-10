@@ -2,11 +2,11 @@
   h3.mb-4 Act Details
   .form-group
     label.col-form-label.required-field(for="act-name") Group or Performer Name
-    input#act-name.form-control(type="text" required autofocus name="act-name" maxlength="280" v-model="submission.name")
+    input#act-name.form-control(type="text" required autofocus name="act-name" maxlength="280" v-model.trim="submission.name")
   .form-group
     label.col-form-label(for="show-title") Show Title
     small.form-text.text-muted Only fill this out if your show title should be different from your group or performer name.
-    input#show-title.form-control(type="text" required autofocus name="show-title" maxlength="280" v-model="submission.showTitle")
+    input#show-title.form-control(type="text" required autofocus name="show-title" maxlength="280" v-model.trim="submission.showTitle")
   .form-group
     label.col-form-label.required-field(for="show-type") Show Type
     small.form-text.text-muted Select all that apply
