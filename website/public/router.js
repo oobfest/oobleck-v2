@@ -42,7 +42,7 @@ router.get('/edit-application/:submissionId', (request, response)=> {
 })
 
 router.get('/apply', (request, response)=> {
-  response.render('public/act-submission-form')
+  response.render('public/act-submission-form/closed')
 })
 
 router.get('/apply-screener', (request, response)=> {
