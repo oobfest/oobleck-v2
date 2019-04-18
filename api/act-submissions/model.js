@@ -50,10 +50,10 @@ let overrides = {
     if(userRole == 'reviewer') query = {paid: true, showType: {$ne: 'Standup'}}
     if(userRole == 'standup-reviewer') query = {paid: true, showType: {$in: 'Standup'}}
     try {
-      let submissionDocuments = await mongooseModel.find(query, '_id name reviews').exec()
+      let submissionDocuments = await mongooseModel.find(query, '_id name showTitle reviews').exec()
       return submissionDocuments.map(s=> { return {
         _id: s._id,
-        name: s.name,
+        name: s.showTitle ? `${s.name}: ${s.showTitle}` : s.name,
         reviewCount: s.reviews.length,
         userReview: s.reviews.find(r=> r.userId == userId)
       }})
