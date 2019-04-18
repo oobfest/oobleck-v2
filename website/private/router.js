@@ -58,7 +58,8 @@ router.get('/user/reviews/:username', isLoggedIn, isRole(['admin', 'staff']), as
       if (submissions[i].reviews[j].username === username) {
         releventSubmissions.push(submissions[i])
         switch(submissions[i].reviews[j].score) {
-          case  2: votes.yes++;  break;
+          case  3: votes.yes++;  break;
+          case  2: votes.good++;  break;
           case  1: votes.meh++;  break;
           case  0: votes.nah++;  break;
           case -1: votes.veto++; break;
