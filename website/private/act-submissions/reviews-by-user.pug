@@ -48,5 +48,15 @@ block content
             tr
               td
                 a(href="/act-submission/reviews/" + submission._id)=submission.name
-              td=review.score
+              td
+                +renderReview(review.score)
               td=review.notes
+
+mixin renderReview(score)
+  case score
+    when  3: |😍 Yes!
+    when  2: |🙂 Good
+    when  1: |😬 Meh
+    when  0: |😕 Nah
+    when -1: |😡 Veto
+    default: break

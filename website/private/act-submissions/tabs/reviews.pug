@@ -23,7 +23,8 @@
           th Name
       tbody
         tr(v-for="submission, key in paidSubmissions")
-          td {{ submission.name }}
+          td
+            a(:href="'/act-submission/reviews/' + submission._id") {{ submission.name }}
           td
             ul.list-inline.mb-0
               li.list-inline-item(v-for="review in submission.reviews") {{review.score | emojify }}

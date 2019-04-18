@@ -52,7 +52,7 @@ router.get('/user/reviews/:username', isLoggedIn, isRole(['admin', 'staff']), as
   let username = request.params.username
   let submissions = await submissionModel.read()
   let releventSubmissions = []
-  let votes = {yes:0, meh:0, nah:0, veto:0}
+  let votes = {yes:0, good:0, meh:0, nah:0, veto:0}
   for(let i=0; i<submissions.length; i++) {
     for(let j=0; j<submissions[i].reviews.length; j++) {
       if (submissions[i].reviews[j].username === username) {
