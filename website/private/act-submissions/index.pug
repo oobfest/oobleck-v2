@@ -16,6 +16,8 @@ block content
             li.nav-item
               a.nav-link(:class="tab=='reviews' ? 'active' : ''" href="#" @click.prevent="tab='reviews'") Reviews
             li.nav-item
+              a.nav-link(:class="tab=='reviewers' ? 'active' : ''" href="#" @click.prevent="tab='reviewers'") Reviewers
+            li.nav-item
               a.nav-link(:class="tab=='hometowns' ? 'active' : ''" href="#" @click.prevent="tab='hometowns'") Hometowns
             li.nav-item
               a.nav-link(:class="tab=='charts' ? 'active' : ''" href="#" @click.prevent="tab='charts'") Charts
@@ -25,6 +27,7 @@ block content
           .tab-content
             include tabs/submissions
             include tabs/reviews
+            include tabs/reviewers
             include tabs/hometowns
             include tabs/charts
             include tabs/performers
@@ -144,6 +147,22 @@ block content
             else reviews[2]++
           }
           return reviews
+        },
+        reviewers() {
+          let reviewers = {}
+          let submissions = this.paidSubmissions
+          let votes = {yes:0, meh:0, nah:0, veto:0}
+          for(let i=0; i<submissions.length; i++) {
+            for(let j=0; j<submissions[i].reviews.length; j++) {
+              if (reviewers[submissions[i].reviews[j].username]) {
+                reviewers[submissions[i].reviews[j].username].push(submissions[i].reviews[j].score)
+              }
+              else {
+               reviewers[submissions[i].reviews[j].username] = [submissions[i].reviews[j].score]
+              }
+            }
+          }
+          return reviewers
         },
         paidSubmissions() {
           return this.submissions.filter(s=> s.paid)

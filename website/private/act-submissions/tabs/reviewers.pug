@@ -1,0 +1,26 @@
+#reviewers.tab-pane.fade.show.active(v-if="tab=='reviewers'")
+  .box
+
+  .box.box-b
+    table.table.box-table
+      thead
+        tr
+          th Name
+          th Total
+          th Yes
+          th Good
+          th Meh
+          th Nah
+          th Veto
+      tbody
+        tr(v-for="reviews, username in reviewers")
+          td
+            a(:href="'user/reviews/' + username") {{username}}
+          td {{reviews.length}}
+          td {{reviews.filter(r=> r==3).length}}
+          td {{reviews.filter(r=> r==2).length}}
+          td {{reviews.filter(r=> r==1).length}}
+          td {{reviews.filter(r=> r==0).length}}
+          td {{reviews.filter(r=> r==-1).length}}
+
+
