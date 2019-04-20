@@ -45,6 +45,16 @@ router.get('/apply', (request, response)=> {
   response.render('public/act-submission-form/closed')
 })
 
+router.get('/apply-secret/:secret', (request, response)=> {
+  let secret = request.params.secret
+  if (secret == process.env.LATE_SUBMISSION_SECRET) {
+    response.render('public/act-submission-form')
+  }
+  else {
+    response.render('public/act-submission-form/closed')
+  }
+})
+
 router.get('/apply-screener', (request, response)=> {
   response.render('public/screener-submission-form')
 })
@@ -76,5 +86,11 @@ router.post('/stripe', async (request, response)=> {
 // Login and Logout pages
 let loginRouter = require('./login/router')
 router.use(loginRouter)
+
+// Default homepage
+router.use((request, response)=> {
+  response.render('public/index')
+})
+
 
 module.exports = router
