@@ -82,15 +82,8 @@ router.post('/stripe', async (request, response)=> {
 
 })
 
-
 // Login and Logout pages
 let loginRouter = require('./login/router')
 router.use(loginRouter)
-
-// Default homepage
-router.use((request, response)=> {
-  response.render('public/index')
-})
-
 
 module.exports = router
