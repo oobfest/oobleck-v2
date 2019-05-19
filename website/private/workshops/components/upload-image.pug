@@ -1,0 +1,95 @@
+script#upload-image-template(type="text/template")
+  div
+    h3 Image Upload
+    div(v-show="uploadState=='no-upload'")
+      .custom-file
+        input#file-input.custom-file-input(type="file" accept="image/*" @change="uploadImage")
+        label.custom-file-label(for="file-input") Select Image
+      p.form-text
+        em Image hosting powered by 
+          a(href="https://imgur.com/" target="_blank") Imgur
+          | .
+    div(v-show="uploadState=='uploading'")
+      p {{uploadMessage}}
+      .progress
+        .progress-bar.bg-primary(:style="{width: uploadPercent + '%'}")
+    div(v-show="uploadState=='uploaded'")
+      img.img-thumbnail(:src="$parent.workshop.imageUrl ? $parent.workshop.imageUrl + '.jpg' : '#'" alt="Image preview")
+      .text-right
+        a.btn.btn-danger(:href="$parent.workshop.deleteImageUrl" target="_blank" @click="deleteImage") Delete Image
+
+script.
+  Vue.component('upload-image', {
+    template: "#upload-image-template",
+    data() {
+      return {
+        uploadState: 'no-upload',   // Values: 'no-upload', 'uploading' and 'uploaded'
+        uploadMessage: "",
+        uploadPercent: 0,
+      }
+    },
+    methods: {
+      deleteImage() {
+        this.$parent.workshop.imageUrl = ""
+        this.$parent.workshop.deleteImageUrl = ""
+        this.uploadMessage = ""
+        this.uploadPercent = 0
+        this.uploadState = 'no-upload'
+      },
+      uploadImage(event) {
+        let self = this // keep 'this' scope for Axios
+        let image = event.target.files[0]
+
+        // Don't upload if image is too big
+        const TEN_MEGABYTES = (1024 * 1000 * 10)
+        if (image.size > TEN_MEGABYTES) {
+          alert("File is too big!")
+          return
+        }
+        else {
+          self.uploadState = 'uploading'
+          self.uploadMessage= 'Uploading to Imgur...'
+
+          // Make weird Form Data object for uploading
+          let formData = new FormData()
+          formData.append('image', image)
+
+          axios({
+
+              // POST to Mashape for Imgur API
+              url: 'https://imgur-apiv3.p.mashape.com/3/image',
+              method: 'POST',
+
+              headers: { 
+                'content-type': 'multipart/form-data',
+
+                // Mashape Credentials
+                'X-mashape-Key': 'MeRL1vcC70mshcx4yVw7R4jv88gnp11IPvPjsn4GKcdklk5FiE',
+                'Authorization': 'Client-ID c60e83c906306c5'
+              },
+              data: formData,
+
+              // Change progress bar as image uploads
+              onUploadProgress: function (uploadProgressEvent) {
+                if (uploadProgressEvent.lengthComputable) {
+                  self.uploadPercent = parseInt((uploadProgressEvent.loaded / uploadProgressEvent.total) * 100)
+                  if(self.uploadPercent === 100) self.uploadMessage = 'Waiting for response from Imgur...'
+                }
+              },
+
+            })
+            .then(function(response) {
+              // IDK why "data" is inside "response.data"
+              self.$parent.workshop.imageUrl = 'http://imgur.com/' + response.data.data.id
+              self.$parent.workshop.deleteImageUrl = 'http://imgur.com/delete/' + response.data.data.deletehash
+              self.uploadState = 'uploaded'
+            })
+            .catch(function(error) {
+              alert("Error uploading image :(")
+              console.log(error)
+              self.deleteImage()
+            })
+        }
+      }
+    }
+  })

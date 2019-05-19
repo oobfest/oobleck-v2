@@ -1,0 +1,27 @@
+script#day-template(type="text/template")
+  div
+    h2 {{day}}
+    .day-container
+      .box.venue(:class="getVenueClass(venue.name)" v-for="venue in venues")
+        venue(:venue="venue",:day="day")
+
+script.
+  Vue.component('day', {
+    template: "#day-template",
+    props: ['day', 'venues'],
+    methods: {
+      // Given the venue name, returns the CSS class (essentially what color the box will be)
+      getVenueClass(venue) {
+        switch(venue) {
+          case 'Hideout Up':        return 'hideout-up'
+          case 'Hideout Down':      return 'hideout-down'
+          case 'Hideout Classroom': return 'hideout-classroom'
+          case 'ColdTowne':         return 'coldtowne'
+          case 'Fallout':           return 'fallout'
+          case 'Velveeta':          return 'velveeta'
+          case 'Spider House':      return 'spider-house'
+          case 'Institution':       return 'institution'
+        }
+      }
+    }
+  })

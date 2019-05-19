@@ -1,0 +1,146 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Badges
+
+  #app.dash-boxes.container-fluid
+    h4 Badge Stats
+    ul
+      li Total Badges: 
+        span.code {{totals.total}}
+      li Paid All-Access: 
+        span.code {{totals.allAccessTotal}}
+      li Performer Upgrades (Weekend/Full/Total): 
+        span.code {{totals.performerWeekendTotal}}/{{totals.performerFullTotal}}/{{totals.performerWeekendTotal + totals.performerFullTotal}}
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Name
+            th Email
+            th Phone
+            th Badge Type
+            th Quantity
+            th Paid
+        tbody(v-for="badge, index in badges")
+          tr(style="background-color: white")
+            td 
+              a(:href="'#collapse-' + index" data-toggle="collapse") {{badge.name}}
+            td {{badge.email}}
+            td {{badge.phone}}
+            td 
+              span.badge.badge-pill(:class="badge.type") {{getBadgeName(badge.type)}}
+            td {{badge.quantity}}
+            td {{badge.payment ? '$' + Number(badge.payment.transactions[0].amount.total) : ''}}
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan=5)
+              div(v-if="badge.payment && badge.payment.create_time")
+                h4 Payment Made
+                pre {{formatDate(badge.payment.create_time)}}
+                h4 Transaction ID
+                p.code
+                  a(:href="'https://www.paypal.com/activity/payment/' + badge.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{badge.payment.transactions[0].related_resources[0].sale.id}}
+              div(v-else)
+                p No payment information
+              //button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete Badge
+    .form-group
+      button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-badge-modal") Add Badge
+    
+    add-badge-modal
+
+  style.
+    .badge { color: white; background-color: #999999 }
+    .badge.all { background-color: #377eb8 }
+    .badge.performer-full-upgrade { background-color: #1f78b4 }
+    .badge.performer-weekend-upgrade { background-color: #7570b3 }
+    .badge.volunteer { background-color: #ff7f00 }
+    .badge.staff { background-color: #4daf4a }
+    .badge.industry { background-color: #a6761d }
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script(src="/js/vue-markdown.js")
+  include components/add-badge
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          badges: [],
+          totals: {
+            total: 0,
+            allAccessTotal: 0,
+            performerWeekendTotal: 0,
+            performerFullTotal: 0
+          }
+        }
+      },
+      computed: {
+        total() {
+          if(this.badges.length == 0) return null
+          return this.badges.reduce((total, badge)=> {return total + badge.quantity}, 0)
+        }
+      },
+      methods: {
+        getTotals() {
+          for(let i=0; i<this.badges.length; i++) {
+            let badge = this.badges[i]
+
+            // All Badges
+            this.totals.total++
+
+            // All-Access Badge (paid)
+            if(badge.type == 'all' && badge.payment) 
+              this.totals.allAccessTotal += badge.quantity
+
+            // Performer Upgrade (full)
+            if(badge.type == 'performer-full-upgrade') 
+              this.totals.performerFullTotal++
+
+            // Performer Upgrade (weekend-only)
+            if(badge.type == 'performer-weekend-upgrade') 
+              this.totals.performerWeekendTotal++
+
+          }
+        },
+        formatDate(date) {
+          return new Date(Date.parse(date)).toLocaleString('en-US')
+        },
+        getBadgeName(type) {
+          if(type=='all') return "All-Access"
+          if(type=='performer-weekend-upgrade') return "Weekend Upgrade"
+          if(type=='performer-full-upgrade') return "Performer All-Access"
+          if(type=='staff') return "Staff"
+          if(type=='industry') return "Industry"
+          if(type=='volunteer') return "5+ Volunteer"
+          else return "Other"
+        },
+        destroy(id, index) {
+          if (confirm("Delete badge? This is probably a bad idea.")) {
+            let self = this
+            axios
+              .delete('/api/badges/' + id)
+              .then(function(response) {
+                self.badges.splice(index, 1)
+              })
+              .catch(function(error) {
+                alert("Error deleting badge :(")
+              })
+          }
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/badges')
+          .then(function(response) {
+            self.badges = response.data
+            self.getTotals()
+          })
+          .catch(function(error) {
+            alert("Error getting badges :(")
+            console.log(error)
+          })
+      }
+    })

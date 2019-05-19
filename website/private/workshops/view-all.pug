@@ -1,0 +1,166 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Workshops
+
+  #app.dash-boxes.container-fluid
+    add-workshop-modal(:workshop="modalWorkshop")
+    edit-workshop-modal(:workshop="modalWorkshop" @update-workshop="updateWorkshop")
+    .box.box-b
+      table.box-table.table
+        thead
+          tr
+            th Name
+            th Teacher(s)
+            th When
+            th Sold
+            th Audit
+            th Refunds
+        tbody(v-for="(workshop, index) in workshops")
+          tr( style="background-color: white")
+            td
+              a(:href="'#collapse-' + index" data-toggle="collapse") {{workshop.name ? workshop.name : '[no name]'}}
+            td {{workshop.teacher}}
+            td {{getWorkshopDate(workshop)}}
+            td.code(:class="{'text-success': workshop.sold == workshop.capacity, 'text-danger': workshop.sold > workshop.capacity}") {{workshop.sold}}/{{workshop.capacity}}
+            td.code {{workshop.auditSold}}/{{workshop.auditCapacity}}
+              //a(href="#" @click="setAuditCapacity(workshop._id)") 
+            td {{workshop.refunded}}
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan="6")
+              h4 Description
+              vue-markdown(:source="workshop.description")
+              h4 Teacher Bio
+              vue-markdown(:source="workshop.bio")
+              div(v-if="workshop.imageUrl")
+                h4 View Image
+                pre
+                  a(:href="workshop.imageUrl" target="_blank") {{workshop.imageUrl}}
+              .form-group
+                button.btn.btn-primary(@click="editWorkshop(workshop)" type="button" data-toggle="modal" data-target="#edit-workshop-modal") Edit
+                | &nbsp;
+                button.btn.btn-danger(v-if="!workshop.deleteImageUrl" @click="deleteWorkshop(workshop._id, index)") Delete
+                button.btn.btn-danger(v-else @click="deleteWorkshopImage(workshop)") Delete Image
+              h4 Students
+              div(v-if="workshop.students.length > 0")
+                table.table.table-sm
+                  thead
+                    tr
+                      th Name
+                      th Email
+                      th Quantity
+                      th Paid
+                      th Audit?
+                      th Date
+                      th Payment ID
+                      th
+                  tbody
+                    tr(:class="{'line-through': student.refunded}" v-for="(student, index) in workshop.students" )
+                      td {{student.name}}
+                      td {{student.email}}
+                      td {{student.quantity}}
+                      td
+                        span(v-if="student.payment") ${{student.payment.transactions[0].amount.total.slice(0, -3)}}
+                      td {{student.auditing ? "Yes" : "" }}
+                      td 
+                        span(v-if="student.payment") {{new Date(Date.parse(student.payment.create_time)).toLocaleDateString('en-US')}}
+                      td 
+                        a(:href="'https://www.paypal.com/activity/payment/' + student.payment.transactions[0].related_resources[0].sale.id" target="_blank" v-if="student.payment") {{student.payment.transactions[0].related_resources[0].sale.id}}
+                      td
+                        button.btn.btn-xs.btn-secondary(v-if="student.refunded" type="button" @click="setRefund(workshop._id, student.email, false)") Undo Refund
+                        button.btn.btn-xs.btn-secondary(v-else type="button" @click="setRefund(workshop._id, student.email, true)") Refund
+              p(v-else) No students
+
+    .form-group
+      button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-workshop-modal") Add Workshop
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script(src="/js/vue-markdown.js")
+  include components/add-workshop
+  include components/edit-workshop
+  script.
+    Vue.use(VueMarkdown)
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          workshops: [],
+          modalWorkshop: {
+            capacity:12, 
+            imageUrl: '', 
+            deleteImageUrl: ''
+          }
+        }
+      },
+      methods: {
+        updateWorkshop(workshop) {
+          let index = this.workshops.map(w=> w._id).indexOf(workshop._id)
+          Vue.set(this.workshops, index, workshop)
+        },
+        setRefund(workshopId, studentEmail, refunded) {
+          let self = this
+          axios
+            .post('/api/workshops/set-refund/' + workshopId, {email: studentEmail, refunded: refunded})
+            .then((response)=> {
+              let index = self.workshops.map(w=> w._id).indexOf(workshopId)
+              Vue.set(self.workshops, index, response.data)
+            })
+            .catch((error)=> {
+              alert("Error setting workshop refund :(")
+              console.log( error)
+            })
+        },
+        editWorkshop(selectedWorkshop) {
+          this.modalWorkshop = selectedWorkshop
+        },
+        deleteWorkshop(id, index) {
+          let self = this
+          axios
+            .delete('/api/workshops/' + id)
+            .then(function(response) {
+              self.workshops.splice(index, 1)
+            })
+        },
+        deleteWorkshopImage(workshop) {
+          window.open(workshop.deleteImageUrl, '_blank')
+          workshop.imageUrl = ''
+          workshop.deleteImageUrl = ''
+          let self = this
+          axios
+            .put('/api/workshops/' + workshop._id, workshop)
+            .then(function(response) {
+              workshop = response.data
+            })
+            .catch(function(error){
+              alert("Error updating workshop :(")
+              console.log(error)
+            })        
+
+        },
+        getWorkshopDate(workshop) {
+          if (workshop.day) {
+            let time = ''
+            if(workshop.time=="10") time = "11:00am"
+            if(workshop.time=="20") time = "12:00pm"
+            if(workshop.time=="30") time = "1:00pm"
+            if(workshop.time=="40") time = "3:00pm"
+            return `${workshop.day}, ${workshop.venue}, ${time}`
+          }
+          else return 'N/A'
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/workshops/')
+          .then(function(response) {
+            self.workshops = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting workshops :(")
+            console.log(error)
+          })
+      }
+    })

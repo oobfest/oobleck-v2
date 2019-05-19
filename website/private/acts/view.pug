@@ -1,0 +1,77 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title
+        a.text-muted(href="/acts/") Acts
+        |  /
+        | #{act.name}
+    a.btn.btn-secondary.ml-md-auto(href="/submissions/edit/"+act._id) Edit Act
+
+  .dash-boxes.container-fluid
+    .row.justify-content-center
+      .col-lg-8
+        .text-center
+          if typeof act.imageUrl != 'undefined' && act.imageUrl != ''
+            a(href=act.imageUrl)
+              img.mb-1(alt="Submission Photo" src=act.imageUrl.substr(0, act.imageUrl.length-4) + 'b.jpeg')
+          else
+            small [no picture]
+          h2.block-title #{act.name}
+          h3.block-subtitle=act.showType
+          h3 From #{act.city}, #{act.state}, #{act.country}
+          h5.block-subtitle=act.homeTheater
+        hr
+        h2.text-center Act Description
+        h3 Bio
+        p=act.publicDescription
+        h3 Self-Description
+        p=act.informalDescription
+        if act.accolades
+          h3 Accolades
+          p=act.accolades
+        if act.socialMedia.length > 0
+          h3 Social Media
+          for social in act.socialMedia
+            p
+              a(href=social.url)=social.type
+        hr
+        h2.text-center Performance Details
+        h3 Availability
+        pre=act.available
+        h3 Set Length
+        p Minimum #{act.minimumShowLength}, Maximum #{act.maximumShowLength}
+        if act.showType !== 'Stand-Up'
+          h3 Tech Rehearsal Requested
+          p=act.techRehearsalNeeded ? 'Yes' : 'No'
+        if act.specialNeeds
+          h3 Performance Needs
+          p=act.specialNeeds
+        hr
+        h2.text-center Contact Information
+        h3 Primary Contact
+        span=act.primaryContactName
+        br
+        span=act.primaryContactRole
+        br
+        code=act.primaryContactEmail
+        br
+        p=act.primaryContactPhone
+        if act.additionalMembers.length > 0
+          h3 Other Members
+          ul
+            for person in act.additionalMembers
+              li
+                strong=person.name
+                | , #{person.role}
+                code=person.email
+        hr
+        h2.text-center Other Details
+        h3 Confirmation Status
+        p=(act.confirmationStatus ? act.confirmationStatus : 'No Reply')
+        if act.bonusShows.length > 0
+          h3 Bonus Shows
+          pre=act.bonusShows
+        if act.city !== 'Austin' && act.workshop
+          h3 Workshop
+          p=act.workshop

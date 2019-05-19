@@ -1,0 +1,15 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title
+        a.text-muted(href="/acts") Acts
+        |  /
+        | Performer Email List
+
+  #app.dash-boxes.container-fluid
+    .row
+      .col
+        for email in emails
+          span=email
+          br

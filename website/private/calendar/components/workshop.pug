@@ -1,0 +1,36 @@
+script#workshop-template(type="text/template")
+  .box.workshop
+    a.delete(v-show="$root.editMode" href="#" @click.prevent="removeWorkshop(workshop._id)") remove workshop
+    h4.time {{workshop.time | time}}
+    p.font-weight-bold Workshop 
+    p {{workshop.name}}
+    p With 
+      span.font-italic {{workshop.teacher}}
+
+script.
+  Vue.component('workshop', {
+    template: "#workshop-template",
+    props: ['workshop'],
+    filters: {
+      time(time) {
+        if(time=="10") return "11:00am"
+        if(time=="20") return "12:00pm"
+        if(time=="30") return "1:00pm"
+        if(time=="40") return "3:00pm"
+      }
+    },
+    methods: {
+      removeWorkshop(id) {
+        let self = this
+        axios
+          .delete('/api/workshops/set-date/' + id)
+          .then((response)=> {
+            self.$store.commit('removeWorkshop', id)
+          })
+          .catch((error)=> {
+            alert("Error removing workshop :(")
+            console.log(error)
+          })
+      }
+    }
+  })

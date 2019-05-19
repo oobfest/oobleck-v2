@@ -1,0 +1,1295 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"html",
+				"html\thtml"
+			],
+			[
+				"long",
+				"longestWordLength"
+			],
+			[
+				"pri",
+				"privateRouter"
+			],
+			[
+				"URL",
+				"url"
+			],
+			[
+				"email",
+				"email"
+			],
+			[
+				"submissino",
+				"submission-row-template"
+			],
+			[
+				"screener",
+				"screenerSubmissions"
+			],
+			[
+				"website",
+				"websitePublicRouter"
+			],
+			[
+				"callback",
+				"callback"
+			],
+			[
+				"conne",
+				"connection"
+			],
+			[
+				"Card",
+				"CreditCard"
+			],
+			[
+				"NewsCHa",
+				"NewsChannelConstructor"
+			],
+			[
+				"NewsCHann",
+				"NewsChannel1"
+			],
+			[
+				"news",
+				"news"
+			],
+			[
+				"dou",
+				"doubledNumbers"
+			],
+			[
+				"deluxc",
+				"deluxeClickerConstructor"
+			],
+			[
+				"movies",
+				"movies"
+			],
+			[
+				"searchString",
+				"searchString"
+			],
+			[
+				"mul",
+				"multiply_vectors"
+			],
+			[
+				"fancy",
+				"fancy_multiplication"
+			],
+			[
+				"g",
+				"g"
+			],
+			[
+				"filte",
+				"filteredWords"
+			],
+			[
+				"favoriteNumb",
+				"favoriteNumbers"
+			],
+			[
+				"response",
+				"response"
+			],
+			[
+				"conn",
+				"connectionString"
+			],
+			[
+				"datbaas",
+				"databaseUrl"
+			],
+			[
+				"gener",
+				"generateRouter"
+			],
+			[
+				"bo",
+				"bodyParser"
+			],
+			[
+				"n",
+				"ns\tNamespace"
+			],
+			[
+				"homewo",
+				"homework_vector_size"
+			],
+			[
+				"tickets",
+				"tickets"
+			],
+			[
+				"searchVenu",
+				"searchVenueRegex"
+			],
+			[
+				"schedule",
+				"schedule-volunteer"
+			],
+			[
+				"KEYP",
+				"KEY_PRESS_SURFACE_UP"
+			],
+			[
+				"audit",
+				"auditCapacity"
+			],
+			[
+				"experi",
+				"experienceProfileId"
+			],
+			[
+				"exper",
+				"experience_profile_id"
+			],
+			[
+				"formatIten",
+				"formatItemNameDay"
+			],
+			[
+				"rec",
+				"recipientEmail"
+			],
+			[
+				"form",
+				"form-control"
+			],
+			[
+				"submi",
+				"submission"
+			],
+			[
+				"submiss",
+				"submissionModel"
+			],
+			[
+				"reser",
+				"Reservation"
+			],
+			[
+				"reserv",
+				"reservationSuccessful"
+			],
+			[
+				"Th",
+				"Thursday"
+			],
+			[
+				"getSHowsByD",
+				"getShowsByDayAndVenue"
+			],
+			[
+				"search",
+				"searchRegex"
+			],
+			[
+				"c",
+				"completedMessage"
+			],
+			[
+				"showId",
+				"showId"
+			],
+			[
+				"update",
+				"updateActDurationModal"
+			],
+			[
+				"id",
+				"id"
+			],
+			[
+				"techVo",
+				"techVolunteers"
+			],
+			[
+				"driverVo",
+				"driverVolunteers"
+			],
+			[
+				"BadgePe",
+				"badgePerformerAllQuantity"
+			],
+			[
+				"badgePer",
+				"badgePerformerWeekendQuantity"
+			],
+			[
+				"badge",
+				"badgePerformerWeekendQuantity"
+			],
+			[
+				"badg",
+				"badgeAllQuantity"
+			],
+			[
+				"badgePerform",
+				"badgePerformerAllQuantity"
+			],
+			[
+				"get",
+				"getArrayOfRandomIntegers"
+			],
+			[
+				"filterPerforme",
+				"filterPerformersByName"
+			],
+			[
+				"availab",
+				"availability"
+			],
+			[
+				"availa",
+				"availability"
+			],
+			[
+				"primary",
+				"primaryContactEmail"
+			],
+			[
+				"reject",
+				"rejectedSubmissions"
+			],
+			[
+				"sub",
+				"submissionString"
+			],
+			[
+				"su",
+				"submission"
+			],
+			[
+				"initi",
+				"initializeVenues"
+			],
+			[
+				"Hometown",
+				"hometownCountArray"
+			],
+			[
+				"total",
+				"totalReviewsCount"
+			],
+			[
+				"submissi",
+				"submissionsWithoutReviewsCount"
+			],
+			[
+				"isCorr",
+				"isCorrectHostname"
+			],
+			[
+				"evnir",
+				"environmentVariable"
+			],
+			[
+				"N",
+				"NODE_ENV"
+			],
+			[
+				"primar",
+				"primary-contact-name"
+			],
+			[
+				"del",
+				"deletePhotoUrl"
+			],
+			[
+				"delet",
+				"deleteImageUrl"
+			],
+			[
+				"environb",
+				"environmentVariableIsMissing"
+			],
+			[
+				"dot",
+				"dotenv"
+			],
+			[
+				"person",
+				"personnel"
+			],
+			[
+				"video",
+				"video-url"
+			],
+			[
+				"pr",
+				"primary-contact-role"
+			],
+			[
+				"persn",
+				"personnel-email"
+			],
+			[
+				"additional",
+				"additional-contact-template"
+			],
+			[
+				"publ",
+				"public-description"
+			],
+			[
+				"backgroun",
+				"background-color"
+			],
+			[
+				"reve",
+				"row-reverse"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"prim",
+				"primary-contact-role"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/C++/C++ Single File.sublime-build",
+				"Run"
+			]
+		],
+		[
+			[
+				[
+					"Packages/C++11/C++11.sublime-build",
+					""
+				],
+				[
+					"Packages/C++11/C++11.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/C++11/C++11.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				],
+				[
+					"Packages/User/UltraPython.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/User/UltraPython.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					""
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Automatic"
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Run (with args)..."
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Check"
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Test"
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Test (with args)..."
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Bench"
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Clean"
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Document"
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Clippy"
+				],
+				[
+					"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+					"Script"
+				]
+			],
+			[
+				"Packages/Rust Enhanced/RustEnhanced.sublime-build",
+				"Run"
+			]
+		],
+		[
+			[
+				[
+					"Packages/Rust/Rust.sublime-build",
+					""
+				],
+				[
+					"Packages/Rust/Rust.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/Rust/Rust.sublime-build",
+					"Build & Run"
+				]
+			],
+			[
+				"Packages/Rust/Rust.sublime-build",
+				"Build & Run"
+			]
+		],
+		[
+			[
+				[
+					"Packages/User/JavaScript.sublime-build",
+					""
+				],
+				[
+					"Packages/User/node.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/User/JavaScript.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/User/JavaScript.sublime-build",
+					""
+				],
+				[
+					"Packages/User/node.sublime-build",
+					""
+				],
+				[
+					"Packages/User/UltraPython.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/User/node.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 239.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"terminus",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				":w",
+				":w - Save"
+			],
+			[
+				":wq",
+				"BracketHighlighter: Swap Quotes"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"termin",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"remove pac",
+				"Package Control: Remove Package"
+			],
+			[
+				"list pk",
+				"Package Control: List Packages"
+			],
+			[
+				"install pack",
+				"Package Control: Install Package"
+			],
+			[
+				"packae cp",
+				"Package Control: Enable Package"
+			],
+			[
+				"disable pa",
+				"Package Control: Disable Package"
+			],
+			[
+				"remov pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"install p",
+				"Package Control: Install Package"
+			],
+			[
+				"prettier",
+				"JsPrettier: Format Code"
+			],
+			[
+				"package control install",
+				"Package Control: Install Package"
+			],
+			[
+				"remove p",
+				"Package Control: Remove Package"
+			],
+			[
+				"install pka",
+				"Package Control: Install Package"
+			],
+			[
+				"remove pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"markdown",
+				"Set Syntax: Markdown"
+			],
+			[
+				"enable p",
+				"Package Control: Enable Package"
+			],
+			[
+				"disable p",
+				"Package Control: Disable Package"
+			],
+			[
+				"change color",
+				"MarkdownEditing: Change color scheme..."
+			],
+			[
+				"color schme",
+				"MarkdownEditing: Change color scheme..."
+			],
+			[
+				"list pack",
+				"Package Control: List Packages"
+			],
+			[
+				"package controll install ",
+				"Package Control: Install Package"
+			],
+			[
+				"package control remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"package instal",
+				"Package Control: Install Package"
+			],
+			[
+				"ui",
+				"UI: Select Theme"
+			],
+			[
+				"dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"color",
+				"UI: Select Color Scheme"
+			],
+			[
+				"disa",
+				"Package Control: Disable Package"
+			],
+			[
+				"color theme",
+				"UI: Select Color Scheme"
+			],
+			[
+				"material theme",
+				"Material Theme: Activate theme"
+			],
+			[
+				"color scheme",
+				"UI: Select Color Scheme"
+			],
+			[
+				"enable pac",
+				"Package Control: Enable Package"
+			],
+			[
+				"list package",
+				"Package Control: List Packages"
+			],
+			[
+				"color sche",
+				"UI: Select Color Scheme"
+			],
+			[
+				"ui co",
+				"UI: Select Color Scheme"
+			],
+			[
+				"package controll inst",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"colro scheme",
+				"UI: Select Color Scheme"
+			],
+			[
+				"t",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"terminu",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"package contrll insta",
+				"Package Control: Install Local Dependency"
+			],
+			[
+				"teri",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"package control list",
+				"Package Control: List Packages"
+			],
+			[
+				"install pa",
+				"Package Control: Install Package"
+			],
+			[
+				"package control enable p",
+				"Package Control: Enable Package"
+			],
+			[
+				"package control disable",
+				"Package Control: Disable Package"
+			],
+			[
+				"pacakge control ist pac",
+				"Package Control: List Packages"
+			],
+			[
+				"package controll install",
+				"Package Control: Install Package"
+			],
+			[
+				"terimin",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"instal ",
+				"Package Control: Install Package"
+			],
+			[
+				"ter",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"terimn",
+				"Terminus: Open Default Shell in Panel"
+			],
+			[
+				"package control disable ",
+				"Package Control: Disable Package"
+			],
+			[
+				"package controll list",
+				"Package Control: List Packages"
+			],
+			[
+				"package controll insta",
+				"Package Control: Install Package"
+			],
+			[
+				"rust ehnaced",
+				"Build With: RustEnhanced"
+			],
+			[
+				"package control up",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"terim",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"terimi",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"terminus ",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"packageresour",
+				"PackageResourceViewer: Open Resource"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"update packages",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"package control update",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"term",
+				"Terminus: Open Default Shell in View"
+			],
+			[
+				"install packa",
+				"Package Control: Install Package"
+			],
+			[
+				"package control rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"instlal package ",
+				"Package Control: Install Package"
+			],
+			[
+				"termianl ",
+				"Terminal View: Open Bash Terminal"
+			],
+			[
+				"terminal",
+				"Preferences: Terminal View: Settings"
+			],
+			[
+				"terminal ",
+				"Preferences: Terminal View: Settings"
+			],
+			[
+				"terminal view ",
+				"Preferences: Terminal View: Settings"
+			],
+			[
+				"install package",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"JsPrettier",
+				"JsPrettier: Format Code"
+			],
+			[
+				"markdown ",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"markdown pr",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"packager dev conv",
+				"PackageDev: Convert (YAML, JSON, PList) to…"
+			],
+			[
+				"package dev new syn",
+				"PackageDev: New Syntax Definition"
+			],
+			[
+				"javascript enhancements",
+				"JavaScript Enhancements Unused Variable: Next"
+			],
+			[
+				"open bash",
+				"Terminal View: Open Bash Terminal"
+			],
+			[
+				"install packag",
+				"Package Control: Install Package"
+			],
+			[
+				"package control di",
+				"Package Control: Disable Package"
+			],
+			[
+				"material theme ",
+				"Material Theme: Activate theme"
+			],
+			[
+				"package contro list",
+				"Package Control: Install Package"
+			],
+			[
+				"package control list pack",
+				"Package Control: List Packages"
+			],
+			[
+				"Package Control: up",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Packages"
+			],
+			[
+				"package dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 444.0
+	},
+	"console":
+	{
+		"height": 585.0,
+		"history":
+		[
+			"\"meow\" + 12",
+			"\"meow\"",
+			"let x = 12",
+			"clear()",
+			"clear",
+			"ls"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/oob/projects/archive/oobleck-v2"
+	],
+	"file_history":
+	[
+		"/Users/oob/Documents/wranglin/la-llorona.txt",
+		"/Users/oob/projects/ooba-leaf/webapp/src/App.vue",
+		"/Users/oob/projects/ooba-leaf/webapp/src/views/Home.vue",
+		"/Users/oob/projects/ooba-leaf/webapp/src/components/Navigation.vue",
+		"/Users/oob/projects/ooba-leaf/webapp/src/router.js",
+		"/Users/oob/projects/ooba-leaf/webapp/src/index.js",
+		"/Users/oob/projects/ooba-leaf/webapp/public/index.html",
+		"/Users/oob/projects/ooba-leaf/webapp/public/charming-green-custom.css",
+		"/Users/oob/projects/ooba-leaf/webapp/public/custom.css",
+		"/Users/oob/projects/ooba-leaf/webapp/public/charming-green.css",
+		"/Users/oob/projects/ooba-leaf/api/setup/mongoose.js",
+		"/Users/oob/projects/ooba-leaf/api/index.js",
+		"/Users/oob/projects/ooba-leaf/api/setup/morgan.js",
+		"/Users/oob/projects/ooba-leaf/api/setup/server.js",
+		"/Users/oob/projects/ooba-leaf/api/setup/passport.js",
+		"/Users/oob/projects/ooba-leaf/api/.notes.md",
+		"/Users/oob/projects/py-snippets/states.py",
+		"/Users/oob/projects/oobleck-v2/.env",
+		"/Users/oob/Documents/emo-tabs/00-setlist.txt",
+		"/Users/oob/notes/css.md",
+		"/Users/oob/notes/00-unix.md",
+		"/Users/oob/notes/01-streams.md",
+		"/Users/oob/notes/29-must-read-books-for-programmers.md",
+		"/Users/oob/Documents/school/workbook.md",
+		"/Users/oob/Documents/school/python-workbook.md",
+		"/Users/oob/Documents/school/00-unix.md",
+		"/Users/oob/Documents/school/00b-kernel.md",
+		"/Users/oob/Documents/school/my-os.md",
+		"/Users/oob/Downloads/SineWave.java",
+		"/Users/oob/Music/kady/the-city.txt",
+		"/Users/oob/Music/kady/its-over.txt",
+		"/Users/oob/Music/kady/i-dont-date-potential.txt",
+		"/Users/oob/Music/kady/somebody.txt",
+		"/Users/oob/Music/kady/i-dont-care.txt",
+		"/Users/oob/Music/kady/bad-kids.txt",
+		"/Users/oob/Music/kady/lovestruck.txt",
+		"/Users/oob/Music/kady/love-songs.txt",
+		"/Users/oob/Downloads/myProg.s",
+		"/Users/oob/Music/kady/order.txt",
+		"/Users/oob/Documents/diary/killer grillz.txt",
+		"/Users/oob/Documents/ga-python/18-scipy.md",
+		"/System/Library/CoreServices/SystemFolderLocalizations/en.lproj/SystemFolderLocalizations.strings",
+		"/Users/oob/Documents/ga-python/14-moar-ds.md",
+		"/Users/oob/projects/data-science/bikes2.csv",
+		"/Users/oob/projects/oobleck-v2/.todo",
+		"/Users/oob/Documents/school/03-programs.md",
+		"/Users/oob/Documents/school/05-users.md",
+		"/Users/oob/Documents/school/06-file-system.md",
+		"/Users/oob/Documents/school/talks.md",
+		"/Users/oob/Documents/school/environment-setup.md",
+		"/Users/oob/Downloads/rosalind_dna.txt",
+		"/Users/oob/Documents/ga-python/end-outline.md",
+		"/Users/oob/Downloads/rosalind_ini6.txt",
+		"/Users/oob/Documents/ga-python/13-visualizations.md",
+		"/Users/oob/Documents/ga-python/12-pandas.md",
+		"/Users/oob/notes/security.md",
+		"/Users/oob/Documents/emo-tabs/crushcrushcrush.txt",
+		"/Users/oob/Documents/emo-tabs/setlist.txt",
+		"/Users/oob/Documents/emo-tabs/i-write-sins.txt",
+		"/Users/oob/projects/oobleck-v2/website/router.js",
+		"/Users/oob/projects/oobleck-v2/website/public/router.js",
+		"/Users/oob/projects/oobleck-v2/website/public/act-submission-form/12-fee.pug",
+		"/Users/oob/projects/oobleck-v2/.notes",
+		"/Users/oob/projects/oobleck-v2/website/private/act-submissions/index.pug",
+		"/Users/oob/projects/oobleck-v2/website/private/act-submissions/tabs/reviewers.pug",
+		"/Users/oob/projects/oobleck-v2/website/private/act-submissions/reviews-by-user.pug",
+		"/Users/oob/Documents/diary/marketing.md",
+		"/Users/oob/Documents/ga-python/01-data-types-and-expressions.md",
+		"/Users/oob/Documents/ga-python/fun.py",
+		"/Users/oob/Documents/ga-python/11-errors.md",
+		"/Users/oob/projects/oobleck-v2/website/public/act-submission-form/closed.pug",
+		"/Users/oob/projects/oobleck-v2/website/public/index.pug",
+		"/Users/oob/projects/oobleck-v2/website/public/_header.pug",
+		"/Users/oob/Documents/ga-bio.txt",
+		"/Users/oob/.bash_profile",
+		"/Users/oob/Documents/evangelion/tropes.md",
+		"/Users/oob/Documents/evangelion/00-intro.md",
+		"/Users/oob/Documents/evangelion/notes.md",
+		"/Users/oob/Documents/ga/python/00-intro.md",
+		"/Users/oob/Documents/ga-python/10-data-science.md",
+		"/Users/oob/projects/machine-learnin/ve/bin/activate",
+		"/Users/oob/projects/colors/index.html",
+		"/Users/oob/projects/colors/style.css",
+		"/Users/oob/Documents/ga-python/hw/09-decorators.py",
+		"/Users/oob/Documents/ga-python/hw/08-functions.py",
+		"/Users/oob/projects/oobleck-v3/src/views/Login.vue",
+		"/Users/oob/projects/oobleck-v3/src/views/Home.vue",
+		"/Users/oob/projects/oobleck-v3/src/main.js",
+		"/Users/oob/projects/oobleck-v3/src/store.js",
+		"/Users/oob/projects/oobleck-v3/src/components/HelloWorld.vue",
+		"/Users/oob/projects/oobleck-v3/src/views/About.vue",
+		"/Users/oob/projects/oobleck-v3/src/components/Navigation.vue",
+		"/Users/oob/projects/oobleck-v3/src/router.js",
+		"/Users/oob/projects/oobleck-v3/src/components/navigation/NavigationItem.vue",
+		"/Users/oob/projects/oobleck-v3/src/views/login.vue",
+		"/Users/oob/projects/oobleck-v3/.gitignore",
+		"/Users/oob/projects/oobleck-v3/globby.js",
+		"/Users/oob/projects/oobleck-v3/package.json",
+		"/Users/oob/projects/oobleck-v3/.notes",
+		"/Users/oob/projects/oobleck-v3/public/index.html",
+		"/Users/oob/projects/oobleck-v3/public/custom.css",
+		"/Users/oob/projects/oobleck-v3/src/App.vue",
+		"/Users/oob/projects/oobleck-v3/src/components/Toolbar.vue",
+		"/Users/oob/projects/oobleck-v3/public/css/charming-green.css",
+		"/Users/oob/projects/oobleck-v3/README.md",
+		"/Users/oob/Documents/music-ad.txt",
+		"/Users/oob/projects/oobleck-v2/website/public/act-submission-form/01-act-details.pug",
+		"/Users/oob/Documents/ga-python/junk.py",
+		"/Users/oob/projects/oobleck-v2/website/private/is-logged-in.js",
+		"/Users/oob/projects/oobleck-v2/website/private/act-submissions/templates/charts-scripts.pug",
+		"/Users/oob/Documents/diary/breebruhh.txt",
+		"/Users/oob/Documents/diary/coffee.txt",
+		"/Users/oob/Documents/ga-python/08-functions.md",
+		"/Users/oob/Documents/ga-saudi-arabia.txt",
+		"/Users/oob/Documents/ga-python/hw/books.csv",
+		"/Users/oob/Documents/ga-python/hw/junk.py",
+		"/Users/oob/Documents/ga-python/07-file-io.md",
+		"/Users/oob/Documents/ga-python/04b-classes.md",
+		"/Users/oob/Documents/ga-python/classes/fun.py",
+		"/Users/oob/Documents/ga-python/hw/06-classes.py",
+		"/Users/oob/projects/oobleck-v2/website/public/act-submission-form/index.pug",
+		"/Users/oob/projects/oobleck-v2/website/public/act-submission-form/00-welcome-late.pug",
+		"/Users/oob/projects/oobleck-v2/website/public/act-submission-edit/index.pug",
+		"/Users/oob/projects/oobleck-v2/api/stripe/router.js",
+		"/Users/oob/Documents/ga-python/07-Type-Conversion.md",
+		"/Users/oob/Documents/ga-python/outline.md",
+		"/Users/oob/Documents/emo-tabs/thnks-fr-th-mmrs.txt",
+		"/Users/oob/Documents/emo-tabs/sugar-were-goin-down.txt"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 481.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 39.0
+	},
+	"input":
+	{
+		"height": 176.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.Terminus":
+	{
+		"height": 396.0
+	},
+	"output.exec":
+	{
+		"height": 481.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.markdown":
+	{
+		"height": 169.0
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0
+	},
+	"output.package_dev":
+	{
+		"height": 139.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 139.0
+	},
+	"pinned_build_system": "",
+	"project": "oobleck-v2.sublime-project",
+	"replace":
+	{
+		"height": 74.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"image schema",
+				"api/act-submissions/schemas/image.js"
+			],
+			[
+				"submission schema",
+				"api/act-submissions/schema.js"
+			],
+			[
+				"cont",
+				"api/act-submissions/controller.js"
+			],
+			[
+				"review schema",
+				"api/act-submissions/schemas/review.js"
+			],
+			[
+				"controller",
+				"api/act-submissions/controller.js"
+			],
+			[
+				"router",
+				"api/router.js"
+			],
+			[
+				"model",
+				"api/act-submissions/model.js"
+			],
+			[
+				"act-submission model",
+				"api/act-submissions/model.js"
+			],
+			[
+				"host compone",
+				"views/hosts/components/upload-image.pug"
+			],
+			[
+				"host view all",
+				"views/hosts/view-all.pug"
+			],
+			[
+				"shows model",
+				"shows/model.js"
+			],
+			[
+				"vendor",
+				"dist/_nuxt/vendor.6e559b8f6aed8e2ec031.js"
+			],
+			[
+				"workshops view all",
+				"views/workshops/view-all.pug"
+			],
+			[
+				"badges",
+				"views/badges/view-all.pug"
+			],
+			[
+				"acts/viewall",
+				"views/acts/view-all.pug"
+			],
+			[
+				"",
+				"package-lock.json"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 592.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 278.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+		"max_columns": 1
+	}
+}

@@ -1,0 +1,39 @@
+script#venue-template(type="text/template")
+  .venue-container
+    h3 {{venue.name}}
+    p(v-if="venue.availability") Available {{venue.availability}}
+    ul.list-inline(v-show="$root.editMode")
+      li.list-inline-item
+        a.add-show(href="#" @click.prevent="showAddShowModal(day, venue.name)" data-toggle="modal" data-target="#add-show-modal") add show
+      li.list-inline-item
+        a.add-show(href="#" @click.prevent="showWorkshopModal(day, venue.name)" data-toggle="modal" data-target="#add-workshop-modal") add workshop
+    workshop(v-for="(workshop, index) in workshopsForVenueAndDay",:workshop="workshop",:key="index")
+    shows(:day="day",:venue="venue.name")
+
+script.
+  Vue.component('venue', {
+    template: "#venue-template",
+    props: ['day', 'venue'],
+    computed: {
+      workshopsForVenueAndDay() {
+        return this.$store.getters.getWorkshops(this.day, this.venue.name)
+      }
+    },
+    methods: {
+      showAddShowModal(day, venue) {
+        this.$store.commit('addShowModal', {day, venue})
+        $('#add-show-modal').on('shown.bs.modal', function () {
+          $("#add-show-modal-time").focus()
+        })
+      },
+      showWorkshopModal(day, venue) {
+        this.$store.commit('addWorkshopModal', {day, venue})
+        $('#add-workshop-modal').on('shown.bs.modal', function () {
+          $("#add-workshop-modal-workshop").focus()
+        })
+      },
+      todo() {
+        alert("This has not been implemented 😢")
+      }
+    }
+  })

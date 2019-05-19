@@ -1,0 +1,33 @@
+script#schedule-volunteer-modal-template(type="text/template")
+  #schedule-volunteer-modal.modal
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h4.modal-title Schedule Volunteer
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          .form-group
+            label(for="schedule-volunteer-modal-volunteer") Volunteer
+            select#schedule-volunteer-modal-volunteer.form-control(type="text" v-model="volunteer")
+              option(:value="volunteer._id" v-for="volunteer in volunteers") {{volunteer.name}}
+          .form-group
+            label(for="schedule-volunteer-modal-hours") Hours
+            input#schedule-volunteer-modal-hours.form-control(type="number" v-model="hours" min=0 max=40)
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+          button.btn.btn-primary(type="button" @click="" data-dismiss="modal") Save
+
+script.
+  Vue.component('schedule-volunteer-modal', {
+    template: "#schedule-volunteer-modal-template",
+    props: ['volunteers'],
+    data() {
+      return {
+        volunteer: "",
+        hours: 1
+      }
+    },
+    methods: {
+    }
+  })

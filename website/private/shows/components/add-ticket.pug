@@ -1,0 +1,75 @@
+script#add-ticket-modal-template(type="text/template")
+  #add-ticket-modal.modal
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h4.modal-title Add Ticket
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          .form-group
+            label(for="add-ticket-modal-name") Name
+            input#add-ticket-modal-name.form-control(type="text" v-model="ticket.name")
+          .form-group
+            label(for="add-ticket-modal-email") Email
+            input#add-ticket-modal-email.form-control.code(type="email" v-model="ticket.email")
+          .form-group
+            label(for="add-ticket-modal-phone") Phone Number
+            input#add-ticket-modal-phone.form-control(type="text" v-model="ticket.phone")
+          .form-group
+            label(for="add-ticket-modal-quantity") Quantity
+            input#add-ticket-modal-quantity.form-control(type="number" v-model="ticket.quantity" min=1 max=10)
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+          button.btn.btn-primary(type="button" @click="createTicket" data-dismiss="modal") Save
+
+script.
+  Vue.component('add-ticket-modal', {
+    template: "#add-ticket-modal-template",
+    props: ['showId'],
+    data() {
+      return {
+        ticket: {
+          name: "",
+          email: "",
+          phone: "",
+          type: 'comp',
+          quantity: 1
+        }
+      }
+    },
+    methods: {
+      getValidationError() {
+        if(this.ticket.name == '') return "Name required"
+        if(this.ticket.email == '') return "Email required"
+        if(this.ticket.phone == '') return "Phone number required"
+        return false
+      },
+      createTicket() {
+        let validationError = this.getValidationError()
+        if(validationError) return alert(validationError)
+
+        let self = this
+        axios
+          .post('/api/shows/comp-reservation/' + self.showId, self.ticket)
+          .then(function(response) {
+            let savedShow = response.data.savedShow
+            let index = self.$parent.shows.map(s=> s._id).indexOf(self.showId)
+            Vue.set(self.$parent.shows, index, savedShow)
+            self.reset()
+          })
+          .catch(function(error){
+            alert("Error creating ticket :(")
+            console.log(error)
+            self.reset()
+          })        
+      },
+      reset() {
+        this.ticket.name = ''
+        this.ticket.email = ''
+        this.ticket.phone = ''
+        this.ticket.type = 'all'
+        this.ticket.quantity = 1
+      }
+    }
+  })

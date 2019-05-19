@@ -4,7 +4,7 @@ script#submission-row-template(type="text/x-template")
       td
         a(href="#" @click.prevent="visible=!visible") {{ name | shorten(42) }}
       td
-        a(:href="'/act-submission/reviews/' + _id")
+        a(:href="'/act-submissions/reviews/' + _id")
           span(v-for="score in getScores()") {{score | emojify}}
       td {{showType.join(', ')}}
       td {{city}}

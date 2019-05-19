@@ -1,0 +1,157 @@
+script#shows-template(type="text/template")
+  div
+    div(v-for="show in shows")
+      .box.show2
+        //a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
+        h4.time {{show.time | time}}
+          span(v-if="show.endTime")  to {{show.endTime}}
+          a.delete(href="#" @click.prevent="setEndTime(show._id)") set end time
+        div(v-if="show.host")
+          a.delete(href="#" @click.prevent="removeHost(show._id)") remove host
+          p 
+            strong Host: 
+            | {{show.host.name}}
+        div(v-else)
+          p
+            a(href="#" @click.prevent="setShowId(show._id)" data-toggle="modal" data-target="#add-host-modal") add host
+        p.act(v-for="act in show.acts")
+          a(href="#" @click.prevent="promptDuration(show._id, act._id)")
+            span.badge.badge-light.code(style="vertical-align: 2px") {{act.duration | duration}}
+          | &nbsp;
+          span(v-if="act.type === 'Sketch'") ✏️ 
+          span(v-if="act.type === 'Music'") 🎶 
+          span(v-if="act.type === 'Improv'") ⚡️ 
+          span(v-if="act.type === 'Stand-Up'") 🎤 
+          span(v-if="act.type === 'Individual'") 🗣           
+          span(:class="actStatus") {{act.name | shorten(24)}}
+
+          a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show._id, act._id)") remove act
+        p(v-show="$root.editMode")
+          a(href="#" @click="showAddActModal(day, venue, show.time, show._id)" data-toggle="modal" data-target="#add-act-modal") add act
+
+script.
+  Vue.component('shows', {
+    template: "#shows-template",
+    props: ['day', 'venue'],
+    computed: { 
+      shows() {
+        return store.getters.getShows(this.day, this.venue)
+      },
+      actStatus() {
+        // Todo: get confirmation status
+        return 'font-weight-bold'
+      }
+    },
+    filters: {
+      duration(time) {
+        if(time == null) return '\xa0\xa0'
+        if(time < 10) return '\xa0' + time
+        else return time
+      },
+      time(time) {
+        time = String(time)
+        return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+      },
+      shorten(actName, characters) {
+      return actName.length > characters
+        ? actName.substring(0,characters)+'...'
+        : actName
+      },
+    },
+    methods: {
+      setEndTime(showId) {
+        let endTime = prompt("Enter in value completely formatted, e.g. 9:30pm")
+        let self = this
+        axios
+          .post('/api/shows/set-end-time/' + showId, {endTime: endTime})
+          .then(function(response) {
+            self.$store.commit('updateShow', response.data)
+          })
+          .catch(function(error) {
+            alert("Error setting end time for show :(")
+            console.log(error)
+          })
+
+      },
+      removeHost(showId) {
+        let self = this
+        axios
+          .post('/api/shows/remove-host/' + showId)
+          .then(function(response) {
+            self.$store.commit('updateShow', response.data)
+          })
+          .catch(function(error) {
+            alert("Error removing host :(")
+            console.log(error)
+          })
+      },
+      setShowId(showId) {
+        this.$store.commit('setShowId', showId)
+      },
+      promptDuration(showId, actId) {
+        let act = store.getters.getAct(actId)
+        let message = "Set performance length"
+        if(act.minimumShowLength) message += ("\nMin: " + act.minimumShowLength)
+        if(act.maximumShowLength) message += ("\nMax: " + act.maximumShowLength)
+        let duration = window.prompt(message, act.duration ? act.duration : 0)
+        if(duration == null) return
+        let durationInt = parseInt(duration)
+        if(Number.isNaN(durationInt)) alert("Invalid input: " + duration)
+        else if (durationInt < 0) alert("Input can't be negative")
+        else {
+          let self = this
+          let showAct = {
+            _id: act._id,
+            name: act.actName,
+            type: act.showType,
+            duration: durationInt
+          }
+          axios
+            .put('/api/shows/update-duration/' + showId, showAct)
+            .then(function(response) {
+              self.$store.commit('updateShow', response.data)
+            })
+            .catch(function(error) {
+              alert("Error updating duration")
+              console.log(error)
+            })
+        }
+      },
+      showUpdateActDurationModal(act) {
+        this.$store.commit('updateActDurationModal', act)
+      },
+      showAddActModal(day, venue, time, _id) {
+        this.$store.state.addActModal = {day: day, venue: venue, time: time, _id: _id}
+        $('#add-act-modal').on('shown.bs.modal', function () {
+          $("#add-act-modal-search").focus()
+        })
+      },
+      removeAct(showId, actId) {
+        let self = this
+        axios
+          .post('/api/shows/remove-act', {showId: showId, actId: actId})
+          .then(function(response) {
+            self.$store.commit('updateShow', response.data)
+          })
+          .catch(function(error) {
+            alert("Error removing act from show :(")
+            console.log(error)
+          })
+      },
+      removeShow(id) {
+        let self = this
+        axios
+          .delete('/api/shows/'+id)
+          .then(function(response){
+            self.$store.commit('removeShow', id)
+          })
+          .catch(function(error) {
+            alert("Failed to delete show :(")
+            console.log(error)
+          })
+      }
+    }
+  })
+
+style.
+  .delete{ float: right}

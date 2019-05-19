@@ -1,0 +1,26 @@
+extends ../_layout
+block content
+  style.
+    .bg-accent-oob {
+      background: url('../img/audience-dark.jpg') no-repeat bottom center fixed; 
+      background-size: cover;
+    }
+  .text-center
+    if link
+      a(href="http://oobfest.com/" target="_parent")
+        img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    else
+      img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    h1.p-3.text-light.font-weight-bold 2018 Invited Act Application
+  .container
+    .row
+      .col-lg-8.mx-auto
+        .box-head.box-head-accent-oob
+        .box-block.box-bb
+          h3 Success!
+          p Thank you for submitting 🙂
+        .box-block.box-bb
+          h3 Updating Your Application
+          p If you need to make changes to your application you can do so with this URL:
+          pre.alert.alert-light https://app.oobfest.com/submissions/edit/#{submissionId}
+          p Anyone with this link can edit your application, so keep it safe!

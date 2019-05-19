@@ -1,0 +1,94 @@
+script#act-modal-template(type="text/template")
+  #act-modal.modal
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h2.modal-title {{act.name}}
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          .text-center
+            a(:href="act.imageUrl" target="_blank")
+              img.mb-1(alt="Submission Photo",:src="'https://imgur.com/' + act.image.id + 'b.jpeg'")
+
+            h4
+              span(v-for="showType in act.showType") {{showType}} &nbsp;
+              br
+              | {{act.city}}, {{act.state}} {{act.country == 'US' ? '' : ', ' + act.country}}
+              br
+              | {{act.homeTheater}}
+            h4
+              a.btn.btn-primary(:href="'/submissions/edit/' + act._id" target="_blank") Edit
+          hr
+          h2.text-center Act Description
+          h3 Bio
+          p {{act.publicDescription}}
+          h3 Self-Description
+          p {{act.privateDescription}}
+          div(v-if="act.accolades")
+            h3 Accolades
+            p {{act.accolades}}
+          div(v-if="act.socialMedia.length > 0")
+            h3 Social Media
+            ul.list-inline
+              li.list-inline-item(v-for="social in act.socialMedia")
+                a(:href="social.url") {{social.type}}
+          hr
+          h2.text-center Performance Details
+          h3 Availability
+          ul.list-inline
+            li.list-inline-item.code(v-show="act.availability.includes('tuesday')") Tuesday
+            li.list-inline-item.code(v-show="act.availability.includes('wednesday')") Wednesday
+            li.list-inline-item.code(v-show="act.availability.includes('thursday')") Thursday
+            li.list-inline-item.code(v-show="act.availability.includes('friday')") Friday
+            li.list-inline-item.code(v-show="act.availability.includes('saturday')") Saturday
+            li.list-inline-item.code(v-show="act.availability.includes('sunday')") Sunday
+            li.list-inline-item.code(v-show="act.availability.includes('monday')") Monday
+
+
+          h3 Set Length
+          p Minimum {{act.minimumLength}}, Maximum {{act.maximumLength}}
+          div(v-if="act.showType !== 'Stand-Up'")
+            h3 Tech Rehearsal Requested
+            p {{act.techRehearsalNeeded ? 'Yes' : 'No'}}
+          div(v-if="act.specialNeeds")
+            h3 Performance Needs
+            p {{act.specialNeeds}}
+          div(v-if="act.videoUrls.length > 0")
+            hr
+            h2.text-center Video
+            h3 Video Links
+            p(v-for="url in act.videoUrls")
+              a(:href="url") {{url}}
+            div(v-if="act.videoInfo")
+              h3 Video Info
+              p {{act.videoInfo}}
+          hr
+          h2.text-center Contact Information
+          h3 Primary Contact
+          strong {{act.contact.name}}
+          br
+          span {{act.contact.role}}
+          br
+          code {{act.email}}
+          br
+          p {{act.phone}}
+          h3 Personnel
+          ul
+            li(v-for="person in act.personnel")
+              strong {{person.name}}
+              |, {{person.role}}
+              code {{person.email}}
+          hr
+          h2.text-center Other Details
+          h3 Confirmation Status
+          p {{act.confirmationStatus ? act.confirmationStatus : 'No Reply'}}
+          //div(v-if="act.bonusShows.length > 0")
+            h3 Bonus Shows
+            ul.list-inline
+              li.list-inline-item.code(v-for="show in act.bonusShows") {{show}}
+          div(v-if="act.city !== 'Austin' && act.workshop")
+            h3 Workshop
+            p {{act.workshop}}
+        .modal-footer
+          button.btn.btn-primary(type="button" data-dismiss="modal") Close

@@ -47,7 +47,7 @@ block content
             - var review = submission.reviews.find(function(review){ return review.username == username})
             tr
               td
-                a(href="/act-submission/reviews/" + submission._id)=submission.name
+                a(href="/act-submissions/reviews/" + submission._id)=submission.name
               td
                 +renderReview(review.score)
               td=review.notes

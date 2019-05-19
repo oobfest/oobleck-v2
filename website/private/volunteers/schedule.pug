@@ -1,0 +1,132 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Volunteers / Schedule
+
+  #app.dash-boxes.container-fluid
+    schedule-volunteer-modal(:volunteers="volunteers")
+    p
+      a(href="/volunteers") Volunteers
+
+    ul.nav.nav-pills
+      li.nav-item
+        a.nav-link.active(data-toggle="tab" href="#schedule") Schedule
+      li.nav-item
+        a.nav-link(data-toggle="tab" href="#registration") Registration
+    .tab-content.mt-3
+
+      #schedule.tab-pane.fade.show.active
+
+        .card.mb-3(v-for="day in schedule")
+          button.btn.bg-primary.card-header.text-white(:data-target="'#' + day.name" data-toggle="collapse")
+            h2 {{day.name}}
+          .card-body.collapse(:id="day.name")
+            ul.list-inline
+              li.list-inline-item
+                strong Party Volunteers
+              li.list-inline-item
+                a(href="#schedule-volunteer-modal" data-toggle="modal" @click="") n/a
+              li.list-inline-item
+                a(href="#schedule-volunteer-modal" data-toggle="modal" @click="") n/a
+            .card-columns
+
+              .card.mb-3(v-for="venue in day.venues" style="min-width: 200px")
+                .card-header.bg-info.text-white
+                  h3 {{formatVenue(venue)}}
+                .card-body
+                  ul.list-inline
+                    li.list-inline-item
+                      strong Merch
+                    li.list-inline-item
+                      a(href="#") n/a
+                    li.list-inline-item
+                      a(href="#") n/a
+
+                  ul.list-group.mb-2(v-for="show in shows.filter(s=> s.day == day.name && s.venue == venue)")
+                    li.list-group-item
+                      h4 {{formatTime(show.time)}}
+                      ul.list-unstyled
+                        li
+                          ul.list-inline
+                            li.list-inline-item
+                              strong Box Office
+                            li.list-inline-item
+                              a(href="#") n/a
+                            li.list-inline-item
+                              a(href="#") n/a
+                        li
+                          ul.list-inline
+                            li.list-inline-item
+                              strong Ticket Taker
+                            li.list-inline-item
+                              a(href="#") n/a
+                            li.list-inline-item
+                              a(href="#") n/a
+
+      #registration.tab-pane.fade
+        p IOU: Registration
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  include components/schedule-volunteer
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          schedule: [
+            {name: 'Tuesday',    venues: ['Hideout Down', 'Hideout Up', 'ColdTowne']},
+            {name: 'Wednesday',  venues: ['Hideout Down', 'Hideout Up', 'ColdTowne']},
+            {name: 'Thursday',   venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta']},
+            {name: 'Friday',     venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta', 'Spider House']},
+            {name: 'Saturday',   venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta', 'Spider House', 'Institution']},
+            {name: 'Sunday',     venues: ['Hideout Down', 'Fallout', 'Velveeta']},
+            {name: 'Monday',     venues: ['Hideout Down']},
+          ],
+          shows: [],
+          volunteers: []
+        }
+      },
+      computed: {
+      },
+      methods: {
+        formatVenue(venue) {
+          switch(venue) {
+            case 'Hideout Up':        return 'Hideout Up'
+            case 'Hideout Down':      return 'Hideout Down'
+            case 'ColdTowne':         return 'ColdTowne'
+            case 'Fallout':           return 'Fallout'
+            case 'Velveeta':          return 'Velveeta'
+            case 'Spider House':      return 'Spider House'
+            case 'Institution':       return 'Institution'
+          }
+        },
+        formatTime(time) {
+          time = String(time)
+          return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/volunteers')
+          .then(function(response) {
+            self.volunteers = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting volunteers :(")
+            console.log(error)
+          })
+
+        axios
+          .get('/api/shows')
+          .then(function(response){
+            self.shows = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting shows :(")
+            console.log(error)
+          })
+      }
+    })

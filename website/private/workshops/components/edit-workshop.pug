@@ -1,0 +1,64 @@
+include upload-image
+script#edit-workshop-modal-template(type="text/template")
+  #edit-workshop-modal.modal
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h2.modal-title Update Workshop
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          input(type="hidden" v-model="workshop._id")
+          .form-group
+            label(for="edit-workshop-modal-name") Name
+            input#edit-workshop-modal-name.form-control(type="text" v-model="workshop.name")
+          .form-group
+            label(for="edit-workshop-modal-description") Description
+            textarea#edit-workshop-modal-description.form-control.code(v-model="workshop.description" rows=5)
+          .form-group
+            label(for="edit-workshop-modal-teacher") Teacher(s)
+            input#edit-workshop-modal-teacher.form-control(type="text" v-model="workshop.teacher")
+          .form-group
+            label(for="edit-workshop-modal-bio") Teacher Bio
+            textarea#edit-workshop-modal-bio.form-control.code(v-model="workshop.bio" rows=5)
+          .form-group
+            label(for="edit-workshop-modal-affiliation") Home Base 
+            input#edit-workshop-modal-affiliation.form-control(v-model="workshop.affiliation")
+          .form-group
+            label(for="edit-workshop-modal-capacity") Maximum Number of Students
+            input#edit-workshop-modal-capacity.form-control(type="number" v-model="workshop.capacity" min=0 max=120)
+          .form-group
+            label(for="edit-workshop-modal-audit-capacity") Maximum Number of Auditors
+            input#edit-workshop-modal-audit-capacity.form-control(type="number" v-model="workshop.auditCapacity" min=0 max=120)
+          input(type="hidden" name="imageUrl" v-model="workshop.imageUrl")
+          input(type="hidden" name="deleteImageUrl" v-model="workshop.deleteImageUrl")
+          div(v-if="workshop.imageUrl")
+            h3 Image
+            img.img-thumbnail(:src="workshop.imageUrl + '.jpg'" alt="Image preview")
+          div(v-if="!workshop.imageUrl")
+            upload-image
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+          button.btn.btn-primary(type="button" @click="updateWorkshop" data-dismiss="modal") Save
+
+script.
+  Vue.component('edit-workshop-modal', {
+    template: "#edit-workshop-modal-template",
+    props: ['workshop'],
+    methods: {
+      updateWorkshop() {
+        let self = this
+        axios
+          .put('/api/workshops/' + self.workshop._id, self.workshop)
+          .then(function(response) {
+            // TODO: This should affect $parent.workshops[index], not this child property
+            //self.workshop = response.data
+            self.$emit('update-workshop', response.data)
+          })
+          .catch(function(error){
+            alert("Error updating workshop :(")
+            console.log(error)
+          })
+      }
+    }
+  })

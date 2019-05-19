@@ -1,0 +1,35 @@
+extends ../_layout
+block content
+	header.dash-titlebar
+		.mb-md-0.mb-3
+			span.dash-titlebar-title Host Details
+
+	.dash-boxes.container
+		.row.justify-content-center
+			.col-6
+				.box.box-b
+					if host.imageUrl
+						.box-banner
+							img.box-banner-image(src=host.imageUrl)
+					.box-block.box-bb.box-rounded-top
+						h2=host.name
+						h4 Email
+						pre=host.email
+						h4 Phone Number
+						pre=host.phone
+
+						h4 Bio
+						p=host.bio
+						
+						h4 Experience
+						p=host.experience
+
+						if host.videoUrl
+							h4 Video Url
+							pre=host.videoUrl
+
+						h4 Availability
+						p=host.canAttendMeeting ? 'Can make the meeting' : 'Unavailable on 26th'
+						ul
+							for date in host.available
+								li=date

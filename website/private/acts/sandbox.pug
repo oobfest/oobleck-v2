@@ -1,0 +1,184 @@
+extends ../_layout
+block content
+
+  #app.container-fluid
+    .row
+      .col-4.offset-4(v-show="paymentComplete")
+        p Thank you for your purchase! 
+        p An email has been sent to 
+          span.code {{badge.email}}
+      .col-4.offset-4(v-show="!paymentComplete")
+        h2 Old
+        input#name.form-control(type="text" name="name" v-model="badge.name")
+        input#email.form-control(type="text" name="email" v-model="badge.email")
+        input#phone.form-control(type="text" name="phone" v-model="badge.phone")
+        input#quantity.form-control(type="text" name="quantity" v-model="badge.quantity")
+        #paypal-button
+        h2 New!
+        input#performer-name.form-control(type="text" name="performer-name" v-model="performerBadge.name")
+        input#performer-email.form-control(type="text" name="performer-email" v-model="performerBadge.email")
+        input#performer-phone.form-control(type="text" name="performer-phone" v-model="performerBadge.phone")
+        button.btn.btn-primary(type="button" @click="confirmPerformerEmail") Confirm Email
+        #paypal-button-2
+
+  script(src="/js/vue.js")
+  script(src="/js/axios.min.js")
+  script(src="https://www.paypalobjects.com/api/checkout.js")
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() {
+        return { 
+          badge: {
+            name: '',
+            email: '',
+            phone: '',
+            quantity: 1
+          },
+          performerBadge: {
+            name: '',
+            email: '',
+            phone: '',
+            weekendOnly: false
+          },
+          paymentComplete: false
+        }
+      },
+      methods: {
+        isValid() {
+          return this.badge.name != '' && 
+                 this.badge.email != '' && 
+                 this.badge.phone != ''
+        },
+        isValidPerformer() {
+          return this.performerBadge.name != '' && 
+                 this.performerBadge.email != '' && 
+                 this.performerBadge.phone != ''
+        },
+        confirmPerformerEmail() {
+          axios
+            .post('/api/submissions/confirm-performer-email', {email: this.performerBadge.email})
+            .then(function(response) {
+              console.log(response.data)
+            })
+            .catch(function() { 
+              alert("FAIL")
+            })
+        }
+      }
+    })
+
+    function validate(actions) {
+      app.isValid() ? actions.enable() : actions.disable()
+    }
+
+    function onChange(handler) {
+      document.querySelector('#name').addEventListener('change', handler)
+      document.querySelector('#email').addEventListener('change', handler)
+      document.querySelector('#phone').addEventListener('change', handler)
+    }
+
+    paypal.Button.render({
+      env: 'sandbox',
+      style: {
+        layout: 'vertical',
+        size:   'medium',
+        shape:  'rect',
+        color:  'gold' 
+      },
+      funding: {
+        allowed: [ paypal.FUNDING.CARD ],
+        disallowed: [ paypal.FUNDING.CREDIT ]
+      },
+      validate: function(actions) {
+        validate(actions)
+        onChange(function() { validate(actions) })
+      },
+      onClick: function() {
+        if(!app.isValid()) alert("All fields are mandatory")
+      },
+      payment: function(data, actions) {
+        return actions.request
+          .post('/api/paypal/create-badge-all-sale', app.badge)
+          .then(function(response) {
+            return response.id;
+          })
+      },
+      onAuthorize: function(data, actions) {
+        return actions.payment
+          .get()
+          .then(function(paymentData) {
+            let requestData = {
+              paymentId: data.paymentID,
+              payerId: data.payerID,
+              name: app.badge.name,
+              email: app.badge.email,
+              phone: app.badge.phone,
+              quantity: paymentData.transactions[0].item_list.items[0].quantity
+            }
+            return actions.request
+              .post('/api/paypal/execute-badge-all-sale', requestData)
+              .then(function(response) {
+                app.paymentComplete = true
+              })
+          })
+      }
+    }, '#paypal-button')
+
+
+    function validatePerformerBadge(actions) {
+      app.isValidPerformer() ? actions.enable() : actions.disable()
+    }
+
+    function onChangePerformerBadge(handler) {
+      document.querySelector('#performer-name').addEventListener('change', handler)
+      document.querySelector('#performer-email').addEventListener('change', handler)
+      document.querySelector('#performer-phone').addEventListener('change', handler)
+    }
+
+    paypal.Button.render({
+      env: 'sandbox',
+      style: {
+        layout: 'vertical',
+        size:   'medium',
+        shape:  'rect',
+        color:  'gold' 
+      },
+      funding: {
+        allowed: [ paypal.FUNDING.CARD ],
+        disallowed: [ paypal.FUNDING.CREDIT ]
+      },
+      validate: function(actions) {
+        validatePerformerBadge(actions)
+        onChangePerformerBadge(function() { validatePerformerBadge(actions) })
+      },
+      onClick: function() {
+        if(!app.isValidPerformer()) alert("All fields are mandatory")
+      },
+      payment: function(data, actions) {
+        return actions.request
+          .post('/api/paypal/create-performer-badge-sale', app.performerBadge)
+          .then(function(response) {
+            return response.id;
+          })
+      },
+      onAuthorize: function(data, actions) {
+        return actions.payment
+          .get()
+          .then(function(paymentData) {
+            let requestData = {
+              paymentId: data.paymentID,
+              payerId: data.payerID,
+              name: app.performerBadge.name,
+              email: app.performerBadge.email,
+              phone: app.performerBadge.phone,
+              quantity: paymentData.transactions[0].item_list.items[0].quantity
+            }
+            return actions.request
+              .post('/api/paypal/execute-performer-badge-sale', requestData)
+              .then(function(response) {
+                app.paymentComplete = true
+              })
+          })
+      }
+    }, '#paypal-button-2')

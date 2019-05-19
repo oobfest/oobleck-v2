@@ -1,0 +1,175 @@
+extends ../_layout
+block content
+  style.
+    .bg-accent-oob {
+      background: url('../img/audience-dark.jpg') no-repeat bottom center fixed; 
+      background-size: cover;
+    }
+  .text-center
+    a(href="http://oobfest.com/" target="_parent")
+      img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    h1.p-3.text-light.font-weight-bold 2018 Host Application
+  #app.container-fluid
+    .row
+      .col-lg-8.mx-auto.pb-5
+        .box-head.box-head-accent-oob
+        div(v-show="submitted==false")
+          .box-block
+            .alert.alert-danger(v-show="validationErrors.length > 0")
+              h4.alert-heading Errors
+              ul
+                  li(v-for="validationError in validationErrors") {{validationError}}
+            .form-group
+              label.col-form-label.required-field(for="name") Full Name
+              input#name.form-control(type="text" required autofocus maxlength="280" v-model="host.name")
+            .form-group
+              label.col-form-label.required-field(for="email") Email
+              input#email.form-control(type="email" required maxlength="280" v-model="host.email")
+            .form-group
+              label.col-form-label.required-field(for="email") Phone Number
+              input#email.form-control(type="tel" required maxlength="280" v-model="host.phone")
+            .form-group
+              label.col-form-label.required-field(for="bio") Bio
+              small.form-text.text-muted Hosts may have this content published on our website and programs. Use third person active voice, e.g. "Jill Bernard is..." and limit it to 3-4 sentences. 
+              textarea#bio.form-control(maxlength="1500" name="bio" required v-model="host.bio")
+            .form-group
+              label.col-form-label(for="experience") Previous Hosting Experience
+              textarea#experience.form-control(maxlength="1500" v-model="host.experience")
+            .form-group
+              label.col-form-label(for="text") Video URL (optional)
+              small.form-text.text-muted If you have video of you hosting we'd like to see it!
+              input#video-url.form-control(type="text" maxlength="280" v-model="host.videoUrl")
+          .box-block
+            upload-image(
+              :image-url="host.imageUrl"
+              :delete-image-url="host.deleteImageUrl" 
+              @update-image-url="host.imageUrl = $event"
+              @update-delete-image-url="host.deleteImageUrl = $event"
+            )
+          .box-block
+            h3 Availability
+            p.help-text Which days of the festival are you able to host?
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-tuesday.custom-control-input(
+                  type="checkbox" 
+                  value="tuesday" 
+                  v-model="host.availability"
+                )
+                label.custom-control-label(for="available-tuesday") Tuesday, August 28th
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-wednesday.custom-control-input(
+                  type="checkbox" 
+                  value="wednesday" 
+                  v-model="host.availability"
+                )
+                label.custom-control-label(for="available-wednesday") Wednesday, August 29th
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-thursday.custom-control-input(
+                  type="checkbox" 
+                  value="thursday" 
+                  v-model="host.availability"
+                )
+                label.custom-control-label(for="available-thursday") Thursday, August 30th
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-friday.custom-control-input(
+                  type="checkbox" 
+                  value="friday" 
+                  v-model="host.availability"
+                )
+                label.custom-control-label(for="available-friday") Friday, August 31st
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-saturday.custom-control-input(
+                  type="checkbox" 
+                  value="saturday" 
+                  v-model="host.availability"
+                )
+                label.custom-control-label(for="available-saturday") Saturday, September 1st
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-sunday.custom-control-input(
+                  type="checkbox" 
+                  value="sunday" 
+                  v-model="host.availability"
+                )
+                label.custom-control-label(for="available-sunday") Sunday, September 2nd
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-monday.custom-control-input(
+                  type="checkbox" 
+                  value="monday" 
+                  v-model="host.availability"
+                )
+                label.custom-control-label(for="available-monday") Monday, September 3rd
+            h4 Mandatory Orientation Meeting
+            .form-group
+              .custom-control.custom-checkbox
+                input#can-attend-meeting.custom-control-input(type="checkbox" name="can-attend-meeting" v-model="host.canAttendMeeting")
+                label.custom-control-label(for="can-attend-meeting") I am available Sunday afternoon, August 26th
+          .box-block.text-center
+            button#submit-button.btn.btn-md.btn-primary(type="button" @click="addHost") Submit
+        div(v-show="submitted==true")
+          .box-block
+            h4 Your submission has been received!
+
+  script(src="/js/vue.js")
+  script(src="/js/axios.min.js")
+  include components/upload-image
+  script.
+    let app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          submitted: false,
+          validationErrors: [],
+          host: {
+            name: '',
+            email: '',
+            phone: '',
+            bio: '',
+            experience: '',
+            videoUrl: '',
+            imageUrl: '',
+            deleteImageUrl: '',
+            availability: [],
+            canAttendMeeting: false
+          }
+        }
+      },
+      methods: {
+        validate() {
+          let validationErrors = []
+          if(this.host.name == '') validationErrors.push("Name is required")
+          if(this.host.email == '') validationErrors.push("Email is required")
+          if(this.host.phone == '') validationErrors.push("Phone is required")
+          if(this.host.bio == '') validationErrors.push("Bio is required")
+          if(this.host.availability.length == 0) validationErrors.push("You did not mark availability for any dates")
+          if(this.host.canAttendMeeting == false) validationErrors.push("You must confirm that you can make the orientation meeting")
+          return validationErrors
+        },
+        addHost() {
+          let self = this
+
+          let validationErrors = self.validate()
+          if(validationErrors.length > 0) {
+            alert("Some required fields were left blank")
+            this.validationErrors = validationErrors
+          }
+          else {
+            axios
+              .post('/api/hosts', self.host)
+              .then(response => {
+                self.submitted = true
+              })
+              .catch(error=> {
+                alert("There was an error submitting the host application :(")
+                console.log(error)
+              })
+          }
+        }
+      }
+    })

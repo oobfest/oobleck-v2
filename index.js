@@ -8,6 +8,7 @@ let setupApp = async ()=> {
     await setupMongoose(process.env.CONNECTION_STRING)
     await setupServer(process.env.PORT)
     console.log("✨ Ready!")
+    console.log(`💻 http://localhost:${process.env.PORT}/`)
   }
   catch(error) {
     if(error.name == "Error") {

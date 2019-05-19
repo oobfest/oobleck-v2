@@ -1,0 +1,65 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Acts / Social
+
+  #app.dash-boxes.container-fluid
+    .box.box-b
+      table.box-table.table
+        thead
+          tr
+            th Name
+            th Type
+            th Bio
+            th Origin
+            th Social
+        tbody
+          tr(v-for="act in acts")
+            td 
+              figure.figure
+                a(:href="act.imageUrl" target="_blank")
+                  img.figure-img.img-thumbnail(:src="getImageSrc(act.imageUrl)")
+                figcaption.figure-caption {{act.actName}}
+            td {{act.showType}}
+            td(style="line-height: 1")
+              small {{act.publicDescription}}
+            td {{act.city}}, {{act.state}}
+              span(v-if="act.country != 'US'") , {{act.country}}
+            td 
+              ul
+                li(v-for="social in act.socialMedia") 
+                  a(:href="social.url" target="_blank") {{social.type}}
+            td
+
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          acts: [],
+        }
+      },
+      computed: {
+      },
+      methods: {
+        getImageSrc(url) {
+          return url.substr(0, url.length-4) + 's.jpeg'
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/submissions/get-valid-acts')
+          .then(function(response) {
+            self.acts = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting acts :(")
+            console.log(error)
+          })
+      }
+    })

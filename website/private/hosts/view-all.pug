@@ -1,0 +1,65 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Host Submissions
+
+  #app.dash-boxes.container-fluid
+    edit-host-modal(:host="Object.assign({}, selectedHost)" @update="updateHost")
+    .box.box-b(v-if="hosts.length > 0")
+      table.box-table.table
+        thead
+          tr
+            th Name
+            th Email
+            th Phone
+        tbody(v-for="(host, index) in hosts")
+          tr
+            td 
+              a(:href="'#collapse-' + index" data-toggle="collapse") {{host.name}}
+            td {{host.email}}
+            td {{host.phone}}
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan="3")
+              h4 Bio
+              p {{host.bio}}
+              div(v-if="host.experience")
+                h4 Experience
+                p {{host.experience}}
+              h4 Availability
+              ul.list-inline
+                li.list-inline-item(v-for="day in host.availability") {{day}}
+              button.btn.btn-secondary(data-toggle="modal" data-target="#edit-host-modal" @click="selectedHost = host") Edit
+    p.m2(v-else) No hosts yet
+
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  include modals/edit-host
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          hosts: [],
+          selectedHost: {},
+        }
+      },
+      methods: {
+        updateHost(savedHost) {
+          let index = this.hosts.map(h=> h._id).indexOf(savedHost._id)
+          Vue.set(this.hosts, index, savedHost)
+        }      
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/hosts/')
+          .then(function(response) {
+            self.hosts = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting hosts :(")
+            console.log(error)
+          })
+      },
+    })

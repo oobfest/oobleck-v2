@@ -12,24 +12,42 @@ nav#dash-nav.dash-nav.dash-nav-accent-2
 	.dash-nav-list
 		- var isAdmin = user.roles.includes('admin')
 		- var isStaff = user.roles.includes('staff')
-		- var isReviewer = user.roles.includes('reviewer')
-		- var isStandupReviewer  = user.roles.includes('standup-reviewer')
+		- var isPanelist = user.roles.includes('panelist')
+		- var isStandupPanelist  = user.roles.includes('standup-panelist')
+		- var isScheduler = user.roles.includes('schedule')
 
 		if isStaff || isAdmin
-			a.dash-nav-item(href="/act-submissions")
-				span.far.fa-file.fa-lg.fa-fw.fa-bounce &nbsp;
-				|  Act Submissions
-			a.dash-nav-item(href="/screener-submissions")
-				span.far.fa-file.fa-lg.fa-fw.fa-bounce &nbsp;
-				|  Screener Submissions
 
-		a.dash-nav-item(href="/act-submissions/review")
-			span.far.fa-star.fa-lg.fa-fw.fa-bounce &nbsp;
-			|  Review Submissions
+			.dash-nav-dropdown
+				a.dash-nav-item.dash-nav-dropdown-toggle(href="#!")
+					span.far.fa-star.fa-lg.fa-fw.fa-bounce &nbsp;
+					|  Acts
+				.dash-nav-dropdown-menu
+					a.dash-nav-item(href="/act-submissions") Submissions
+					a.dash-nav-item(href="/act-submissions/stamp") Approve / Reject
+					a.dash-nav-item(href="/acts") View
+
+			//a.dash-nav-item(href="/badges")
+				span.far.fa-map.fa-lg.fa-fw &nbsp;
+				|  Badges
+			//a.dash-nav-item(href="/calendar")
+				span.far.fa-calendar-alt.fa-lg.fa-fw &nbsp;
+				|  Calendar
+			//a.dash-nav-item(href="/hosts")
+				span.far.fa-grin-alt.fa-lg.fa-fw &nbsp;
+				|  Hosts
+			//a.dash-nav-item(href="/shows")
+				span.far.fa-list-alt.fa-lg.fa-fw &nbsp;
+				|  Shows
+			//a.dash-nav-item(href="/volunteers")
+				span.far.fa-heart.fa-lg.fa-fw &nbsp;
+				|  Volunteers
+			//a.dash-nav-item(href="/workshops")
+				span.far.fa-lightbulb.fa-lg.fa-fw &nbsp;
+				|  Workshops
 
 		if isAdmin
 			hr.dash-nav-divider
 			a.dash-nav-item(href="/users")
-				span.far.fa-id-card.fa-lg.fa-fw &nbsp;
+				span.far.fa-user-circle.fa-lg.fa-fw &nbsp;
 				|  Users
-

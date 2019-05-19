@@ -1,0 +1,497 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title
+        a.text-muted(href="/acts") Acts
+        |  /
+        | Add Act
+
+  form.container(method="POST" action="/submissions/create" name="apply")
+    input(type="hidden" value="checked" name="no-food")
+    input(type="hidden" value="N/A" name="flight-agreement")
+    .row
+      .col
+        .text-center.m-4
+          button.btn.btn-primary.btn-lg(type="submit") Save
+    .row
+      .col
+        .box.box-b.mb-4
+          .box-block.box-rounded-top.box-bb
+            h4 General Details
+            .form-group
+              label.col-form-label.required-field(for="act-name") Act Name
+              input#act-name.form-control(type="text" required autofocus name="act-name" maxlength="280")
+            .form-group
+              label.col-form-label.required-field(for="show-type") Show Type
+              select#show-type.form-control(name="show-type" required)
+                option Improv
+                option Sketch
+                option Stand-Up
+                option Variety
+                option Podcast
+                option(value='Individual') Teacher / Performer
+                option Music
+                option Other
+            .form-group
+              label.col-form-label.required-field(for="public-description") Public Description
+              textarea#public-description.form-control(maxlength="1400" name="public-description" required)
+            .form-group
+              label.col-form-label(for="accolades") Previous Festival Apperances, Awards, etc.
+              textarea#accolades.form-control(maxlength="1400" name="accolades")
+          .box-block.box-bb
+            h4 Location
+            .form-group
+              - var submission = {country: 'US'};
+              include ../apply/partials/location/countries
+            #state-item
+            #region-item
+            .form-group
+              label.col-form-label.required-field(for="city") City
+              input#city.form-control(type="text" name="city" required maxlength="280" )
+            .form-group
+              label.col-form-label(for="home-theater") What theater is your home base?
+              input#home-theater.form-control(type="text" name="home-theater" maxlength="280" )
+            include ../apply/partials/location/states
+          .box-block.box-bb
+            h4 Performance Details
+            .form-group
+              label.col-form-label.required-field(for="minimum-length") What is the shortest set you'd be willing to do for the festival? 
+              .input-group
+                input#minimum-show-length.form-control(type="number" min="0" max="2400" name="minimum-show-length" value=5)
+                .input-group-append
+                  span.input-group-text minutes
+
+            .form-group
+              label.col-form-label.required-field(for="maximum-length") What's the longest you would be able to perform for? 
+              .input-group
+                input#maximum-show-length.form-control(type="number" min="0" max="2400" name="maximum-show-length" value=60)
+                .input-group-append
+                  span.input-group-text minutes
+            .form-group
+              label.col-form-label(for="special-needs") Special Performance Requirements
+              textarea#special-needs.form-control(maxlength="1500" name="special-needs")
+          .box-block.box-bb
+            h4 Availability
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-tuesday.custom-control-input(
+                  type="checkbox" 
+                  value="tuesday" 
+                  name="available[]"
+                )
+                label.custom-control-label(for="available-tuesday") Tuesday
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-wednesday.custom-control-input(
+                  type="checkbox" 
+                  value="wednesday" 
+                  name="available[]"
+                )
+                label.custom-control-label(for="available-wednesday") Wednesday
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-thursday.custom-control-input(
+                  type="checkbox" 
+                  value="thursday" 
+                  name="available[]"
+                )
+                label.custom-control-label(for="available-thursday") Thursday
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-friday.custom-control-input(
+                  type="checkbox" 
+                  value="friday" 
+                  name="available[]"
+                )
+                label.custom-control-label(for="available-friday") Friday
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-saturday.custom-control-input(
+                  type="checkbox" 
+                  value="saturday" 
+                  name="available[]"
+                )
+                label.custom-control-label(for="available-saturday") Saturday
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-sunday.custom-control-input(
+                  type="checkbox" 
+                  value="sunday" 
+                  name="available[]"
+                )
+                label.custom-control-label(for="available-sunday") Sunday
+            .form-group
+              .custom-control.custom-checkbox
+                input#available-monday.custom-control-input(
+                  type="checkbox" 
+                  value="monday" 
+                  name="available[]"
+                )
+                label.custom-control-label(for="available-monday") Monday
+            h4 Conflicts
+            #conflicts
+            .form-group
+              button#add-conflict-button.btn.btn-secondary(type="button") Add Conflict
+
+            script#conflict-template(type="text/x-template")
+              .conflict-item
+                .row
+                  .col-sm-6
+                    .form-group
+                      label.col-form-label.required-field Act Name
+                      input.form-control(type="text" required name="conflict-act[]" maxlength="280")
+                  .col-sm-6
+                    .form-group
+                      label.col-form-label.required-field Person(s) with Conflict
+                      input.form-control(type="text" required name="conflict-person[]" maxlength="280")
+                .form-group.text-right
+                  label.col-form-label &nbsp;
+                  button.remove-conflict-button.btn.btn-danger(type="button") Remove
+                hr
+            
+            script.
+              var conflictTemplate = $("#conflict-template").html()
+              $("#add-conflict-button").click(function() {
+                $("#conflicts").append(conflictTemplate)
+              })
+              $("#conflicts").on('click', '.remove-conflict-button', function() {
+                $(this).closest(".conflict-item").remove()
+              })
+          //.box-block.box-bb
+            h4 Video Link
+            .form-group
+              label.col-form-label.required-field(for="video-url-0") Link to Video
+              input#video-url-0.form-control(type="text" name="video-url-0" maxlength="1400")
+            .form-group
+              label.col-form-label(for="video-url-1") Second Video (optional)
+              input#video-url-1.form-control(type="text" name="video-url-1" maxlength="1400")
+            .form-group
+              label.col-form-label(for="video-url-2") Third Video (optional)
+              input#video-url-2.form-control(type="text" name="video-url-2" maxlength="1400")
+            .form-group
+              label.col-form-label(for="video-info") Password or other information for accessing video
+              input#video-info.form-control(type="text" name="video-info" maxlength="1400")
+      .col
+        .box.box-b.mb-4
+          input#image-url(type="hidden" name="image-url")
+          input#delete-image-url(type="hidden" name="delete-image-url")
+          #image-preview
+            .box-banner
+              img#image-preview-element.box-banner-image(alt="Submission Photo" src='')
+            .box-block.box-bb.text-right
+              a#delete-image-button.btn.btn-danger(href='#' target="_blank" onclick="deleteImage()") Delete image
+          #image-upload.box-block.box-rounded-top.box-bb
+            h4 Image Upload
+            #image-upload-controls
+              .custom-file
+                input#image-upload-input.custom-file-input(type="file" accept="image/*")
+                label.custom-file-label(for="image-upload-input") Select Image
+              p.form-text
+                em Image hosting powered by 
+                  a(href="https://imgur.com/" target="_blank") Imgur
+                  | .
+            p#image-upload-message
+            #image-upload-progress.progress
+              #image-upload-progress-bar.progress-bar.bg-primary
+          .box-block.box-bb
+            h4 Primary Contact
+            .form-group.row
+              label.col-form-label.col-3.required-field(for="primary-contact-name") Name
+              input#primary-contact-name.form-control.col-9(type="text" name="primary-contact-name" required maxlength="280")
+            .form-group.row
+              label.col-form-label.col-3.required-field(for="primary-contact-email") Email
+              input#primary-contact-email.form-control.col-9(type="email" name="primary-contact-email" required maxlength="280")
+            .form-group.row
+              label.col-form-label.col-3.required-field(for="primary-contact-phone") Phone
+              input#primary-contact-phone.form-control.col-9(type="text" name="primary-contact-phone" required maxlength="280")
+            .form-group.row
+              label.col-form-label.col-3.required-field(for="primary-contact-role") Role
+              select#primary-contact-role.form-control.col-9(name="primary-contact-role")
+                option Performer
+                option Crew
+                option Director
+                option Other
+            .form-group.row
+              label.col-form-label.col-3.required-field(for="primary-contact-attending") Attending
+              select#primary-contact-attending.form-control.col-9(name="primary-contact-attending")
+                option Yes
+                option No
+          .box-block.box-bb
+            h4 Additional Members
+            #additional-members
+            .form-group
+              button#add-contact-button.btn.btn-secondary(type="button") Add Contact
+          .box-block.box-bb
+            h4 Social Media
+            #social-media
+            .form-group
+              button#add-social-media-button.btn.btn-secondary(type="button") Add Link
+    .row
+      .col
+        .text-center.mb-4
+          button.btn.btn-primary.btn-lg(type="submit") Save
+
+  script#region-template(type="text/x-template")
+    .form-group
+      label.col-form-label(for="state") State / Province / Region
+      input#state.form-control(type="text" name="state" maxlength="280")
+
+  script#additional-contact-template(type="text/x-template")
+    .personnel-item
+      .form-group.row
+        label.col-form-label.col-3 Name
+        input.form-control.col-9(type="text" name="personnel-name[]" maxlength="280")
+      .form-group.row
+        label.col-form-label.col-3 Email
+        input.form-control.col-9(type="email" name="personnel-email[]" maxlength="280")
+      .form-group.row
+        label.col-form-label.col-3 Role
+        select.form-control.col-9(name="personnel-role[]")
+          option Performer
+          option Tech
+          option Director
+          option Other
+      .form-group.row
+        label.col-form-label.col-3.required-field Attending
+        select.form-control.col-9(name="personnel-attending[]")
+          option Yes
+          option No
+      .form-group.text-right
+        button.remove-contact-button.btn.btn-danger(type="button") Remove Contact
+      hr
+
+  script#social-media-template(type="text/x-template")
+    .social-media-item
+      .form-group
+        .input-group
+          .input-group-prepend
+            select.form-control(name="social-media-type[]")
+              option Twitter
+              option Facebook
+              option YouTube
+              option Instagram
+              option Website
+              option Other
+          input.form-control(type="text" placeholder="URL" name="social-media-url[]" maxlength="280")
+      .form-group.text-right
+        button.remove-social-media-button.btn.btn-danger(type="button") Remove Link
+      hr
+              
+  script.
+    // Get template for state dropdown
+    var stateTemplate = $("#state-template").html()
+
+    // Get template for region text input
+    var regionTemplate = $("#region-template").html()
+
+    // Whenever the "Country" dropdown changes
+    $("#country").on('change', function() {
+
+      // Get what country was selected
+      var selectedCountry = $("#country").val()
+
+      // If the selected country was the US
+      if(selectedCountry === "US") {
+        // Remove the region input
+        $("#region-item").empty()
+
+        // Show the state dropdown
+        $("#state-item").html(stateTemplate)
+      }
+      // Otherwise
+      else {
+        // Remove the state dropdown
+        $("#state-item").empty()
+        // Insert the region dropdown
+        $("#region-item").html(regionTemplate)
+      }
+    })
+
+    // Initialize the correct field by what the country dropdown is set to
+    $("#country").change()
+
+  script.
+    var additionalContactTemplate = $("#additional-contact-template").html()
+    $("#add-contact-button").click(function() {
+      $("#additional-members").append(additionalContactTemplate)
+    })
+    $("#additional-members").on('click', '.remove-contact-button', function() {
+      $(this).closest(".personnel-item").remove()
+    })
+
+  script.
+    var socialMediaTemplate = $("#social-media-template").html()
+    $("#add-social-media-button").click(function() {
+      $("#social-media").append(socialMediaTemplate)
+    })
+    $("#social-media").on('click', '.remove-social-media-button', function() {
+      $(this).closest(".social-media-item").remove()
+    })
+
+  script.
+    var submissionHasImage = $("#image-url").val() !== ""
+    if (submissionHasImage) {
+      $("#image-upload").hide()
+    }
+    else {
+      $("#image-preview").hide()
+      $("#image-upload-progress").hide()
+    }
+
+    function deleteImage() {
+      $("#image-url").removeAttr('value')
+      $("#delete-image-url").removeAttr('value')
+
+      // Delete image urls from database
+      var objectId = $("#submission-id").val()
+      $.post('/submissions/delete-image/' + objectId, function(response) {
+        alert("Image removed from submission")
+      }, "json")
+
+      $("#image-upload-message").html("")
+      $("#image-upload-progress").hide()
+      $("#image-upload-progress-bar").width(0)
+
+      $("#image-upload-controls").show()
+      $("#image-upload").show()
+      $("#image-preview").hide()
+    }
+
+
+    $("#image-upload-input").on('change', () => {
+      var image = $("#image-upload-input").prop('files')[0]
+      if(image.size > (1024 * 1000 * 10)) {
+        alert("Image cannot be larger than 10MB")
+        return;
+      }
+      else {
+        $("#image-upload-controls").hide()
+        $("#image-upload-progress").show()
+        $("#image-upload-message").html("Uploading to Imgur...")
+        formData = new FormData()
+        formData.append('image', image)
+
+        var request = {
+            url: 'https://imgur-apiv3.p.mashape.com/3/image',
+          type: 'POST',
+          mimeType: 'multipart/form-data',
+          crossDomain: true,
+          processData: false,
+          contentType: false,
+          dataType: 'json',
+          headers: {
+            'X-mashape-Key': 'MeRL1vcC70mshcx4yVw7R4jv88gnp11IPvPjsn4GKcdklk5FiE',
+                'Authorization': 'Client-ID c60e83c906306c5'
+          },
+          data: formData,
+          xhr: function() {
+            var xhr = new window.XMLHttpRequest()
+
+            // This block of code is for the progress bar
+            xhr.upload.addEventListener("progress", function(evt) {
+              if (evt.lengthComputable) {
+                var percentComplete = evt.loaded / evt.total
+                percentComplete = parseInt(percentComplete * 100)
+                $("#image-upload-progress-bar").width(percentComplete + '%')
+                if (percentComplete === 100) $("#image-upload-message").html("Waiting for response from Imgur...")
+              }
+            }, false)
+
+            return xhr
+          }
+        }
+
+        $.ajax(request)
+          .done(function(response){
+          $("#image-upload-message").html("Saving image...")
+            let imageUrl = response.data.link
+            let deleteImageUrl = 'http://imgur.com/delete/' + response.data.deletehash
+            $("#image-upload-message").html(
+              "Upload complete! <br> Link: <a href='http://imgur.com/" 
+              + response.data.id 
+              + "'>http://imgur.com/" 
+              + response.data.id + "</a>"
+            )
+            $("#image-upload").hide()
+            $("#image-preview-element").attr('src', imageUrl)
+            $("#image-url").val(imageUrl)
+            $("#delete-image-url").val(deleteImageUrl)
+            $("#delete-image-button").attr('href', deleteImageUrl)
+            $("#image-preview-element").attr('src', imageUrl)
+
+            // Update image urls in database
+            var objectId = $("#submission-id").val()
+            var data = {
+              'image-url': imageUrl,
+              'delete-image-url': deleteImageUrl
+            }
+            $.post('/submissions/add-image/' + objectId, data, function(response) {
+              $("#image-preview").show()            
+            }, "json")
+          })
+          .fail(function(response){ 
+            console.log("Upload failed", response)
+            alert(response.data.error)
+          })
+      }
+    })
+
+  if settings.env !== 'production'
+    script.
+      // Secret autofill method for testing!
+      function autofill() {
+        reset()
+
+        //Act Details
+        document.apply['act-name'].value = "TEST SUBMISSION"
+        document.apply['show-type'].value = "Sketch"
+        document.apply['informal-description'].value = "Informal description of act"
+        document.apply['public-description'].value = "Public description of act"
+        document.apply['accolades'].value = "List of accolades"
+
+        // Location
+        document.apply['country'].value = "CA"
+        document.apply['state'].value = "Manitoba"
+        document.apply['city'].value = "Winnipeg"
+        document.apply['home-theater'].value = "Winnipeg ChuckleSportz"
+
+        // Contact
+        document.apply['primary-contact-name'].value = "Carl McCarl"
+        document.apply['primary-contact-email'].value = "carl@example.com"
+        document.apply['primary-contact-phone'].value = "777-555-1234"
+        document.apply['primary-contact-role'].value = "Director"
+        document.apply['primary-contact-attending'].value = "No"
+
+        // Performance Requirements
+        document.apply['minimum-show-length'].value = "12"
+        document.apply['maximum-show-length'].value = "42"
+        document.apply['special-needs'].value = "Vegan steaks"
+
+        // Video
+        document.apply['video-url-0'].value = "http://www.google.com/channel-2"
+        document.apply['video-url-1'].value = "http://www.google.com/channel-3"
+        document.apply['video-url-2'].value = "http://www.google.com/channel-4"
+        document.apply['video-info'].value = "The password is \"swordfish\""
+
+        // Social Media
+        // ----
+
+        // Availability
+        document.apply['available-tuesday'].checked = true
+        document.apply['available-wednesday'].checked = true
+        document.apply['available-thursday'].checked = true
+        document.apply['available-friday'].checked = true
+        document.apply['available-saturday'].checked = false
+        document.apply['available-sunday'].checked = true
+        document.apply['available-monday'].checked = true
+        //document.apply['conflict-name'][0].value = ""
+
+        // Travel Agreement
+
+        console.log("Autofill'd!")
+      }
+
+      function reset() {
+        document.apply.reset()
+      }

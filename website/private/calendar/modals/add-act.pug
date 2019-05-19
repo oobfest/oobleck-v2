@@ -1,0 +1,88 @@
+script#add-act-modal-template(type="text/template")
+  #add-act-modal.modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title Add Act
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          form
+            .form-group
+              label(for="add-act-modal-day") Day
+              input#add-act-modal-day.form-control(type="text" readonly v-model="show.day")
+            .form-group
+              label(for="add-act-modal-venue") Venue
+              input#add-act-modal-venue.form-control(type="text" readonly v-model="show.venue")
+            .form-group
+              label(for="add-act-modal-time") Time
+              input#add-act-modal-time.form-control(type="text" readonly v-model="show.time")
+            .form-group
+              label(for="add-act-modal-search") Act
+              .input-group
+                input#add-act-modal-search.form-control(type="text" placeholder="Search for act" v-model="search")
+                select.custom-select.input-group-append(v-model="filterActsByType" style="flex-grow:0.5")
+                  option(value='') All
+                  option Improv
+                  option Stand-Up
+                  option Sketch
+                  option Individual
+                  option Music
+            .form-group
+              table.table.table-borderless.table-sm
+                tbody
+                  tr(v-for="act in filteredActs") 
+                    td {{act.available.includes(show.day.toLowerCase()) ? '✅' : '⛔️'}}
+                    td
+                      a(href="#" @click.prevent="addAct(act)" data-dismiss="modal") {{act.actName | shorten(30)}} 
+                    td {{act.minimumShowLength}} to {{act.maximumShowLength}}
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+
+script.
+  Vue.component('add-act-modal', {
+    template: "#add-act-modal-template",
+    data() {
+      return {
+        filterActsByType: '',
+        search: ''
+      }
+    },
+    filters: {
+      shorten(value, characters) {
+        return value.length > characters
+          ? value.substring(0,characters)+'...'
+          : value
+        }
+    },
+    computed: {
+      acts() {
+        return this.$store.state.acts
+      },
+      filteredActs() {
+        if (this.search == '' && this.filterActsByType == '') return null
+        let filteredActs = this.acts
+        if(this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType === this.filterActsByType)
+        if(this.search !== '') filteredActs = filteredActs.filter(a=> a.actName.match(new RegExp(this.search, 'i')))
+        return filteredActs
+      },
+      show() {
+        return this.$store.state.addActModal
+      }
+    },
+    methods: {
+      addAct(act) {
+        this.search = ''
+        let self = this
+        axios
+          .post('/api/shows/add-act/' + this.show._id, act)
+          .then(function(response) {
+            self.$store.commit('updateShow', response.data)
+          })
+          .catch(function(error){
+            alert("Error adding act to show :(")
+            console.log(error)
+          })
+      }
+    }
+  })

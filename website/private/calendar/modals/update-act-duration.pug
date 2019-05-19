@@ -1,0 +1,48 @@
+script#update-act-duration-modal-template(type="text/template")
+  #update-act-duration-modal.modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title Update Act Time
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          pre {{modal}}
+          .form-group
+            label(for="update-act-duration-modal-duration") Set Length
+            input#update-act-duration-modal-duration.form-control(type="number" v-model="duration")
+        .modal-footer
+          .form-group
+            button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+            | &nbsp;
+            button.btn.btn-primary(type="button" data-dismiss="modal" @click="updateActDuration") Save
+
+script.
+  Vue.component('update-act-duration-modal', {
+    template: "#update-act-duration-modal-template",
+    data() {
+      return { duration: 0 }
+    },
+    computed: {
+      modal() {
+        return store.getters.getUpdateActDurationModal
+      }
+    },
+    methods: {
+      updateActDuration() {
+        this.modal.duration = this.duration
+        alert("CLICKY!")
+        /*
+        axios
+          .post('/api/shows/' + this.show._id, act)
+          .then(function(response) {
+            console.log(response.data)
+            self.$store.commit('updateShow', response.data)
+          })
+          .catch(function(error){
+            alert("Error adding act to show :(")
+            console.log(error)
+          })*/
+      }
+    }
+  })

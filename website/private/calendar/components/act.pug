@@ -1,0 +1,16 @@
+script#act-template(type="text/template")
+  p.act 
+    span(v-if="act.type === 'Sketch'") ✏️ 
+    span(v-if="act.type === 'Music'") 🎶 
+    span(v-if="act.type === 'Improv'") ⚡️ 
+    span(v-if="act.type === 'Stand-Up'") 🎤 
+    span(v-if="act.type === 'Individual'") 🗣 
+    span(:class="actStatus") {{act.name | shorten(24)}}
+
+    a(v-show="$root.editMode" href="#" @click.prevent="removeAct(show._id, act._id)" style="float:right") remove act
+
+script.
+  Vue.component('shows', {
+    template: "#shows-template",
+    props: ['act'],
+  })

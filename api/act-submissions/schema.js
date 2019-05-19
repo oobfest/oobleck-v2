@@ -153,6 +153,16 @@ let SubmissionSchema = mongoose.Schema({
   reviews: {
     required: false,
     type: [ReviewSchema]
+  },
+
+  // Newer
+  headliner: {
+    required: false,
+    type: Boolean
+  },
+  stamp: {
+    required: false,
+    type: String
   }
 })
 

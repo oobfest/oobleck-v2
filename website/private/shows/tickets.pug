@@ -1,0 +1,232 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title 
+        a(href="/shows") Shows
+        |  / Tickets
+
+  #app.dash-boxes.container-fluid
+    .box.box-b
+      table.table
+        thead
+          tr
+            th Name
+            th Email
+            th Shows
+            th Reserved
+            th Paid
+        tbody(v-for="email, index in Object.keys(tickets)")
+          tr
+            td 
+              a(:href="'#collapse-tickets-'+index" data-toggle="collapse") {{tickets[email][0].name}}
+            td.code {{email}}
+            td {{tickets[email].length}}
+            td {{getQuantity(email)}}
+            td
+              span(v-if="getPaid(email) > 0") ${{getPaid(email)}}
+          tr.collapse(:id="'collapse-tickets-'+index")
+            td.p-0(colspan=5)
+              table.table.table-sm.mb-0
+                tbody.striped(v-for="day in days")
+                  tr(v-for="ticket in formatTickets(email, day)")
+                    td.borderless 
+                      span(style="user-select: none") {{ticket.quantity > 1 ? '(' + ticket.quantity + ')' : ''}} 
+                      | {{ticket.day}}, {{ticket.time | time}}, {{formatVenue(ticket.venue)}}                  
+                    td.text-right.borderless(style="user-select: none")
+                      span(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
+                      span(v-else-if="ticket.payment") 
+                        a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") PayPal (${{Number(ticket.payment.transactions[0].amount.total)}})
+                      span(v-else) n/a
+  script(src="/js/axios.min.js")
+  script(src="/js/vue.js")
+  script(src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js" integrity="sha256-/GKyJ0BQJD8c8UYgf7ziBrs/QgcikS7Fv/SaArgBcEI=" crossorigin="anonymous")
+  include components/add-ticket
+  script.
+    let app = new Vue({ 
+      el: "#app",
+      data() { 
+        return {
+          showTables: false,
+          print: {
+            day: 'Tuesday',
+            venue: '',
+            time: '',
+          },
+          sortByRemaining: false,
+          ticketsSort: 'shows',
+          shows: [],
+          showId: null,
+          searchDay: "",
+          searchVenue: "",
+          days: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday']
+        }
+      },
+      computed: {
+        times() {
+          return this.shows
+            .filter(s=> (s.venue == this.print.venue) && (s.day == this.print.day))
+            .map(s=> s.time)
+            .sort((a,b)=> a-b)
+        },
+        filteredShows() {
+          if(this.sortByRemaining) this.shows.sort((a,b)=> { return b.remaining - a.remaining })
+          else this.shows.sort((a,b)=> { return (a.capacity - a.remaining) - (b.capacity - b.remaining) })
+
+          let searchDayRegex = new RegExp(this.searchDay, 'i')
+          let searchVenueRegex = new RegExp(this.searchVenue, 'i')
+          return this.shows.filter(s=> { return s.day.match(searchDayRegex) && s.venue.match(searchVenueRegex) })
+        },
+        tickets() {
+          let tickets = []
+          for(let i=0; i<this.shows.length; i++) {
+            for(let j=0; j<this.shows[i].tickets.length; j++) {
+              let ticket = this.shows[i].tickets[j]
+              ticket.showId = this.shows[i]._id
+              ticket.day = this.shows[i].day
+              ticket.venue = this.shows[i].venue
+              ticket.time = this.shows[i].time
+              ticket.paid = ticket.payment 
+                ? Number(ticket.payment.transactions[0].amount.total)
+                : 0
+              tickets.push(ticket)
+            }
+          }
+          return _.groupBy(tickets, 'email')
+        }
+      },
+      methods: {
+        clicky(yay) {
+          alert(yay)
+        },
+        formatTickets(email, day) {
+          return this.tickets[email]
+            .filter(t => t.day == day)
+            .sort((a, b)=> a.time - b.time)
+        },
+        getPaid(email) {
+          let paid = 0
+          let tickets = this.tickets[email]
+          for(let ticket of tickets) {
+            paid += ticket.paid
+          }
+          return paid
+        },
+        getQuantity(email) {
+          let quantity = 0
+          let tickets = this.tickets[email]
+          for(let ticket of tickets) {
+            quantity += Number(ticket.quantity)
+          }
+          return quantity
+        },
+        formatVenue(venue) {
+          switch(venue) {
+            case 'Hideout Down': return 'Hideout Downstairs'
+            case 'Hideout Up': return 'Hideout Upstairs'
+            case 'ColdTowne': return 'ColdTowne'
+            case 'Fallout': return 'Fallout'
+            case 'Velveeta': return 'Velveeta Room'
+            case 'Spider House': return 'Spider House Ballroom'
+            case 'Institution': return 'Institution'
+            default: return venue
+          }
+        },
+        formatBadge(badgeType) {
+          switch(badgeType) {
+            case 'all': return 'All-Access Badge'
+            case 'performer-full-upgrade': return 'Performer Badge (Full)'
+            case 'performer-weekend-upgrade': return 'Performer Badge (Weekend)'
+            case 'staff': return 'Staff'
+            default: return badgeType
+          }
+        },
+        reserveWithBadge(showId) {
+          let badgeEmail = prompt("Badge email")
+          if(badgeEmail == null) return
+          let quantity = Number(prompt("Quantity"))
+          if(quantity == 0) return
+
+          let self = this
+          axios
+            .post('/api/shows/badge-reservation/' + showId, {email: badgeEmail, quantity: quantity})
+            .then(function(response) {
+              if(response.data.reservationSuccessful) {
+                let index = self.shows.findIndex(s=> s._id == showId)
+                Vue.set(self.shows, index, response.data.savedShow)
+              }
+              else {
+                alert(response.data.message)
+              }
+            })
+            .catch(function(error) {
+              alert("Error reserving for show with badge :(")
+              console.log(error)
+            })
+        },
+        removeReservation(showId, ticketId) {
+          let self = this
+          axios
+            .post('/api/shows/remove-reservation/' + showId, {ticketId: ticketId})
+            .then(function(response) {
+              let showIndex = self.shows.findIndex(s=> s._id == showId)
+              Vue.set(self.shows, showIndex, response.data)
+            })
+            .catch(function(error) {
+              alert("Error removing reservation from show :(")
+              console.log(error)
+            })
+        },
+        setCapacity(id) {
+          let capacity = Number(prompt("New capacity"))
+          if(capacity == 0) return
+          let self = this
+          axios
+            .post('/api/shows/set-capacity/' + id, {capacity: capacity})
+            .then((response)=> {
+              let index = self.shows.findIndex(s=> s._id == id)
+              Vue.set(self.shows, index, response.data)
+            })
+            .catch((error)=> {
+              alert("Failed to set capacity for show :(")
+              console.log(error)
+            })
+        },
+        setPrice(id) {
+          let price = prompt("New price")
+          if(price == null) return
+          else price = Number(price)
+
+          let self = this
+          axios
+            .post('/api/shows/set-price/' + id, {price: price})
+            .then((response)=> {
+              let index = self.shows.findIndex(s=> s._id == id)
+              Vue.set(self.shows, index, response.data)
+            })
+            .catch((error)=> {
+              alert("Failed to set price for show :(")
+              console.log(error)
+            })
+
+        }
+      },
+      filters: {
+        time(time) {
+          time = String(time)
+          return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+        },
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/shows/')
+          .then(function(response) {
+            self.shows = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting shows :(")
+            console.log(error)
+          })
+      }
+    })

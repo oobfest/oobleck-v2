@@ -1,0 +1,293 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Approve or Reject Acts
+
+  #vue-app
+    .dash-boxes.container-fluid
+      .row
+        .col
+          .box.box-b
+            table.table.box-table
+              thead
+                tr
+                  //th
+                  th Act
+                  th Score
+                  th Type
+                  th City
+                  th Theater
+                  th
+              tbody
+                tr
+                  //td
+                  td
+                    input.form-control(type="text" placeholder="Filter by Name" v-model="nameFilter")
+                  td
+                  td
+                    select#type-filter.form-control(v-model="typeFilter")
+                      option All
+                      option Improv
+                      option Sketch
+                      option Standup
+                      option Variety
+                      option Podcast
+                      option One-person-show
+                      option Music
+                      option Other
+                  td
+                    input.form-control(type="text" placeholder="Filter by Theater" v-model="locationFilter")
+                  td
+                    input.form-control(type="text" placeholder="Filter by Theater" v-model="theaterFilter")
+                  td
+                    select#stamp-filter.form-control(v-model="stampFilter")
+                      option All
+                      option Accepted
+                      option Maybe
+                      option Rejected
+              tbody
+                tr
+                  td(colspan=6)
+                    | Accepted: &nbsp;
+                    strong.badge.badge-success {{totalAcceptedActs}}
+                    | &nbsp; Maybe: &nbsp;
+                    strong.badge.badge-info {{totalPurgatoryActs}}
+                    | &nbsp; Rejected: &nbsp;
+                    strong.badge.badge-danger {{totalRejectedActs}}
+                    | &nbsp; Total: &nbsp;
+                    strong.badge.badge-secondary {{totalActs}}
+
+              tbody(v-for="submission in submissions")
+                  tr(:class="{'table-success': submission.stamp === 'in','table-danger': submission.stamp === 'out','table-info': submission.stamp === undefined || submission.stamp === null}")
+                    td.middle
+                      a(:href="'#collapse-' + submission._id" data-toggle="collapse") {{submission.name | shorten(42)}}
+                    td.middle {{submission.reviews | emojifyReviews}}
+                    td.middle {{submission.showType.join(", ")}}
+                    td.middle {{submission.city}}, {{submission.state}}
+                      span(v-if="submission.country !== 'US'") , {{submission.country}}
+                    td.middle {{submission.home | shorten(42)}}
+
+
+                    td.middle.text-right
+                      .btn-group.btn-group-toggle(data-toggle="buttons")
+                        label.btn.btn-sm.btn-info(:class="{active: submission.stamp === 'in'}" @click="accept(submission._id)")
+                          input(type="radio")
+                          | In
+                        label.btn.btn-sm.btn-info(:class="{active: submission.stamp === undefined || submission.stamp === null}" @click="purgatory(submission._id)")
+                          input(type="radio" checked)
+                          | ???
+                        label.btn.btn-sm.btn-info(:class="{active: submission.stamp === 'out'}" @click="reject(submission._id)")
+                          input(type="radio")
+                          | Out
+                  tr.collapse(:id="'collapse-' + submission._id")
+                    td(colspan="6")
+                      h2 {{submission.name}}
+                      ul.pagination
+                        li.page-item(:class="[submission.availability.includes('tuesday')    ? 'available' : 'unavailable']")
+                          span.page-link.availability Tuesday
+                        li.page-item(:class="[submission.availability.includes('wednesday')  ? 'available' : 'unavailable']")
+                          span.page-link.availability Wednesday
+                        li.page-item(:class="[submission.availability.includes('thursday')   ? 'available' : 'unavailable']")
+                          span.page-link.availability Thursday
+                        li.page-item(:class="[submission.availability.includes('friday')     ? 'available' : 'unavailable']")
+                          span.page-link.availability Friday
+                        li.page-item(:class="[submission.availability.includes('saturday')   ? 'available' : 'unavailable']")
+                          span.page-link.availability Saturday
+                        li.page-item(:class="[submission.availability.includes('sunday')     ? 'available' : 'unavailable']")
+                          span.page-link.availability Sunday
+                        li.page-item(:class="[submission.availability.includes('monday')     ? 'available' : 'unavailable']")
+                          span.page-link.availability Monday
+                      h4 Score:
+                        span(v-for="review in submission.reviews") {{review.score | emojifyReview}}
+                      table.table.table-striped.table-bordered
+                        thead.thead-light
+                          tr
+                            th Reviewer
+                            th
+                            th Description
+                        tbody
+                          tr(v-for="review in submission.reviews")
+                            td.middle(style="white-space:nowrap")
+                              small.code {{review.username}}
+                            td.middle.text-center {{review.score | emojifyReview}}
+                            td
+                              p {{review.notes}}
+                      h4 Video Links
+                      div(v-for="videoUrl in submission.videoUrls")
+                        pre.alert.alert-light(v-if="videoUrl")
+                          a(:href="videoUrl" target="_blank") {{videoUrl}}
+                      div(v-if="submission.videoInfo")
+                        h4 Video Information
+                        p {{submission.videoInfo}}
+                      h4 Bio
+                      p.font-italic {{submission.publicDescription}}
+
+                      h4 How Do You Describe Your Act?
+                      p {{submission.privateDescription}}
+
+                      div(v-if="submission.accolades")
+                        h4 Accolades
+                        p {{submission.accolades}}
+
+                      h4 Members
+                      ul
+                        li(v-for="person in submission.personnel")
+                          strong {{person.name}}, &nbsp;
+                          | {{person.role}}
+
+  script.
+
+    let vm = new Vue({
+      el: "#vue-app",
+      data() {
+        return {
+          allSubmissions: [],
+          typeFilter: 'All',
+          stampFilter: 'All',
+          nameFilter: '',
+          locationFilter: '',
+          theaterFilter: ''
+        }
+      },
+      computed: {
+        submissions() {
+          let filteredSubmissions = this.allSubmissions
+
+          // Filter by act name
+          if (this.nameFilter !== '') {
+            let nameRegex = new RegExp(this.nameFilter, 'i')
+            filteredSubmissions = filteredSubmissions.filter(s=> s.name.match(nameRegex))
+          }
+
+          // Filter by theater
+          if (this.theaterFilter !== '') {
+            let theaterRegex = new RegExp(this.theaterFilter, 'i')
+            filteredSubmissions = filteredSubmissions.filter(s=> s.home.match(theaterRegex))
+          }
+
+          // Filter by location
+          if (this.locationFilter !== '') {
+            let locationRegex = new RegExp(this.locationFilter, 'i')
+            filteredSubmissions = filteredSubmissions.filter(s=> (s.city + s.state + s.country).match(locationRegex))
+          }
+
+
+          // Filter by show type
+          if(this.typeFilter !== 'All')
+            filteredSubmissions = filteredSubmissions.filter((s)=> s.showType.includes(this.typeFilter))
+
+          // Sort alphabetically by act name
+          filteredSubmissions.sort((a,b)=> {
+            if (a.name < b.name) return -1
+            else if (a.name > b.name) return 1
+            else return 0
+          })
+
+          // Filter by stamp
+          switch(this.stampFilter) {
+            case 'Accepted': return filteredSubmissions.filter((s)=> s.stamp === 'in')
+            case 'Maybe': return filteredSubmissions.filter((s)=> s.stamp === undefined)
+            case 'Rejected': return filteredSubmissions.filter((s)=> s.stamp === 'out')
+            default: return filteredSubmissions
+          }
+        },
+        totalAcceptedActs() {
+          return this.submissions.filter(s=> s.stamp === 'in').length
+        },
+        totalPurgatoryActs() {
+          return this.submissions.filter(s=> s.stamp === undefined).length
+        },
+        totalRejectedActs() {
+          return this.submissions.filter(s=> s.stamp === 'out').length
+        },
+        totalActs() {
+          return this.submissions.length
+        }
+      },
+      methods: {
+        accept(id) {
+          let self = this
+          axios
+            .put('/api/act-submissions/' + id, {stamp: 'in'})
+            .then(function(response) {
+              let i = self.allSubmissions.findIndex((s)=> s._id === response.data._id)
+              self.$set(self.allSubmissions[i], 'stamp', response.data.stamp)
+            })
+            .catch(function(error) {
+              alert("Error :(")
+              console.log(error)
+            })
+        },
+        purgatory(id) {
+          let self = this
+          axios
+            .put('/api/act-submissions/' + id, {stamp: null})
+            .then(function(response) {
+              let i = self.allSubmissions.findIndex((s)=> s._id === response.data._id)
+              self.$set(self.allSubmissions[i], 'stamp', response.data.stamp)
+            })
+            .catch(function(error) {
+              alert("Error :(")
+              console.log(error)
+            })
+        },
+        reject(id) {
+          let self = this
+          axios
+            .put('/api/act-submissions/' + id, {stamp: 'out'})
+            .then(function(response) {
+              let i = self.allSubmissions.findIndex((s)=> s._id === response.data._id)
+              self.$set(self.allSubmissions[i], 'stamp', response.data.stamp)
+            })
+            .catch(function(error) {
+              alert("Error :(")
+              console.log(error)
+            })
+        }
+      },
+      filters: {
+        shorten(value, characters) {
+        return value.length > characters
+          ? value.substring(0,characters)+'...'
+          : value
+        },
+        emojifyReview(review) {
+          switch(review) {
+            case -1: return '😡'
+            case  0: return '😕'
+            case  1: return '😬'
+            case  2: return '😍'
+            default: break;
+          }
+        },
+        emojifyReviews(reviews) {
+        let pretty = ""
+        for (let i=0; i<reviews.length; i++) {
+          switch(reviews[i].score) {
+            case -1: pretty+='😡'; break;
+            case  0: pretty+='😕'; break;
+            case  1: pretty+='😬'; break;
+            case  2: pretty+='😍'; break;
+            default: break;
+          }
+        }
+        return pretty
+      },
+
+        imgur(url) {
+          return url? url.substr(0, url.length-4) + 's.jpeg' : ''
+        }
+      },
+      mounted() {
+        let self = this
+        axios
+          .get('/api/act-submissions')
+          .then(function(response) {
+            self.allSubmissions = response.data.filter(a=> a.paid)
+          })
+          .catch(function(error) {
+            self.allSubmissions = []
+          })
+      }
+    })

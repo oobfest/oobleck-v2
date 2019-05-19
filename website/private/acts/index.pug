@@ -1,0 +1,205 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Acts
+    //a.btn.btn-secondary.ml-md-auto(href="/acts/create") Create Act
+
+  #app.dash-boxes.container-fluid
+
+    ul.nav.nav-pills
+      li.nav-item
+        a.nav-link.active(data-toggle="tab" href="#home") Acts
+      li.nav-item
+        a.nav-link(data-toggle="tab" href="#other") Performers
+
+    .tab-content
+      #home.tab-pane.show.active
+        .box.box-b
+          table.box-table.table
+            thead
+              tr
+                th
+                th Name
+                th Type
+                th Location
+                th Headliner
+            tbody
+              tr
+                th(style="width:180px")
+                  select.form-control(v-model="filterActsByConfirmation")
+                    option(value='all') All
+                    option(value='yes') ✅ Accepted
+                    option(value='reschedule') 🚸 Reschedule
+                    option(value='no') ⛔️ Rejected
+                    option(value='null') 👻 N/A
+                th
+                  input.form-control(type="text" v-model="filterActsByName" placeholder="Filter by Name")
+                th
+                  select.form-control(v-model="filterActsByType")
+                    option(selected value="") All
+                    option Improv
+                    option Sketch
+                    option Standup
+                    option Podcast
+                    option Teacher
+                    option Musical
+                    option One-person-show
+                    option Variety
+                    option Other
+                th
+                  input.form-control(type="text" v-model="filterActsByCity" placeholder="Filter by City")
+                th
+                  select.form-control(v-model="filterActsByHeadliner")
+                    option All
+                    option Yes
+                    option No
+              tr(v-for="act in filteredActs")
+                td.text-right {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : '👻'}}
+                td
+                  a(@click.prevent="clicky(act)" href="#" data-toggle="modal" data-target="#act-modal") {{act.name}}
+                td {{act.showType.join(', ')}}
+                td {{act.city}}, {{act.state}}
+                td.text-center
+                  span(v-if="act.headliner")
+                    button.btn.btn-primary.btn-xs(@click="setHeadliner(act._id, false)") Yes
+                  span(v-else)
+                    button.btn.btn-secondary.btn-xs(@click="setHeadliner(act._id, true)") No
+      #other.tab-pane
+        .box.box-b
+          table.box-table.table
+            thead
+              tr
+                th Name
+                th Act
+                th Type
+                th Email
+            tbody
+              tr
+                th
+                  input.form-control(type="text" v-model="filterPerformersByName" placeholder="Filter by Name")
+                th
+                  input.form-control(type="text" v-model="filterPerformersByAct" placeholder="Filter by Act")
+                th
+                  select.form-control(v-model="filterPerformersByType")
+                    option(selected value="") All
+                    option Improv
+                    option Sketch
+                    option Standup
+                    option Podcast
+                    option Teacher
+                    option Musical
+                    option One-person-show
+                    option Variety
+                    option Other
+                th
+                  input.form-control(type="text" v-model="filterPerformersByEmail" placeholder="Filter by Email")
+              tr(v-for="performer in filteredPerformers")
+                td {{performer.name}}
+                td
+                  a(href="#" @click.prevent="clicky2(performer.actId)" data-toggle="modal" data-target="#act-modal") {{performer.act}}
+                td {{performer.type.join(', ')}}
+                td {{performer.email}}
+    act-modal(:act="currentAct")
+
+  include components/act-modal
+  script.
+    Vue.component('act-modal', {
+      template: "#act-modal-template",
+      props: ['act']
+    })
+
+    let app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          acts: [],
+          performers: [],
+          currentAct: {name: "YAY", contact:{}, personnel: [], socialMedia:[], videoUrls: [], image:{}, availability:[]},
+          filterActsByConfirmation: 'all',
+          filterActsByName: '',
+          filterActsByType: '',
+          filterActsByCity: '',
+          filterActsByHeadliner: 'All',
+          filterPerformersByName: '',
+          filterPerformersByAct: '',
+          filterPerformersByType: '',
+          filterPerformersByEmail: '',
+        }
+      },
+      computed: {
+        filteredActs() {
+          let filteredActs = this.acts
+          if (this.filterActsByConfirmation === 'null') filteredActs = filteredActs.filter(a=> a.confirmationStatus == null)
+          else if (this.filterActsByConfirmation !== 'all') filteredActs = filteredActs.filter(a=> a.confirmationStatus === this.filterActsByConfirmation)
+          if (this.filterActsByCity !== '') filteredActs = filteredActs.filter(a=> a.city.match(new RegExp(this.filterActsByCity, 'i')))
+          if (this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType.includes(this.filterActsByType))
+          if (this.filterActsByName !== '') filteredActs = filteredActs.filter(a=> a.name.match(new RegExp(this.filterActsByName, 'i')))
+          if (this.filterActsByHeadliner == 'Yes') filteredActs = filteredActs.filter(a=> a.headliner)
+          if (this.filterActsByHeadliner == 'No') filteredActs = filteredActs.filter(a=> !a.headliner) // Works for 'undefined'
+          filteredActs.sort((a, b)=> { return a.name.localeCompare(b.name)})
+          return filteredActs
+        },
+        filteredPerformers() {
+          let filteredPerformers = this.performers
+          if (this.filterPerformersByType !== '') filteredPerformers = filteredPerformers.filter(a=> a.type.includes(this.filterPerformersByType))
+          if (this.filterPerformersByName !== '') filteredPerformers = filteredPerformers.filter(a=> a.name.match(new RegExp(this.filterPerformersByName, 'i')))
+          if (this.filterPerformersByEmail !== '') filteredPerformers = filteredPerformers.filter(a=> a.email.match(new RegExp(this.filterPerformersByEmail, 'i')))
+          if (this.filterPerformersByAct !== '') filteredPerformers = filteredPerformers.filter(a=> a.act.match(new RegExp(this.filterPerformersByAct, 'i')))
+          filteredPerformers.sort((a, b)=> { return a.name.localeCompare(b.name)})
+          return filteredPerformers
+        }
+      },
+      methods: {
+        clicky(selectedAct) {
+          this.currentAct = selectedAct
+        },
+        clicky2(actId) {
+          console.log(actId)
+          this.currentAct = this.acts.find(a=> a._id===actId)
+          console.log(this.currentAct)
+        },
+        setHeadliner(id, headlinerStatus) {
+          let self = this
+          axios
+            .put('/api/act-submissions/' + id, {headliner: headlinerStatus})
+            .then(function(response) {
+              let actIndex = self.acts.map(a => a._id).indexOf(id)
+              Vue.set(self.acts, actIndex, response.data)
+            })
+            .catch(function(error) {
+              alert("Updating headliner status failed :(")
+              console.log(error)
+            })
+        }
+      },
+      created() {
+        let self = this
+        // TODO:
+        // Get all *accepted* acts
+        axios
+          .get('/api/act-submissions/')
+          .then(function(response) {
+            self.acts = response.data.filter(a=> a.paid)
+            // TODO: For getting the performers, filter only acts that have confirmed
+            let confirmedActs = self.acts.filter(a=> a.paid)
+            let performers = []
+            for(let i=0; i<confirmedActs.length; i++) {
+              for(let j=0; j<confirmedActs[i].personnel.length; j++) {
+                performers.push({
+                  name: confirmedActs[i].personnel[j].name,
+                  email: confirmedActs[i].personnel[j].email,
+                  act: confirmedActs[i].name,
+                  actId: confirmedActs[i]._id,
+                  type: confirmedActs[i].showType
+                })
+              }
+            }
+            self.performers = performers
+          })
+          .catch(function(error) {
+            alert("Error getting acts :(")
+            console.log(error)
+          })
+      }
+    })

@@ -1,0 +1,59 @@
+include upload-image
+script#add-workshop-modal-template(type="text/template")
+  #add-workshop-modal.modal
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h4.modal-title Add Workshop
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          .form-group
+            label(for="add-workshop-modal-name") Name
+            input#add-workshop-modal-name.form-control(type="text" v-model="workshop.name")
+          .form-group
+            label(for="add-workshop-modal-description") Description
+            textarea#add-workshop-modal-description.form-control.code(v-model="workshop.description" rows=5)
+          .form-group
+            label(for="add-workshop-modal-teacher") Teacher(s)
+            input#add-workshop-modal-teacher.form-control(type="text" v-model="workshop.teacher")
+          .form-group
+            label(for="add-workshop-modal-bio") Teacher Bio
+            textarea#add-workshop-modal-bio.form-control.code(v-model="workshop.bio" rows=5)
+          .form-group
+            label(for="add-workshop-modal-affiliation") Home Base 
+            input#add-workshop-modal-affiliation.form-control(v-model="workshop.affiliation")
+          .form-group
+            label(for="add-workshop-modal-capacity") Maximum Number of Students
+            input#add-workshop-modal-capacity.form-control(type="number" v-model="workshop.capacity" min=0 max=120)
+          .form-group
+            label(for="edit-workshop-modal-audit-capacity") Maximum Number of Auditors
+            input#edit-workshop-modal-audit-capacity.form-control(type="number" v-model="workshop.auditCapacity" min=0 max=120)
+          input(type="hidden" name="imageUrl" v-model="workshop.imageUrl")
+          input(type="hidden" name="deleteImageUrl" v-model="workshop.deleteImageUrl")
+          upload-image(:imageUrl="workshop.imageUrl",:deleteImageUrl="workshop.deleteImageUrl")
+
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+          button.btn.btn-primary(type="button" @click="createWorkshop" data-dismiss="modal") Save
+
+script.
+  Vue.component('add-workshop-modal', {
+    template: "#add-workshop-modal-template",
+    props: ['workshop'],
+    methods: {
+      createWorkshop() {
+        let self = this
+        axios
+          .post('/api/workshops/', self.workshop)
+          .then(function(response) {
+            let savedWorkshop = response.data
+            self.$parent.workshops.push(savedWorkshop)
+          })
+          .catch(function(error){
+            alert("Error creating workshop :(")
+            console.log(error)
+          })        
+      }
+    }
+  })

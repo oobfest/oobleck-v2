@@ -82,3 +82,15 @@ label.required-field:after {
 .badge-warning {
   color:  white;
 }
+
+
+/* For the "Stamp" page */
+.box-table td.middle { vertical-align: middle; padding: 0 0.5em; }
+.badge-secondary { color: white; }
+.page-link:not([disabled]):not(.disabled).availability { cursor: inherit; color: white; }
+.page-item.available   .page-link { background-color: #35bd49; }
+.page-item.unavailable .page-link { background-color: #fc2344; }
+
+
+/* Make nav nicer */
+.dash-nav-accent-2 .dash-nav-dropdown.show { background-color: inherit; }

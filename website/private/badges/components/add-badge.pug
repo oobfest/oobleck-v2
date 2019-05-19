@@ -1,0 +1,83 @@
+script#add-badge-modal-template(type="text/template")
+  #add-badge-modal.modal
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h4.modal-title Add Badge
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          .form-group
+            label(for="add-badge-modal-name") Name
+            input#add-badge-modal-name.form-control(type="text" v-model="badge.name")
+          .form-group
+            label(for="add-badge-modal-email") Email
+            input#add-badge-modal-email.form-control.code(type="email" v-model="badge.email")
+          .form-group
+            label(for="add-badge-modal-phone") Phone Number
+            input#add-badge-modal-phone.form-control(type="text" v-model="badge.phone")
+          .form-group
+            label(for="add-badge-modal-type") Badge Type
+            select#add-badge-modal-type.custom-select(v-model="badge.type")
+              option(value="all") All-Access
+              option(value="performer-full-upgrade") Performer Upgrade
+              option(value="performer-weekend-upgrade") Performer Weekend Upgrade
+              option(value="volunteer") 5+ Volunteer 
+              option(value="staff") Staff
+              option(value="industry") Industry
+          .form-group
+            label(for="add-badge-modal-quantity") Quantity
+            input#add-badge-modal-quantity.form-control(type="number" v-model="badge.quantity" min=1 max=10)
+
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+          button.btn.btn-primary(type="button" @click="createBadge" data-dismiss="modal") Save
+
+script.
+  Vue.component('add-badge-modal', {
+    template: "#add-badge-modal-template",
+    data() {
+      return {
+        badge: {
+          name: "",
+          email: "",
+          phone: "",
+          type: 'all',
+          quantity: 1
+        }
+      }
+    },
+    methods: {
+      getValidationError() {
+        if(this.badge.name == '') return "Name required"
+        if(this.badge.email == '') return "Email required"
+        if(this.badge.phone == '') return "Phone number required"
+        return false
+      },
+      createBadge() {
+        let validationError = this.getValidationError()
+        if(validationError) return alert(validationError)
+
+        let self = this
+        axios
+          .post('/api/badges/', self.badge)
+          .then(function(response) {
+            let savedBadge = response.data
+            self.$parent.badges.push(savedBadge)
+            self.reset()
+          })
+          .catch(function(error){
+            alert("Error creating badge :(")
+            console.log(error)
+            self.reset()
+          })        
+      },
+      reset() {
+        this.badge.name = ''
+        this.badge.email = ''
+        this.badge.phone = ''
+        this.badge.type = 'all'
+        this.badge.quantity = 1
+      }
+    }
+  })

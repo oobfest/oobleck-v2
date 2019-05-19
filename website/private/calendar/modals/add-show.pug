@@ -1,0 +1,47 @@
+script#add-show-modal-template(type="text/template")
+  #add-show-modal.modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title Add Show
+          button.close(type="button" data-dismiss="modal")
+            span &times;
+        .modal-body
+          form
+            .form-group
+              label(for="add-show-modal-day") Day
+              input#add-show-modal-day.form-control(type="text" readonly v-model="show.day")
+            .form-group
+              label(for="add-show-modal-venue") Venue
+              input#add-show-modal-venue.form-control(type="text" readonly v-model="show.venue")
+            .form-group
+              label(for="add-show-modal-time") Time
+              input#add-show-modal-time.form-control(type="number" min="0" max="1259" v-model="show.time" @keyup.enter="addShow()")
+        .modal-footer
+          button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
+          button.btn.btn-primary(type="submit" @click="addShow()") Add Show
+
+script.
+  Vue.component('add-show-modal', {
+    template: "#add-show-modal-template",
+    computed: {
+      show() {
+        return this.$store.state.addShowModal
+      }
+    },
+    methods: {
+      addShow() {
+        $('#add-show-modal').modal('hide')
+        let self = this
+        axios
+          .post('/api/shows', self.$store.state.addShowModal)
+          .then(function(response) {
+            self.$store.commit('addShow', response.data)
+          })
+          .catch(function(error) {
+            alert("Error adding show :(")
+            console.log(error)
+          })
+      }
+    }
+  })

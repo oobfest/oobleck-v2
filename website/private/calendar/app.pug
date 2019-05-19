@@ -1,0 +1,130 @@
+// Todo: https://codepen.io/alenabdula/pen/ayyQOv?editors=1010
+script.
+  let app = new Vue({ 
+    el: "#app",
+    store: store,
+    data() { 
+      return {
+        days: [
+          {day: "Tuesday", 
+          venues: [
+            {name: "Hideout Down", availability: "3pm"}, 
+            {name: "Hideout Up", availability: "3pm"}, 
+            {name: "ColdTowne", availability: "4pm"}
+          ]},
+          {day: "Wednesday", 
+          venues: [
+            {name: "Hideout Down", availability: "3pm"},
+            {name: "Hideout Up", availability: "3pm"},
+            {name: "ColdTowne", availability: "4pm"},
+          ]},
+          {day: "Thursday", 
+          venues: [
+            {name: "Hideout Down", availability: "3pm"},
+            {name: "Hideout Up", availability: "3pm"},
+            {name: "ColdTowne", availability: "3pm"},
+            {name: "Fallout", availability: "4pm"},
+            {name: "Velveeta"},
+          ]},
+          {day: "Friday", 
+          venues: [
+            {name: "Hideout Down", availability: "3pm"},
+            {name: "Hideout Up", availability: "3pm"},
+            {name: "ColdTowne", availability: "3pm"},
+            {name: "Fallout", availability: "3pm"},
+            {name: "Velveeta"},
+            {name: "Spider House"},
+          ]},
+          {day: "Saturday", 
+          venues: [
+            {name: "Hideout Down", availability: "8am"},
+            {name: "Hideout Up", availability: "8am"},
+            {name: "Hideout Classroom", availability: "8am"},
+            {name: "ColdTowne", availability: "4pm"},
+            {name: "Fallout", availability: "all day"},
+            {name: "Velveeta"},
+            {name: "Spider House", availability: "1pm"},
+            {name: "Institution"},
+          ]},
+          {day: "Sunday", 
+          venues: [
+            {name: "Hideout Down", availability: "8am"},
+            {name: "Hideout Up", availability: "8am"},
+            {name: "Hideout Classroom", availability: "8am"},
+            {name: "Fallout", availability: "all day"},
+            {name: "Velveeta"},
+          ]},
+          {day: "Monday", 
+          venues: [
+            {name: "Hideout Down", availability: "5pm"},
+            {name: "Hideout Up", availability: "5pm"},
+          ]}
+        ],
+        editMode: true,
+        hideNavigation: false
+      }
+    },
+    methods: {
+      toggleNavigation() {
+        if(this.hideNavigation) {
+          document.getElementById("dash-nav").style.display = 'flex';
+          document.getElementsByTagName("main")[0].style["margin-left"] = '206px'
+          document.getElementsByClassName('dash-toolbar')[0].style.left = '206px'
+        }
+        else {
+          document.getElementById("dash-nav").style.display = 'none';
+          document.getElementsByTagName("main")[0].style["margin-left"] = 0
+          document.getElementsByClassName('dash-toolbar')[0].style.left = 0
+        }
+        this.hideNavigation = !this.hideNavigation
+      },
+    },
+
+    created() {
+      let self = this
+
+      // Get Shows
+      axios
+        .get('/api/shows')
+        .then(function(response) {
+          self.$store.commit('setupShows', response.data)
+        })
+        .catch(function(error) {
+          alert("Error getting shows :(")
+          console.log(error)
+        })
+
+      // Get Acts
+      axios
+        .get('/api/submissions/get-all-accepted')
+        .then(function(response) {
+          self.$store.commit('setupActs', response.data)
+        })
+        .catch(function(error) {
+          alert("Error getting acts :(")
+          console.log(error)
+        })
+
+      // Get Workshops
+      axios
+        .get('/api/workshops/')
+        .then(function(response) {
+          self.$store.commit('setupWorkshops', response.data)
+        })
+        .catch(function(error) {
+          alert("Error getting workshops :(")
+          console.log(error)
+        })
+
+      // Get Hosts
+      axios
+        .get('/api/hosts/')
+        .then(function(response) {
+          self.$store.commit('setupHosts', response.data)
+        })
+        .catch(function(error){
+          alert("Error getting hosts :(")
+          console.log(error)
+        })
+    }
+  })
