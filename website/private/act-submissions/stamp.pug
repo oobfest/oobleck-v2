@@ -257,19 +257,21 @@ block content
             case -1: return '😡'
             case  0: return '😕'
             case  1: return '😬'
-            case  2: return '😍'
-            default: break;
+            case  2: return '🙂'
+            case  3: return '😍'
+            default: return ''
           }
         },
         emojifyReviews(reviews) {
         let pretty = ""
         for (let i=0; i<reviews.length; i++) {
           switch(reviews[i].score) {
-            case -1: pretty+='😡'; break;
-            case  0: pretty+='😕'; break;
-            case  1: pretty+='😬'; break;
-            case  2: pretty+='😍'; break;
-            default: break;
+            case -1: return '😡'
+            case  0: return '😕'
+            case  1: return '😬'
+            case  2: return '🙂'
+            case  3: return '😍'
+            default: return ''
           }
         }
         return pretty
