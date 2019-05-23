@@ -266,11 +266,11 @@ block content
         let pretty = ""
         for (let i=0; i<reviews.length; i++) {
           switch(reviews[i].score) {
-            case -1: pretty += '😡'
-            case  0: pretty += '😕'
-            case  1: pretty += '😬'
-            case  2: pretty += '🙂'
-            case  3: pretty += '😍'
+            case -1: pretty += '😡'; break
+            case  0: pretty += '😕'; break
+            case  1: pretty += '😬'; break
+            case  2: pretty += '🙂'; break
+            case  3: pretty += '😍'; break
             default: pretty += ''
           }
         }
