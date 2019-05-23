@@ -187,7 +187,7 @@ block content
           // Filter by stamp
           switch(this.stampFilter) {
             case 'Accepted': return filteredSubmissions.filter((s)=> s.stamp === 'in')
-            case 'Maybe': return filteredSubmissions.filter((s)=> s.stamp === undefined)
+            case 'Maybe': return filteredSubmissions.filter((s)=> (s.stamp === undefined || s.stamp === null))
             case 'Rejected': return filteredSubmissions.filter((s)=> s.stamp === 'out')
             default: return filteredSubmissions
           }
@@ -196,7 +196,7 @@ block content
           return this.submissions.filter(s=> s.stamp === 'in').length
         },
         totalPurgatoryActs() {
-          return this.submissions.filter(s=> s.stamp === undefined).length
+          return this.submissions.filter(s=> s.stamp === undefined || s.stamp === null).length
         },
         totalRejectedActs() {
           return this.submissions.filter(s=> s.stamp === 'out').length
@@ -266,12 +266,12 @@ block content
         let pretty = ""
         for (let i=0; i<reviews.length; i++) {
           switch(reviews[i].score) {
-            case -1: return '😡'
-            case  0: return '😕'
-            case  1: return '😬'
-            case  2: return '🙂'
-            case  3: return '😍'
-            default: return ''
+            case -1: pretty += '😡'
+            case  0: pretty += '😕'
+            case  1: pretty += '😬'
+            case  2: pretty += '🙂'
+            case  3: pretty += '😍'
+            default: pretty += ''
           }
         }
         return pretty

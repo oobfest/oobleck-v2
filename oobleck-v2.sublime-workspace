@@ -950,10 +950,23 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/oob/projects/archive/oobleck-v2"
+		"/Users/oob/projects/archive/oobleck-v2",
+		"/Users/oob/projects/archive/oobleck-v2/website",
+		"/Users/oob/projects/archive/oobleck-v2/website/private",
+		"/Users/oob/projects/archive/oobleck-v2/website/private/act-submissions"
 	],
 	"file_history":
 	[
+		"/Users/oob/projects/archive/oobleck-v2/website/private/acts/index.pug",
+		"/Users/oob/projects/archive/oobleck-v2/website/private/act-submissions/stamp.pug",
+		"/Users/oob/projects/archive/oobleck-v2/website/private/_layout/navigation.pug",
+		"/Users/oob/projects/archive/oobleck-v2/website/static/css/custom.css",
+		"/Users/oob/projects/archive/oobleck-v2/api/act-submissions/schema.js",
+		"/Users/oob/projects/archive/oobleck-v2/website/private/act-submissions/act-submission.pug",
+		"/Users/oob/projects/archive/oobleck-v2/website/private/act-submissions/router.js",
+		"/Users/oob/projects/archive/oobleck-v2/website/private/acts/components/act-modal.pug",
+		"/Users/oob/projects/archive/oobleck-v2/website/private/acts/view.pug",
+		"/Users/oob/projects/archive/oobleck-v2/website/private/router.js",
 		"/Users/oob/Documents/wranglin/la-llorona.txt",
 		"/Users/oob/projects/ooba-leaf/webapp/src/App.vue",
 		"/Users/oob/projects/ooba-leaf/webapp/src/views/Home.vue",
@@ -1071,27 +1084,19 @@
 		"/Users/oob/Documents/ga-python/hw/books.csv",
 		"/Users/oob/Documents/ga-python/hw/junk.py",
 		"/Users/oob/Documents/ga-python/07-file-io.md",
-		"/Users/oob/Documents/ga-python/04b-classes.md",
-		"/Users/oob/Documents/ga-python/classes/fun.py",
-		"/Users/oob/Documents/ga-python/hw/06-classes.py",
-		"/Users/oob/projects/oobleck-v2/website/public/act-submission-form/index.pug",
-		"/Users/oob/projects/oobleck-v2/website/public/act-submission-form/00-welcome-late.pug",
-		"/Users/oob/projects/oobleck-v2/website/public/act-submission-edit/index.pug",
-		"/Users/oob/projects/oobleck-v2/api/stripe/router.js",
-		"/Users/oob/Documents/ga-python/07-Type-Conversion.md",
-		"/Users/oob/Documents/ga-python/outline.md",
-		"/Users/oob/Documents/emo-tabs/thnks-fr-th-mmrs.txt",
-		"/Users/oob/Documents/emo-tabs/sugar-were-goin-down.txt"
+		"/Users/oob/Documents/ga-python/04b-classes.md"
 	],
 	"find":
 	{
-		"height": 39.0
+		"height": 42.0
 	},
 	"find_in_files":
 	{
 		"height": 481.0,
 		"where_history":
 		[
+			"<current file>",
+			""
 		]
 	},
 	"find_state":
@@ -1099,6 +1104,27 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"'",
+			"//   ",
+			"objectId",
+			"contact",
+			"showType",
+			".available",
+			"available",
+			"shorten",
+			"actName",
+			"shorten",
+			".actName",
+			"actName",
+			"shorten",
+			"act",
+			"{{day}}",
+			"v-for=\"day in act.availability\"",
+			"additionalMembers",
+			"Stand",
+			"actName",
+			"YAY",
+			"actName"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1106,6 +1132,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			".name"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1119,11 +1146,16 @@
 			"sheets":
 			[
 			]
+		},
+		{
+			"sheets":
+			[
+			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 39.0
+		"height": 29.0
 	},
 	"input":
 	{
@@ -1138,6 +1170,12 @@
 				0,
 				1,
 				1
+			],
+			[
+				0,
+				1,
+				1,
+				2
 			]
 		],
 		"cols":
@@ -1148,6 +1186,7 @@
 		"rows":
 		[
 			0.0,
+			0.78717426591,
 			1.0
 		]
 	},
@@ -1184,7 +1223,7 @@
 	"project": "oobleck-v2.sublime-project",
 	"replace":
 	{
-		"height": 74.0
+		"height": 54.0
 	},
 	"save_all_on_build": true,
 	"select_file":
