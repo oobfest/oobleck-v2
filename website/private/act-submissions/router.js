@@ -8,7 +8,6 @@ let isLoggedIn = require('../is-logged-in')
 let isRole = require('../is-role')
 
 router.get('/stamp', isLoggedIn, (request, response)=> {
-  console.log("WOO")
   response.render('private/act-submissions/stamp')
 })
 

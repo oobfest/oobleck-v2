@@ -28,6 +28,7 @@ block content
                   td
                     select#type-filter.form-control(v-model="typeFilter")
                       option All
+                      option Not Standup
                       option Improv
                       option Sketch
                       option Standup
@@ -174,7 +175,9 @@ block content
 
 
           // Filter by show type
-          if(this.typeFilter !== 'All')
+          if(this.typeFilter === 'Not Standup')
+            filteredSubmissions = filteredSubmissions.filter((s)=> !(s.showType.includes("Standup")))
+          else if(this.typeFilter !== 'All')
             filteredSubmissions = filteredSubmissions.filter((s)=> s.showType.includes(this.typeFilter))
 
           // Sort alphabetically by act name
