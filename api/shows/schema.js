@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+let ActSchema = require('./schemas/act')
 
 let showSchema = mongoose.Schema({
   day: String,
@@ -11,7 +12,7 @@ let showSchema = mongoose.Schema({
   remaining: Number,
   price: Number,
 
-  acts: [],
+  acts: [ActSchema],
   host: {},
   tickets: [],
 

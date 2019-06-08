@@ -1,14 +1,9 @@
-extends ../_layout
+extends ../../_layout
 block content
-  style.
-    .bg-accent-oob {
-      background: url('../img/audience-dark.jpg') no-repeat bottom center fixed; 
-      background-size: cover;
-    }
   .text-center
     a(href="http://oobfest.com/" target="_parent")
       img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
-    h1.p-3.text-light.font-weight-bold 2018 Host Application
+    h1.p-3.text-light.font-weight-bold 2019 Host Application
   #app.container-fluid
     .row
       .col-lg-8.mx-auto.pb-5
@@ -30,7 +25,7 @@ block content
               input#email.form-control(type="tel" required maxlength="280" v-model="host.phone")
             .form-group
               label.col-form-label.required-field(for="bio") Bio
-              small.form-text.text-muted Hosts may have this content published on our website and programs. Use third person active voice, e.g. "Jill Bernard is..." and limit it to 3-4 sentences. 
+              small.form-text.text-muted Hosts may have this content published on our website and programs. Use third person active voice, e.g. "Jill Bernard is..." and limit it to 3-4 sentences.
               textarea#bio.form-control(maxlength="1500" name="bio" required v-model="host.bio")
             .form-group
               label.col-form-label(for="experience") Previous Hosting Experience
@@ -39,10 +34,10 @@ block content
               label.col-form-label(for="text") Video URL (optional)
               small.form-text.text-muted If you have video of you hosting we'd like to see it!
               input#video-url.form-control(type="text" maxlength="280" v-model="host.videoUrl")
-          .box-block
+          //.box-block
             //upload-image(
             //  :image-url="host.imageUrl"
-            //  :delete-image-url="host.deleteImageUrl" 
+            //  :delete-image-url="host.deleteImageUrl"
             //  @update-image-url="host.imageUrl = $event"
             //  @update-delete-image-url="host.deleteImageUrl = $event"
             //)
@@ -52,64 +47,65 @@ block content
             .form-group
               .custom-control.custom-checkbox
                 input#available-tuesday.custom-control-input(
-                  type="checkbox" 
-                  value="tuesday" 
+                  type="checkbox"
+                  value="tuesday"
                   v-model="host.availability"
                 )
-                label.custom-control-label(for="available-tuesday") Tuesday, August 28th
+                label.custom-control-label(for="available-tuesday") Tuesday, August 27th
             .form-group
               .custom-control.custom-checkbox
                 input#available-wednesday.custom-control-input(
-                  type="checkbox" 
-                  value="wednesday" 
+                  type="checkbox"
+                  value="wednesday"
                   v-model="host.availability"
                 )
-                label.custom-control-label(for="available-wednesday") Wednesday, August 29th
+                label.custom-control-label(for="available-wednesday") Wednesday, August 28th
             .form-group
               .custom-control.custom-checkbox
                 input#available-thursday.custom-control-input(
-                  type="checkbox" 
-                  value="thursday" 
+                  type="checkbox"
+                  value="thursday"
                   v-model="host.availability"
                 )
-                label.custom-control-label(for="available-thursday") Thursday, August 30th
+                label.custom-control-label(for="available-thursday") Thursday, August 29th
             .form-group
               .custom-control.custom-checkbox
                 input#available-friday.custom-control-input(
-                  type="checkbox" 
-                  value="friday" 
+                  type="checkbox"
+                  value="friday"
                   v-model="host.availability"
                 )
-                label.custom-control-label(for="available-friday") Friday, August 31st
+                label.custom-control-label(for="available-friday") Friday, August 30st
             .form-group
               .custom-control.custom-checkbox
                 input#available-saturday.custom-control-input(
-                  type="checkbox" 
-                  value="saturday" 
+                  type="checkbox"
+                  value="saturday"
                   v-model="host.availability"
                 )
-                label.custom-control-label(for="available-saturday") Saturday, September 1st
+                label.custom-control-label(for="available-saturday") Saturday, September 31st
             .form-group
               .custom-control.custom-checkbox
                 input#available-sunday.custom-control-input(
-                  type="checkbox" 
-                  value="sunday" 
+                  type="checkbox"
+                  value="sunday"
                   v-model="host.availability"
                 )
-                label.custom-control-label(for="available-sunday") Sunday, September 2nd
+                label.custom-control-label(for="available-sunday") Sunday, September 1st
             .form-group
               .custom-control.custom-checkbox
                 input#available-monday.custom-control-input(
-                  type="checkbox" 
-                  value="monday" 
+                  type="checkbox"
+                  value="monday"
                   v-model="host.availability"
                 )
-                label.custom-control-label(for="available-monday") Monday, September 3rd
+                label.custom-control-label(for="available-monday") Monday, September 2nd
+          .box-block
             h4 Mandatory Orientation Meeting
             .form-group
               .custom-control.custom-checkbox
                 input#can-attend-meeting.custom-control-input(type="checkbox" name="can-attend-meeting" v-model="host.canAttendMeeting")
-                label.custom-control-label(for="can-attend-meeting") I am available Sunday afternoon, August 26th
+                label.custom-control-label(for="can-attend-meeting") I am available (Date TBA)
           .box-block.text-center
             button#submit-button.btn.btn-md.btn-primary(type="button" @click="addHost") Submit
         div(v-show="submitted==true")

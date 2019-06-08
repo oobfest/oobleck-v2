@@ -6,7 +6,7 @@ const store = new Vuex.Store({
     workshops: [],
     hosts: [],
     addShowModal: { day: '', venue: '', startTime: '', endTime: '' },
-    addActModal: { day: '', venue: '', time: '', _id: '' },
+    addActModal: { day: '', venue: '', show: '' },
     addWorkshopModal: { day: '', venue: '', time: ''},
     showId: '',
   },

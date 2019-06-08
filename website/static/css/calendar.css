@@ -47,3 +47,9 @@ h1, h2, h3, h4, p {
   border-bottom: 2px solid black;
   margin-bottom: 0.25em;
 }
+
+/* Hosts */
+.bg-accent-oob {
+  background: url('../img/audience-dark.jpg') no-repeat bottom center fixed;
+  background-size: cover;
+}

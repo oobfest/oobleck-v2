@@ -79,7 +79,7 @@ script.
         this.search = ''
         let self = this
         axios
-          .post('/api/shows/add-act/' + this.show._id, act)
+          .post('/api/shows/add-act/', {show: this.show.show, act})
           .then(function(response) {
             self.$store.commit('updateShow', response.data)
           })

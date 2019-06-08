@@ -6,4 +6,5 @@ router.get('/', isLoggedIn, (request, response, next)=> {
   response.render('private/hosts')
 })
 
+
 module.exports = router

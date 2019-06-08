@@ -6,6 +6,8 @@ router.get('/', (request, response)=> {
   response.render('public', {alt: true})
 })
 
+
+
 router.get('/set-password/:id/:key', async (request, response, next)=> {
   let key = request.params.key
   if(key != process.env.PASSWORD_KEY) {
@@ -43,6 +45,10 @@ router.get('/edit-application/:submissionId', (request, response)=> {
 
 router.get('/apply', (request, response)=> {
   response.render('public/act-submission-form/closed')
+})
+
+router.get('/host-submission-form/', (request, response)=> {
+  response.render('public/host-submission-form')
 })
 
 router.get('/apply-secret/:secret', (request, response)=> {

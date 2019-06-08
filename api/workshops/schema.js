@@ -1,5 +1,7 @@
-const mongoose = require('mongoose')
-const Mixed = mongoose.Schema.Types.Mixed
+let mongoose = require('mongoose')
+let Mixed = mongoose.Schema.Types.Mixed
+let imageSchema = require('../act-submissions/schemas/image')
+let studentSchema = require('./schemas/student')
 
 let workshopSchema = mongoose.Schema({
   name: String,
@@ -8,28 +10,36 @@ let workshopSchema = mongoose.Schema({
   teacher: String,
   bio: String,
   affiliation: String,
-  imageUrl: String,
-  deleteImageUrl: String,
+
+  image: {
+    type: imageSchema,
+    required: false
+  },
 
   day: String,
   venue: String,
   time: String,
 
   capacity: Number,
-  sold: Number,
-  refunded: Number,
+  sold: {
+    type: Number,
+    default: 0
+  },
+  refunded: {
+    type: Number,
+    default: 0
+  },
   auditCapacity: Number,
-  auditSold: Number,
+  auditSold: {
+    type: Number,
+    default: 0
+  },
+  auditRefunded: {
+    type: Number,
+    default: 0
+  },
 
-  students: [{
-    name: String,
-    email: String,
-    phone: String,
-    auditing: Boolean,
-    quantity: Number,
-    refunded: Boolean,
-    payment: {}
-  }]
+  students: [studentSchema]
 
 })
 

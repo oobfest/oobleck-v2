@@ -6,6 +6,8 @@ block content
 
   #app.dash-boxes.container-fluid
     edit-host-modal(:host="Object.assign({}, selectedHost)" @update="updateHost")
+    p.m2
+      a(href="/host-submission-form" target="_blank") Host Submission Form
     .box.box-b(v-if="hosts.length > 0")
       table.box-table.table
         thead
@@ -30,6 +32,9 @@ block content
               ul.list-inline
                 li.list-inline-item(v-for="day in host.availability") {{day}}
               button.btn.btn-secondary(data-toggle="modal" data-target="#edit-host-modal" @click="selectedHost = host") Edit
+              | &nbsp;
+              button.btn.btn-danger(@click="deleteHost(host._id)") Delete
+
     p.m2(v-else) No hosts yet
 
   include modals/edit-host
@@ -46,6 +51,19 @@ block content
         updateHost(savedHost) {
           let index = this.hosts.map(h=> h._id).indexOf(savedHost._id)
           Vue.set(this.hosts, index, savedHost)
+        },
+        deleteHost(hostId) {
+          let self = this
+          axios
+            .delete('/api/hosts/' + hostId)
+            .then(function(response) {
+              let deleteHostIndex = self.hosts.map(h=> h._id).indexOf(hostId)
+              self.hosts.splice(deleteHostIndex, 1)
+            })
+            .catch(function(error) {
+              alert("Error deleting host :(")
+              console.log(error)
+            })
         }
       },
       created() {

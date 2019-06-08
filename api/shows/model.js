@@ -3,6 +3,18 @@ let schema = require('./schema')
 let createModel = require('../create-model')
 
 let mongooseModel = mongoose.model('show', schema)
-let overrides = null
+let overrides = {
+  async addAct(show, act) {
+    show.acts.push(act)
+    return show
+  },
+  async removeAct(showId, actId) {
+    let show = await mongooseModel.findById(showId).exec()
+    let actIndex = show.acts.findIndex(a=> a._id == actId)
+    show.acts.splice(actIndex, 1)
+    show.markModified('acts')
+    return show
+  }
+}
 
 module.exports = createModel(mongooseModel, overrides)
