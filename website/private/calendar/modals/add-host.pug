@@ -16,7 +16,7 @@ script#add-host-modal-template(type="text/template")
           .form-group
             button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
             | &nbsp;
-            button.btn.btn-primary(type="button" data-dismiss="modal" @click="addHost") Save
+            button.btn.btn-primary(:disabled="selectedHost==''" type="button" data-dismiss="modal" @click="addHost") Save
 
 script.
   Vue.component('add-host-modal', {

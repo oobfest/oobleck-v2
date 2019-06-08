@@ -22,12 +22,16 @@ script#add-act-modal-template(type="text/template")
               .input-group
                 input#add-act-modal-search.form-control(type="text" placeholder="Search for act" v-model="search")
                 select.custom-select.input-group-append(v-model="filterActsByType" style="flex-grow:0.5")
-                  option(value='') All
+                  option(selected value="") All
                   option Improv
-                  option Stand-Up
                   option Sketch
-                  option Individual
-                  option Music
+                  option Standup
+                  option Podcast
+                  option Teacher
+                  option Musical
+                  option One-person-show
+                  option Variety
+                  option Other
             .form-group
               table.table.table-borderless.table-sm
                 tbody
@@ -62,7 +66,7 @@ script.
       filteredActs() {
         if (this.search == '' && this.filterActsByType == '') return null
         let filteredActs = this.acts
-        if(this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType === this.filterActsByType)
+        if(this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType.includes(this.filterActsByType))
         if(this.search !== '') filteredActs = filteredActs.filter(a=> a.name.match(new RegExp(this.search, 'i')))
         return filteredActs
       },

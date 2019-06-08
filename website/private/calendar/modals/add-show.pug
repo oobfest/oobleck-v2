@@ -20,6 +20,9 @@ script#add-show-modal-template(type="text/template")
             .form-group
               label(for="add-show-modal-end-time") End Time
               input#add-show-modal-end-time.form-control(type="number" min="0" max="1259" v-model="show.endTime" @keyup.enter="addShow()")
+            .form-group
+              small.form-text.text-muted Enter time as a three or four digit number.
+              small.form-text.text-muted For example, 845 for 8:45pm or 1000 for 10:00pm
         .modal-footer
           button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
           button.btn.btn-primary(:disabled="isFilledOut" type="submit" @click="addShow()") Add Show

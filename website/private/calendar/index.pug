@@ -18,8 +18,8 @@ block content
       day(v-bind="day")
 
   script(src="/js/vuex.js")
+  script(src="/js/calendar/store.js")
 
-  include store
   include modals/add-act
   include modals/add-show
   include modals/add-workshop
@@ -28,4 +28,5 @@ block content
   include components/venue
   include components/workshop
   include components/shows
-  include app
+
+  script(src="/js/calendar/app.js")

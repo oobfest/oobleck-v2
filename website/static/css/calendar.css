@@ -1,0 +1,49 @@
+h1, h2, h3, h4, p {
+  margin: 0
+}
+
+.box {
+  border: 2px solid black;
+  margin: 1em;
+  padding: 0.5em;
+}
+
+.day-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.day   { background-color: #ffffcc; }
+.show2  { background-color: #ffffff;}
+.workshop { background-color: #ffffcc; }
+.venue {
+  flex-basis: 30%;
+  flex-grow: 1;
+  min-width: 250px;
+}
+@media (min-width: 605px) {
+  .venue {max-width: 50%;}
+}
+
+.hideout-down       { background-color: #d9e1f2}
+.hideout-up         { background-color: #00b0f0}
+.hideout-classroom  { background-color: #ffffff}
+.coldtowne          { background-color: #ff7970}
+.fallout            { background-color: #ffff00}
+.velveeta           { background-color: #c6e0b4}
+.spider-house       { background-color: #c4a2e2}
+.north-door         { background-color: #efb97e}
+
+.hideout-up a.add-show,
+.coldtowne a.add-show,
+.spider-house a.add-show {
+  color: white;
+}
+
+.act { letter-spacing: -0.5px; }
+.act:hover { background-color: yellow;}
+.time {
+  border-bottom: 2px solid black;
+  margin-bottom: 0.25em;
+}
