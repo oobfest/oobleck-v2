@@ -1,0 +1,72 @@
+form(action="/submissions/reschedule/"+act._id method="POST")
+  p Please update your availability. If you are no longer available when you were originally scheduled, you risk losing your spot in the festival. (We will try our best to accommodate you and for this not to happen).
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-tuesday.custom-control-input(
+        type="checkbox" 
+        value="tuesday" 
+        name="available[]"
+        checked=(act.available.includes('tuesday'))
+      )
+      label.custom-control-label(for="available-tuesday") Tuesday
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-wednesday.custom-control-input(
+        type="checkbox" 
+        value="wednesday" 
+        name="available[]"
+        checked=(act.available.includes('wednesday'))
+      )
+      label.custom-control-label(for="available-wednesday") Wednesday
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-thursday.custom-control-input(
+        type="checkbox" 
+        value="thursday" 
+        name="available[]"
+        checked=(act.available.includes('thursday'))
+      )
+      label.custom-control-label(for="available-thursday") Thursday
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-friday.custom-control-input(
+        type="checkbox" 
+        value="friday" 
+        name="available[]"
+        checked=(act.available.includes('friday'))
+      )
+      label.custom-control-label(for="available-friday") Friday
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-saturday.custom-control-input(
+        type="checkbox" 
+        value="saturday" 
+        name="available[]"
+        checked=(act.available.includes('saturday'))
+      )
+      label.custom-control-label(for="available-saturday") Saturday
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-sunday.custom-control-input(
+        type="checkbox" 
+        value="sunday" 
+        name="available[]"
+        checked=(act.available.includes('sunday'))
+      )
+      label.custom-control-label(for="available-sunday") Sunday
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-monday.custom-control-input(
+        type="checkbox" 
+        value="monday" 
+        name="available[]"
+        checked=(act.available.includes('monday'))
+      )
+      label.custom-control-label(for="available-monday") Monday
+
+  .form-group.text-center
+    button.btn.btn-lg.btn-primary(type="submit") Update Availability
+
+form(action="/submissions/accept/"+act._id method="POST")
+  .form-group.text-center
+    button.btn.btn-lg.btn-secondary(type="submit" name="confirmation-status" value="cancel") Undo Reschedule Request

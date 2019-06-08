@@ -1,6 +1,7 @@
 {
   "scripts": {
     "start": "nodemon",
+    "debug": "node --inspect index.js",
     "test": "node spawn-test",
     "open": "open http://localhost:9000/login"
   },

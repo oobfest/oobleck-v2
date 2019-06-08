@@ -2,14 +2,12 @@ script#shows-template(type="text/template")
   div
     div(v-for="show in shows")
       .box.show2
-        //a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
-        h4.time {{show.time | time}}
-          span(v-if="show.endTime")  to {{show.endTime}}
-          a.delete(href="#" @click.prevent="setEndTime(show._id)") set end time
+        a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
+        h4.time {{show.startTime | time}} to {{show.endTime | time}}
         div(v-if="show.host")
           a.delete(href="#" @click.prevent="removeHost(show._id)") remove host
-          p 
-            strong Host: 
+          p
+            strong Host:
             | {{show.host.name}}
         div(v-else)
           p
@@ -18,22 +16,22 @@ script#shows-template(type="text/template")
           a(href="#" @click.prevent="promptDuration(show._id, act._id)")
             span.badge.badge-light.code(style="vertical-align: 2px") {{act.duration | duration}}
           | &nbsp;
-          span(v-if="act.type === 'Sketch'") ✏️ 
-          span(v-if="act.type === 'Music'") 🎶 
-          span(v-if="act.type === 'Improv'") ⚡️ 
-          span(v-if="act.type === 'Stand-Up'") 🎤 
-          span(v-if="act.type === 'Individual'") 🗣           
+          span(v-if="act.type === 'Sketch'") ✏️
+          span(v-if="act.type === 'Music'") 🎶
+          span(v-if="act.type === 'Improv'") ⚡️
+          span(v-if="act.type === 'Stand-Up'") 🎤
+          span(v-if="act.type === 'Individual'") 🗣
           span(:class="actStatus") {{act.name | shorten(24)}}
 
           a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show._id, act._id)") remove act
         p(v-show="$root.editMode")
-          a(href="#" @click="showAddActModal(day, venue, show.time, show._id)" data-toggle="modal" data-target="#add-act-modal") add act
+          a(href="#" @click="showAddActModal(day, venue, show.startTime, show.endTime, show._id)" data-toggle="modal" data-target="#add-act-modal") add act
 
 script.
   Vue.component('shows', {
     template: "#shows-template",
     props: ['day', 'venue'],
-    computed: { 
+    computed: {
       shows() {
         return store.getters.getShows(this.day, this.venue)
       },
@@ -59,20 +57,6 @@ script.
       },
     },
     methods: {
-      setEndTime(showId) {
-        let endTime = prompt("Enter in value completely formatted, e.g. 9:30pm")
-        let self = this
-        axios
-          .post('/api/shows/set-end-time/' + showId, {endTime: endTime})
-          .then(function(response) {
-            self.$store.commit('updateShow', response.data)
-          })
-          .catch(function(error) {
-            alert("Error setting end time for show :(")
-            console.log(error)
-          })
-
-      },
       removeHost(showId) {
         let self = this
         axios

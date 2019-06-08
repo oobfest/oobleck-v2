@@ -1,4 +1,4 @@
-extends ../_layout
+extends ../../_layout
 block content
   header.dash-titlebar
     .mb-md-0.mb-3
@@ -25,7 +25,7 @@ block content
             td {{getWorkshopDate(workshop)}}
             td.code(:class="{'text-success': workshop.sold == workshop.capacity, 'text-danger': workshop.sold > workshop.capacity}") {{workshop.sold}}/{{workshop.capacity}}
             td.code {{workshop.auditSold}}/{{workshop.auditCapacity}}
-              //a(href="#" @click="setAuditCapacity(workshop._id)") 
+              //a(href="#" @click="setAuditCapacity(workshop._id)")
             td {{workshop.refunded}}
           tr.collapse(:id="'collapse-' + index")
             td(colspan="6")
@@ -63,9 +63,9 @@ block content
                       td
                         span(v-if="student.payment") ${{student.payment.transactions[0].amount.total.slice(0, -3)}}
                       td {{student.auditing ? "Yes" : "" }}
-                      td 
+                      td
                         span(v-if="student.payment") {{new Date(Date.parse(student.payment.create_time)).toLocaleDateString('en-US')}}
-                      td 
+                      td
                         a(:href="'https://www.paypal.com/activity/payment/' + student.payment.transactions[0].related_resources[0].sale.id" target="_blank" v-if="student.payment") {{student.payment.transactions[0].related_resources[0].sale.id}}
                       td
                         button.btn.btn-xs.btn-secondary(v-if="student.refunded" type="button" @click="setRefund(workshop._id, student.email, false)") Undo Refund
@@ -75,21 +75,19 @@ block content
     .form-group
       button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-workshop-modal") Add Workshop
 
-  script(src="/js/axios.min.js")
-  script(src="/js/vue.js")
   script(src="/js/vue-markdown.js")
   include components/add-workshop
   include components/edit-workshop
   script.
     Vue.use(VueMarkdown)
-    let app = new Vue({ 
+    let app = new Vue({
       el: "#app",
-      data() { 
+      data() {
         return {
           workshops: [],
           modalWorkshop: {
-            capacity:12, 
-            imageUrl: '', 
+            capacity:12,
+            imageUrl: '',
             deleteImageUrl: ''
           }
         }
@@ -136,7 +134,7 @@ block content
             .catch(function(error){
               alert("Error updating workshop :(")
               console.log(error)
-            })        
+            })
 
         },
         getWorkshopDate(workshop) {

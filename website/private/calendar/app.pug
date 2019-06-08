@@ -1,63 +1,60 @@
 // Todo: https://codepen.io/alenabdula/pen/ayyQOv?editors=1010
 script.
-  let app = new Vue({ 
+  let app = new Vue({
     el: "#app",
     store: store,
-    data() { 
+    data() {
       return {
         days: [
-          {day: "Tuesday", 
+          {day: "Tuesday",
           venues: [
-            {name: "Hideout Down", availability: "3pm"}, 
-            {name: "Hideout Up", availability: "3pm"}, 
-            {name: "ColdTowne", availability: "4pm"}
+            {name: "Hideout Down"},
+            {name: "Hideout Up"},
+            {name: "Fallout"}
           ]},
-          {day: "Wednesday", 
+          {day: "Wednesday",
           venues: [
-            {name: "Hideout Down", availability: "3pm"},
-            {name: "Hideout Up", availability: "3pm"},
-            {name: "ColdTowne", availability: "4pm"},
+            {name: "Hideout Down"},
+            {name: "Hideout Up"},
+            {name: "Fallout"},
           ]},
-          {day: "Thursday", 
+          {day: "Thursday",
           venues: [
-            {name: "Hideout Down", availability: "3pm"},
-            {name: "Hideout Up", availability: "3pm"},
-            {name: "ColdTowne", availability: "3pm"},
-            {name: "Fallout", availability: "4pm"},
+            {name: "Hideout Down"},
+            {name: "Hideout Up"},
+            {name: "ColdTowne"},
+            {name: "Fallout"},
             {name: "Velveeta"},
           ]},
-          {day: "Friday", 
+          {day: "Friday",
           venues: [
-            {name: "Hideout Down", availability: "3pm"},
-            {name: "Hideout Up", availability: "3pm"},
-            {name: "ColdTowne", availability: "3pm"},
-            {name: "Fallout", availability: "3pm"},
-            {name: "Velveeta"},
-            {name: "Spider House"},
-          ]},
-          {day: "Saturday", 
-          venues: [
-            {name: "Hideout Down", availability: "8am"},
-            {name: "Hideout Up", availability: "8am"},
-            {name: "Hideout Classroom", availability: "8am"},
-            {name: "ColdTowne", availability: "4pm"},
-            {name: "Fallout", availability: "all day"},
-            {name: "Velveeta"},
-            {name: "Spider House", availability: "1pm"},
-            {name: "Institution"},
-          ]},
-          {day: "Sunday", 
-          venues: [
-            {name: "Hideout Down", availability: "8am"},
-            {name: "Hideout Up", availability: "8am"},
-            {name: "Hideout Classroom", availability: "8am"},
-            {name: "Fallout", availability: "all day"},
+            {name: "Hideout Down"},
+            {name: "Hideout Up"},
+            {name: "ColdTowne"},
+            {name: "Fallout"},
             {name: "Velveeta"},
           ]},
-          {day: "Monday", 
+          {day: "Saturday",
           venues: [
-            {name: "Hideout Down", availability: "5pm"},
-            {name: "Hideout Up", availability: "5pm"},
+            {name: "Hideout Down"},
+            {name: "Hideout Up"},
+            {name: "Hideout Classroom"},
+            {name: "ColdTowne"},
+            {name: "Velveeta"}
+          ]},
+          {day: "Sunday",
+          venues: [
+            {name: "Hideout Down"},
+            {name: "Hideout Up"},
+            {name: "Hideout Classroom"},
+            {name: "Fallout"},
+            {name: "Velveeta"},
+            {name: "North Door"}
+          ]},
+          {day: "Monday",
+          venues: [
+            {name: "Hideout Down"},
+            {name: "Hideout Up"},
           ]}
         ],
         editMode: true,
@@ -96,7 +93,7 @@ script.
 
       // Get Acts
       axios
-        .get('/api/submissions/get-all-accepted')
+        .get('/api/acts')
         .then(function(response) {
           self.$store.commit('setupActs', response.data)
         })

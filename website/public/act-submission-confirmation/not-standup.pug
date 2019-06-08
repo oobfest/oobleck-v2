@@ -1,0 +1,147 @@
+if act.confirmationStatus == null
+  p If you are no longer available for then you may request a reschedule. We will accomodate as best we can but cannot guarantee another spot in the festival. 
+  p  Please confirm by 
+    strong June 22nd 
+    | or your spot will be forfeited. Cancelling your attendance 
+    em after
+    |  the June 22nd deadline will result in a two-year ban from Out of Bounds.
+  form(action="/submissions/accept/"+act._id method="POST").text-center
+    .form-group
+      button.btn.btn-lg.btn-primary(type="submit" name="confirmation-status" value="yes") Commit to Performance Dates
+    .form-group
+      button.btn.btn-lg.btn-secondary(type="submit" name="confirmation-status" value="reschedule") Request Reschedule
+    .form-group
+      button.btn.btn-lg.btn-danger(type="submit" name="confirmation-status" value="no") Cancel Festival Attendance
+
+if act.confirmationStatus === 'yes'
+  form(action="/submissions/finalize/"+act._id method="POST")
+    p.alert.alert-info You are now confirmed for Out of Bounds 2018!
+      p You'll receive more info from us by July 15th about your show times and lengths. If you have any questions, don't hesitate to contact 
+        code ruby@oobfest.com
+
+    p By attending this festival, you agree to the following: 
+    ul
+      if act.city !== 'Austin'
+        li Flight itineraries will be submitted by 
+          strong August 1st 
+      li The show does not include food, liquid or make a mess
+      li If someone damages something at a venue, even by accident, everyone will be cool and responsible about it and report it immediately
+
+    hr
+    h3 Tech Needs
+    p If a tech rehearsal is needed, everyone should be in Austin no later than 12pm the day of the first show. All tech/prop needs will be finalized with us by 
+      strong August 1st
+      |  (A separate form will be supplied)
+    .form-group
+      .custom-control.custom-checkbox
+        input#tech-rehearsal-needed.custom-control-input(
+          type="checkbox" 
+          value="yes" 
+          name="techRehearsalNeeded"
+          checked=(act.techRehearsalNeeded)
+        )
+        label.custom-control-label(for="tech-rehearsal-needed") This show will require a tech rehearsal
+
+    hr
+    h3 Confirm Availability for Additional Shows
+    p In addition to the days you are scheduled, please let us know all days you can attend the festival. Should another act drop out we may schedule you for additional shows. 
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-tuesday.custom-control-input(
+          type="checkbox" 
+          value="tuesday" 
+          name="available[]"
+          checked=(act.available.includes('tuesday'))
+        )
+        label.custom-control-label(for="available-tuesday") Tuesday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-wednesday.custom-control-input(
+          type="checkbox" 
+          value="wednesday" 
+          name="available[]"
+          checked=(act.available.includes('wednesday'))
+        )
+        label.custom-control-label(for="available-wednesday") Wednesday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-thursday.custom-control-input(
+          type="checkbox" 
+          value="thursday" 
+          name="available[]"
+          checked=(act.available.includes('thursday'))
+        )
+        label.custom-control-label(for="available-thursday") Thursday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-friday.custom-control-input(
+          type="checkbox" 
+          value="friday" 
+          name="available[]"
+          checked=(act.available.includes('friday'))
+        )
+        label.custom-control-label(for="available-friday") Friday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-saturday.custom-control-input(
+          type="checkbox" 
+          value="saturday" 
+          name="available[]"
+          checked=(act.available.includes('saturday'))
+        )
+        label.custom-control-label(for="available-saturday") Saturday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-sunday.custom-control-input(
+          type="checkbox" 
+          value="sunday" 
+          name="available[]"
+          checked=(act.available.includes('sunday'))
+        )
+        label.custom-control-label(for="available-sunday") Sunday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-monday.custom-control-input(
+          type="checkbox" 
+          value="monday" 
+          name="available[]"
+          checked=(act.available.includes('monday'))
+        )
+        label.custom-control-label(for="available-monday") Monday
+
+    hr
+    h3 Bonus Shows
+    p In addition to our standard line up, we have a number of exciting all-star improv shows. Please check all shows you would you be interested in participating in.
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-maestro.custom-control-input(
+          type="checkbox"
+          value="maestro"
+          name="bonusShows[]"
+          checked=(act.bonusShows ? act.bonusShows.includes('maestro') : false)
+        )
+        label.custom-control-label(for="available-maestro") An elimination-style short form improv show
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-megapigeon.custom-control-input(
+          type="checkbox"
+          value="megapigeon"
+          name="bonusShows[]"
+          checked=(act.bonusShows ? act.bonusShows.includes('megapigeon') : false)
+        )
+        label.custom-control-label(for="available-megapigeon") An Armando/ASSSCAT-style long form improv show
+
+    if act.city !== 'Austin'
+      hr
+      h3 Workshop Opportunity!
+      .form-group
+        label.col-form-label(for="workshop") Wanna teach? Pitch a workshop below. Fill in your name contact info and provide a workshop title, description and maximum number of students.
+        textarea#workshop.form-control(maxlength="14000" name="workshop" rows="4")=act.workshop
+
+    hr
+    h3 Update Profile
+    p You can update your press photo, bio, contacts and more 
+      a(href="/submissions/edit/"+act._id) here
+      | .
+    .form-group.text-center
+      button.btn.btn-lg.btn-primary(type="submit") Update Submission

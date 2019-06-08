@@ -1,4 +1,4 @@
-extends ../_layout
+extends ../../_layout
 block content
   header.dash-titlebar
     .mb-md-0.mb-3
@@ -15,7 +15,7 @@ block content
             th Phone
         tbody(v-for="(host, index) in hosts")
           tr
-            td 
+            td
               a(:href="'#collapse-' + index" data-toggle="collapse") {{host.name}}
             td {{host.email}}
             td {{host.phone}}
@@ -32,13 +32,11 @@ block content
               button.btn.btn-secondary(data-toggle="modal" data-target="#edit-host-modal" @click="selectedHost = host") Edit
     p.m2(v-else) No hosts yet
 
-  script(src="/js/axios.min.js")
-  script(src="/js/vue.js")
   include modals/edit-host
   script.
-    let app = new Vue({ 
+    let app = new Vue({
       el: "#app",
-      data() { 
+      data() {
         return {
           hosts: [],
           selectedHost: {},
@@ -48,7 +46,7 @@ block content
         updateHost(savedHost) {
           let index = this.hosts.map(h=> h._id).indexOf(savedHost._id)
           Vue.set(this.hosts, index, savedHost)
-        }      
+        }
       },
       created() {
         let self = this

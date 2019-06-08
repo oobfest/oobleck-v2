@@ -1,4 +1,4 @@
-extends ../_layout
+extends ../../_layout
 block content
   header.dash-titlebar
     .mb-md-0.mb-3
@@ -8,7 +8,7 @@ block content
     ul.nav.nav-pills
       li.nav-item
         a.nav-link.active(data-toggle="tab" href="#shows") Shows
-      li.nav-item
+      //- li.nav-item
         a.nav-link(href="/shows/tickets") Tickets
       li.nav-item
         a.nav-link(data-toggle="tab" href="#print-tickets") Print Tickets
@@ -18,7 +18,7 @@ block content
           table.box-table.table.table-sm.text-center
             thead
               tr
-                th 
+                th
                   .row
                     .col
                       .form-group.mb-0
@@ -32,7 +32,7 @@ block content
                           option Saturday
                           option Sunday
                           option Monday
-                    .col                  
+                    .col
                       .form-group.mb-0
                         select.form-control(v-model="searchVenue")
                           option(value="" disabled selected) Filter by Venue
@@ -45,20 +45,20 @@ block content
                           option Spider House
                           option Institution
                 th Cap
-                th 
+                th
                   a(href="#" @click.prevent="sortByRemaining = false") Sold
-                th 
+                th
                   a(href="#" @click.prevent="sortByRemaining = true") Left
             tbody
               tr(v-for="(show, index) in filteredShows")
-                td.text-left 
+                td.text-left
                   a(:href="'#collapse'+index" data-toggle="collapse") {{show.day}}, {{show.venue}}, {{show.time | time}}
                   .collapse(:id="'collapse'+index")
                     ul
                       li(:class="{'font-weight-bold' : act.headliner}" v-for="act in show.acts") {{act.name}}
-                    p(v-if="show.price") Price: 
+                    p(v-if="show.price") Price:
                       a(href="#" @click.prevent="setPrice(show._id)") ${{show.price}}
-                    p(v-else) 
+                    p(v-else)
                       a(href="#" @click.prevent="setPrice(show._id)") No price set
 
                     table.table.table-sm(v-if="show.capacity != show.remaining")
@@ -76,10 +76,10 @@ block content
                           td {{ticket.quantity}}
 
                           td(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
-                          td(v-else) 
+                          td(v-else)
                             a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{ticket.payment.transactions[0].related_resources[0].sale.id}}
 
-                          td 
+                          td
                             a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
                     p(v-else) No tickets sold
                     button.btn.btn-secondary.btn-xs(type="button" @click="showId = show._id" data-toggle="modal" data-target="#add-ticket-modal") Add Ticket Reservation
@@ -89,9 +89,9 @@ block content
                 td
                   a.digits(href="#" @click.prevent="setCapacity(show._id)") {{show.capacity}}
                 td.digits {{show.capacity - show.remaining}}
-                td.digits {{show.remaining}}              
+                td.digits {{show.remaining}}
         p.m2(v-else) No shows yet
-    
+
       #print-tickets.tab-pane.fade
         .row
           .col-sm-6
@@ -113,19 +113,16 @@ block content
               .form-group
                 label(for="print-time") Time
                 select#print-time.form-control(v-model="print.time" name="time")
-                  option(:value="time" v-for="time in times") {{time | time}} 
+                  option(:value="time" v-for="time in times") {{time | time}}
               button.btn.btn-primary(type="submit" ) View
 
     add-ticket-modal(:show-id="showId")
 
-  script(src="/js/axios.min.js")
-  script(src="/js/vue.js")
-  script(src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js" integrity="sha256-/GKyJ0BQJD8c8UYgf7ziBrs/QgcikS7Fv/SaArgBcEI=" crossorigin="anonymous")
   include components/add-ticket
   script.
-    let app = new Vue({ 
+    let app = new Vue({
       el: "#app",
-      data() { 
+      data() {
         return {
           print: {
             day: 'Tuesday',
@@ -157,6 +154,7 @@ block content
           return this.shows.filter(s=> { return s.day.match(searchDayRegex) && s.venue.match(searchVenueRegex) })
         },
         tickets() {
+          alert("CRUNCH")
           let tickets = []
           for(let i=0; i<this.shows.length; i++) {
             for(let j=0; j<this.shows[i].tickets.length; j++) {
@@ -165,7 +163,7 @@ block content
               ticket.day = this.shows[i].day
               ticket.venue = this.shows[i].venue
               ticket.time = this.shows[i].time
-              ticket.paid = ticket.payment 
+              ticket.paid = ticket.payment
                 ? Number(ticket.payment.transactions[0].amount.total)
                 : 0
               tickets.push(ticket)

@@ -1,0 +1,155 @@
+if act.confirmationStatus == null 
+  p You have been accepted into the Out of Bounds Comedy Festival!
+  p  Please confirm your attendance to the festival by 
+    strong June 22nd 
+    | or your spot will be forfeited. Cancelling your attendance 
+    em after
+    |  the June 22nd deadline will result in a two-year ban from Out of Bounds.
+  form(action="/submissions/accept/"+act._id method="POST").text-center
+    .form-group
+      button.btn.btn-lg.btn-primary(type="submit" name="confirmation-status" value="yes") Confirm Attendance
+    .form-group
+      button.btn.btn-lg.btn-danger(type="submit" name="confirmation-status" value="no") Cancel Attendance
+
+if act.confirmationStatus === 'yes'
+  form(action="/submissions/finalize/"+act._id method="POST")
+    p.alert.alert-info You are now confirmed for Out of Bounds 2018!
+    p You'll receive more info from us by July 15th about your show times and lengths
+      br
+      | If you have any questions, don't hesitate to contact 
+      code ruby@oobfest.com
+    p By attending this festival you agree to the following:
+    ul
+      if act.city !== 'Austin'
+        li I will send my flight itinerary by 
+          strong August 1st 
+          | to the festival, and if I don't, I risk forfeiting my place. (We will send a form for you to fill out mid-July so that we can set you up with an airport pick-up!)
+      li I will not perform any set that includes food, liquid or potential mess
+      li If I damage something at a venue, even by accident, I'll report it immediately and be cool and responsible about it
+
+    hr
+    h3 Availability
+    p Please re-confirm all the days you are able to attend the festival
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-tuesday.custom-control-input(
+          type="checkbox" 
+          value="tuesday" 
+          name="available[]"
+          checked=(act.available.includes('tuesday'))
+        )
+        label.custom-control-label(for="available-tuesday") Tuesday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-wednesday.custom-control-input(
+          type="checkbox" 
+          value="wednesday" 
+          name="available[]"
+          checked=(act.available.includes('wednesday'))
+        )
+        label.custom-control-label(for="available-wednesday") Wednesday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-thursday.custom-control-input(
+          type="checkbox" 
+          value="thursday" 
+          name="available[]"
+          checked=(act.available.includes('thursday'))
+        )
+        label.custom-control-label(for="available-thursday") Thursday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-friday.custom-control-input(
+          type="checkbox" 
+          value="friday" 
+          name="available[]"
+          checked=(act.available.includes('friday'))
+        )
+        label.custom-control-label(for="available-friday") Friday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-saturday.custom-control-input(
+          type="checkbox" 
+          value="saturday" 
+          name="available[]"
+          checked=(act.available.includes('saturday'))
+        )
+        label.custom-control-label(for="available-saturday") Saturday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-sunday.custom-control-input(
+          type="checkbox" 
+          value="sunday" 
+          name="available[]"
+          checked=(act.available.includes('sunday'))
+        )
+        label.custom-control-label(for="available-sunday") Sunday
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-monday.custom-control-input(
+          type="checkbox" 
+          value="monday" 
+          name="available[]"
+          checked=(act.available.includes('monday'))
+        )
+        label.custom-control-label(for="available-monday") Monday
+
+    hr
+    h3 Bonus Shows
+    p In addition to our standard stand-up showcases, please check any of our bonus shows you would you be interested in participating in
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-awkward-sex.custom-control-input(
+          type="checkbox"
+          value="awkward-sex"
+          name="bonusShows[]"
+          checked=(act.bonusShows ? act.bonusShows.includes('awkward-sex') : false)
+        )
+        label.custom-control-label(for="available-awkward-sex") A sex-themed show where you'd do material based on awkward sexual encounters
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-heckling.custom-control-input(
+          type="checkbox"
+          value="heckling"
+          name="bonusShows[]"
+          checked=(act.bonusShows ? act.bonusShows.includes('heckling') : false)
+        )
+        label.custom-control-label(for="available-heckling") A heckling / crowdwork show where the audience is encourage to interact with you during your set
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-improvised-standup.custom-control-input(
+          type="checkbox"
+          value="improvised-standup"
+          name="bonusShows[]"
+          checked=(act.bonusShows ? act.bonusShows.includes('improvised-standup') : false)
+        )
+        label.custom-control-label(for="available-improvised-standup") An improvised standup show where you have to make up bits on the spot from prompts given to you on stage
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-blind-date.custom-control-input(
+          type="checkbox"
+          value="blind-date"
+          name="bonusShows[]"
+          checked=(act.bonusShows ? act.bonusShows.includes('blind-date') : false)
+        )
+        label.custom-control-label(for="available-blind-date") A blind dating show where you and another random performer will go on a fake 15-minute "date" on stage, having a getting-to-know-you conversation in front of a live audience
+    .form-group
+      .custom-control.custom-checkbox
+        input#available-roast.custom-control-input(
+          type="checkbox"
+          value="roast"
+          name="bonusShows[]"
+          checked=(act.bonusShows ? act.bonusShows.includes('roast') : false)
+        )
+        label.custom-control-label(for="available-roast") A team roast battle where you'll be assigned an opponent with only their videos to work from
+
+    if act.city !== 'Austin'
+      hr
+      h3 Workshop Opportunity!
+      .form-group
+        label.col-form-label(for="workshop") Wanna teach? Pitch a workshop below. Fill in your name contact info and provide a workshop title, description and maximum number of students.
+        textarea#workshop.form-control(maxlength="14000" name="workshop" rows="4")=act.workshop
+
+    hr
+    .form-group.text-center
+      button.btn.btn-lg.btn-primary(type="submit") Update Submission

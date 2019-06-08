@@ -1,11 +1,10 @@
-extends ../_layout
+extends ../../_layout
 block content
   include style
   #app
     header.dash-titlebar
       .mb-md-0.mb-3
         span.dash-titlebar-title Calendar
-      a.btn.btn-secondary.ml-md-auto(href="/acts/create") Create Act
     .m-3
       p
         a(href="#" @click.prevent="editMode = !editMode" v-cloak) {{ editMode ? 'Hide Edit Links' : 'Show Edit Links' }}
@@ -17,9 +16,7 @@ block content
     add-host-modal
     .box.day(v-for="day in days")
       day(v-bind="day")
-  
-  script(src="/js/axios.min.js")
-  script(src="/js/vue.js")
+
   script(src="/js/vuex.js")
 
   include store

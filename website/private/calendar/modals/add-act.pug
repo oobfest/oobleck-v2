@@ -31,11 +31,11 @@ script#add-act-modal-template(type="text/template")
             .form-group
               table.table.table-borderless.table-sm
                 tbody
-                  tr(v-for="act in filteredActs") 
-                    td {{act.available.includes(show.day.toLowerCase()) ? '✅' : '⛔️'}}
+                  tr(v-for="act in filteredActs")
+                    td {{act.availability.includes(show.day.toLowerCase()) ? '✅' : '⛔️'}}
                     td
-                      a(href="#" @click.prevent="addAct(act)" data-dismiss="modal") {{act.actName | shorten(30)}} 
-                    td {{act.minimumShowLength}} to {{act.maximumShowLength}}
+                      a(href="#" @click.prevent="addAct(act)" data-dismiss="modal") {{act.name | shorten(30)}}
+                    td {{act.minimumLength}} to {{act.maximumLength}}
         .modal-footer
           button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
 
@@ -63,7 +63,7 @@ script.
         if (this.search == '' && this.filterActsByType == '') return null
         let filteredActs = this.acts
         if(this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType === this.filterActsByType)
-        if(this.search !== '') filteredActs = filteredActs.filter(a=> a.actName.match(new RegExp(this.search, 'i')))
+        if(this.search !== '') filteredActs = filteredActs.filter(a=> a.name.match(new RegExp(this.search, 'i')))
         return filteredActs
       },
       show() {

@@ -15,11 +15,14 @@ script#add-show-modal-template(type="text/template")
               label(for="add-show-modal-venue") Venue
               input#add-show-modal-venue.form-control(type="text" readonly v-model="show.venue")
             .form-group
-              label(for="add-show-modal-time") Time
-              input#add-show-modal-time.form-control(type="number" min="0" max="1259" v-model="show.time" @keyup.enter="addShow()")
+              label(for="add-show-modal-start-time") Start Time
+              input#add-show-modal-start-time.form-control(type="number" min="0" max="1259" v-model="show.startTime")
+            .form-group
+              label(for="add-show-modal-end-time") End Time
+              input#add-show-modal-end-time.form-control(type="number" min="0" max="1259" v-model="show.endTime" @keyup.enter="addShow()")
         .modal-footer
           button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
-          button.btn.btn-primary(type="submit" @click="addShow()") Add Show
+          button.btn.btn-primary(:disabled="isFilledOut" type="submit" @click="addShow()") Add Show
 
 script.
   Vue.component('add-show-modal', {
@@ -27,6 +30,9 @@ script.
     computed: {
       show() {
         return this.$store.state.addShowModal
+      },
+      isFilledOut() {
+        return this.show.endTime == undefined && this.show.startTime == undefined
       }
     },
     methods: {

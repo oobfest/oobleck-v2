@@ -1,0 +1,45 @@
+extends ../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Host Submissions
+  - var showTypes = ['Improv', 'Sketch', 'Stand-Up', 'Variety', 'Podcast', 'Individual', 'Music', 'Other']
+  .dash-boxes.container-fluid
+    #tables.panel-group
+      each showType in showTypes
+        .panel.panel-default
+          .panel-heading
+            h4.panel-title
+              a(role="button" data-toggle="collapse" data-parent="tables" href='#'+showType+'-accepted') #{showType} - Accepted
+          .panel-collapse.collapse.in(id=showType+'-accepted')
+            .panel-body
+              - var acceptedSubmissions = submissions.filter(s=> (s.showType === showType && s.stamp==='in'))
+              .box.box-b
+                table.box-table.table
+                  thead
+                    tr
+                      th Act
+                      th Email
+                  tbody
+                    each acceptedSubmission in acceptedSubmissions
+                      tr
+                        td(style="-moz-user-select:none")=acceptedSubmission.actName
+                        td=acceptedSubmission.primaryContactEmail
+        .panel.panel-default
+          .panel-heading
+            h4.panel-title
+              a(role="button" data-toggle="collapse" data-parent="tables" href='#'+showType+'-not-accepted') #{showType} - Not Accepted
+          .panel-collapse.collapse.in(id=showType+'-not-accepted')
+            .panel-body
+              - var notAcceptedSubmissions = submissions.filter(s=> (s.showType === showType && s.stamp!=='in'))
+              .box.box-b
+                table.box-table.table
+                  thead
+                    tr
+                      th Act
+                      th Email
+                  tbody
+                    each notAcceptedSubmission in notAcceptedSubmissions
+                      tr
+                        td(style="-moz-user-select:none")=notAcceptedSubmission.actName
+                        td=notAcceptedSubmission.primaryContactEmail

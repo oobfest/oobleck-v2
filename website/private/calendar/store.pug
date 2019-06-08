@@ -5,7 +5,7 @@ script.
       acts: [],
       workshops: [],
       hosts: [],
-      addShowModal: { day: '', venue: '', time: '' },
+      addShowModal: { day: '', venue: '', startTime: '', endTime: '' },
       addActModal: { day: '', venue: '', time: '', _id: '' },
       addWorkshopModal: { day: '', venue: '', time: ''},
       showId: '',
@@ -71,7 +71,7 @@ script.
       },
       setShowId(state, payload) {
         state.showId = payload
-      },      
+      },
       setupShows(state, payload) {
         state.shows = payload
       },
