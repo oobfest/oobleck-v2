@@ -1,0 +1,24 @@
+if actType.includes('Standup')
+  p Congratulations, #{name}! You have been accepted to the Out of Bounds Comedy Festival.
+  p Here is what you can expect at our fest!
+  ul
+    li Airport ride to &amp; from the airport
+    li At least two shows in the festival, maybe more depending on availability
+    li Festival T-Shirt
+    li Festival Performer Badge (if a show is starting and has empty seats, you get in for free!)
+    li Nightly Parties
+    li A free professional video recording of all sets at The Velveeta Room
+  p BUT before we officially add you to our line-up, please confirm your attendance at the following link:&nbsp;
+    a(href='https://app.oobfest.com/submissions/accept/' + actId) https://app.oobfest.com/submissions/accept/#{actId}
+else
+  p Congratulations, #{name}! You have been accepted to the Out of Bounds Comedy Festival.
+  p Here is what you can expect at our fest!
+  ul
+    li Free ride to &amp; from the airport
+    li Two shows in the festival (one show if you're local)
+    li Festival T-Shirt
+    li Festival Performer Badge (if a show is starting and has empty seats, you get in for free!)
+    li Nightly Parties
+  p BUT before we officially add you to our line-up, please confirm your attendance at the following link:&nbsp;
+    a(href='https://app.oobfest.com/submissions/accept/' + actId) https://app.oobfest.com/submissions/accept/#{actId}
+`

@@ -55,7 +55,7 @@ script.
         $('#add-workshop-modal').modal('hide')
         let self = this
         axios
-          .post('/api/workshops/set-date/' + self.selectedWorkshopId, self.workshop)
+          .put('/api/workshops/' + self.selectedWorkshopId, self.workshop)
           .then((response)=> {
             self.$store.commit('updateWorkshop', response.data)
             self.selectedWorkshopId = null

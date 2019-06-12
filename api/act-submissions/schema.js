@@ -163,7 +163,17 @@ let SubmissionSchema = mongoose.Schema({
   stamp: {
     required: false,
     type: String
-  }
+  },
+
+
+  // Did they confirm?
+  // yes, no, reschedule, undefined
+  confirmationStatus: String,
+
+  // After confirming...
+  bonusShows: [],
+  workshop: String,
+  techRehearsalNeeded: Boolean,
 })
 
 module.exports = SubmissionSchema

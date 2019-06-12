@@ -14,6 +14,14 @@ let overrides = {
     show.acts.splice(actIndex, 1)
     show.markModified('acts')
     return show
+  },
+  async addHost(show, host) {
+    show.host = host
+    return show
+  },
+  async removeHost(show) {
+    show.host = null
+    return show
   }
 }
 

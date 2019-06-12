@@ -16,10 +16,21 @@ let workshopSchema = mongoose.Schema({
     required: false
   },
 
-  day: String,
-  venue: String,
-  time: String,
-
+  day: {
+    required: false,
+    default: null,
+    type: String
+  },
+  venue: {
+    required: false,
+    default: null,
+    type: String
+  },
+  time: {
+    required: false,
+    default: null,
+    type: String
+  },
   capacity: Number,
   sold: {
     type: Number,

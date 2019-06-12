@@ -2,25 +2,25 @@ extends _layout
 block accept
   if act.stamp !== 'in'
     h2=act.actName
-    p This act was not accepted into to Out of Bounds 2018
-    p If this is wrong, please contact 
+    p This submission was not accepted into to Out of Bounds 2019
+    p If this is wrong, please contact &nbsp;
       code admin@oobfest.com
 
   if act.stamp === 'in'
     if act.confirmationStatus === 'no'
-      h2 #{act.actName}
-      p #{act.actName} will not attending Out of Bounds 2018. 
-      form(action="/submissions/accept/"+act._id method="POST").text-center
+      h2 #{act.name}
+      p #{act.name} will not attending Out of Bounds 2018.
+      form(action="/accept/"+act._id method="POST").text-center
         .form-group
           button.btn.btn-secondary.btn-lg(type="submit" name="confirmation-status" value="cancel") Undo
     else
-      h2 Congratulations, #{act.actName}!
+      h2 Congratulations, #{act.name}!
       if days
-        p 
-          em #{act.actName} 
-          | is scheduled to perform 
-          strong #{days}
-          | . 
+        p
+          em #{act.name}
+          |  is scheduled to perform
+          strong  #{days}
+          | .
 
       if act.confirmationStatus === 'reschedule'
         include reschedule
@@ -31,12 +31,12 @@ block accept
         include not-standup
 
       if act.confirmationStatus === 'yes'
-        form(action="/submissions/accept/"+act._id method="POST").text-center
+        form(action="/accept/"+act._id method="POST").text-center
           .form-group
             button.btn.btn-lg.btn-danger(type="submit" name="confirmation-status" value="no") Cancel Festival Attendance
-          p You have until 
+          p You have until
             strong July 22nd
             |  to finalize your submission
-          p You can update your photo, bio, contacts, social media and more 
+          p You can update your photo, bio, contacts, social media and more
             a(href="/submissions/edit/"+act._id) here
             | .

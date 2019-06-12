@@ -2,9 +2,9 @@ script#workshop-template(type="text/template")
   .box.workshop
     a.delete(v-show="$root.editMode" href="#" @click.prevent="removeWorkshop(workshop._id)") remove workshop
     h4.time {{workshop.time | time}}
-    p.font-weight-bold Workshop 
+    p.font-weight-bold Workshop
     p {{workshop.name}}
-    p With 
+    p With
       span.font-italic {{workshop.teacher}}
 
 script.
@@ -20,12 +20,12 @@ script.
       }
     },
     methods: {
-      removeWorkshop(id) {
+      removeWorkshop(workshopId) {
         let self = this
         axios
-          .delete('/api/workshops/set-date/' + id)
+          .put('/api/workshops/' + workshopId, {day: null, venue: null, time: null})
           .then((response)=> {
-            self.$store.commit('removeWorkshop', id)
+            self.$store.commit('removeWorkshop', workshopId)
           })
           .catch((error)=> {
             alert("Error removing workshop :(")

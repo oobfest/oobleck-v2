@@ -64,7 +64,7 @@ script.
       removeHost(showId) {
         let self = this
         axios
-          .post('/api/shows/remove-host/' + showId)
+          .put('/api/shows/' + showId, {host: null})
           .then(function(response) {
             self.$store.commit('updateShow', response.data)
           })

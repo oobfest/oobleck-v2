@@ -37,7 +37,7 @@ script.
         let host = self.$store.getters.getHost(self.selectedHost)
         let showId = self.$store.getters.getShowId
         axios
-          .post('/api/shows/set-host/' + showId, host)
+          .put('/api/shows/' + showId, {host})
           .then(function(response){
             self.$store.commit('updateShow', response.data)
           })

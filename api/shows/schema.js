@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-let ActSchema = require('./schemas/act')
+let actSchema = require('./schemas/act')
+let hostSchema = require('../hosts/schema')
 
 let showSchema = mongoose.Schema({
   day: String,
@@ -12,8 +13,12 @@ let showSchema = mongoose.Schema({
   remaining: Number,
   price: Number,
 
-  acts: [ActSchema],
-  host: {},
+  acts: [actSchema],
+  host: {
+    required: false,
+    default: null,
+    type: hostSchema
+  },
   tickets: [],
 
   volunteerBoxOffice1: mongoose.Schema.Types.ObjectId,

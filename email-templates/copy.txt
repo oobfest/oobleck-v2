@@ -1,0 +1,44 @@
+STANDUP REJECTION
+[performer name],
+
+Unfortunately, we were unable to include you in this year's Out of Bounds line-up. Every year we receive a record number of applicants, of which a large majority we are unable to accept. We encourage you to keep working, performing, failing and succeeding and hope that you consider applying for next year's festival.
+
+Sincerely,
+The Out of Bounds Producer Team
+
+
+
+NON-STANDUP REJECTION
+[Primary contact name],
+
+Unfortunately, we were unable to include [act name] in this year's Out of Bounds line-up. Out of Bounds is a very difficult festival to get into and every year we break our record number of applicants making it even harder. We encourage you to keep working, rehearsing, trying, failing and succeeding and hope that you consider applying to next year's festival.
+
+Sincerely,
+The Out of Bounds Producer Team
+
+
+
+STANDUP ACCEPTANCE
+Congratulations, [performer name]! You have been accepted to this year's Out of Bounds Comedy Festival!
+Here is what you can expect:
+  - Airport ride to & from the airport
+  - At least two shows in the festival, maybe more depending on availability
+  - Festival T-Shirt
+  - Festival Performer Badge (if a show is starting and has empty seats, you get in for free)
+  - Nightly Parties
+  - A free professional video recording of all sets at The Velveeta Room
+
+BUT before we officially add you to our line-up, please confirm your attendance at the following link: [link to confirmation form]
+
+
+
+NON-STANDUP ACCEPTANCE
+Congratulations, [act name]! You have been accepted to this year's Out of Bounds Comedy Festival!
+Here is what you can expect:
+  - Free ride to & from the airport
+  - Two shows in the festival (one show if you're local)
+  - Festival T-Shirt
+  - Festival Performer Badge (if a show is starting and has empty seats, you get in for free)
+  - Nightly Parties
+
+BUT before we officially add you to our line-up, please confirm your attendance at the following link: [link to confirmation form]
