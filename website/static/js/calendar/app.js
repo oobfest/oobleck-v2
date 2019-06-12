@@ -7,53 +7,51 @@ let app = new Vue({
       days: [
         {day: "Tuesday",
         venues: [
-          {name: "Hideout Down"},
           {name: "Hideout Up"},
+          {name: "Hideout Down"},
           {name: "Fallout"}
         ]},
         {day: "Wednesday",
         venues: [
-          {name: "Hideout Down"},
           {name: "Hideout Up"},
+          {name: "Hideout Down"},
           {name: "Fallout"},
         ]},
         {day: "Thursday",
         venues: [
-          {name: "Hideout Down"},
           {name: "Hideout Up"},
+          {name: "Hideout Down"},
           {name: "ColdTowne"},
           {name: "Fallout"},
           {name: "Velveeta"},
         ]},
         {day: "Friday",
         venues: [
-          {name: "Hideout Down"},
           {name: "Hideout Up"},
+          {name: "Hideout Down"},
           {name: "ColdTowne"},
           {name: "Fallout"},
           {name: "Velveeta"},
         ]},
         {day: "Saturday",
         venues: [
-          {name: "Hideout Down"},
-          {name: "Hideout Up"},
           {name: "Hideout Classroom"},
+          {name: "Hideout Up"},
+          {name: "Hideout Down"},
           {name: "ColdTowne"},
           {name: "Velveeta"}
         ]},
         {day: "Sunday",
         venues: [
-          {name: "Hideout Down"},
-          {name: "Hideout Up"},
           {name: "Hideout Classroom"},
+          {name: "Hideout Down"},
           {name: "Fallout"},
           {name: "Velveeta"},
           {name: "North Door"}
         ]},
         {day: "Monday",
         venues: [
-          {name: "Hideout Down"},
-          {name: "Hideout Up"},
+          {name: "Hideout Down"}
         ]}
       ],
       editMode: true,

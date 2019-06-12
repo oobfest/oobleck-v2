@@ -7,13 +7,13 @@ script#shows-template(type="text/template")
           a(href="#" @click.prevent="setStartTime(show._id)") {{show.startTime | time}}
           |  to&nbsp;
           a(href="#" @click.prevent="setEndTime(show._id)") {{show.endTime | time}}
-        div(v-if="show.host")
+        div(v-if="show.host" v-show="$root.editMode")
           a.delete(href="#" @click.prevent="removeHost(show._id)") remove host
           p
             strong Host:
             | {{show.host.name}}
         div(v-else)
-          p
+          p(v-show="$root.editMode")
             a(href="#" @click.prevent="setShowId(show._id)" data-toggle="modal" data-target="#add-host-modal") add host
         p.act(v-for="act in show.acts")
           a(href="#" @click.prevent="promptDuration(show, act._id)")
@@ -40,7 +40,9 @@ script.
     props: ['day', 'venue'],
     computed: {
       shows() {
-        return store.getters.getShows(this.day, this.venue)
+        return store.getters
+          .getShows(this.day, this.venue)
+          .sort((a,b)=> a.startTime > b.startTime ? 1 : -1)
       },
       actStatus() {
         // Todo: get confirmation status
