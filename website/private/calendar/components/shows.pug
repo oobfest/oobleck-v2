@@ -3,7 +3,10 @@ script#shows-template(type="text/template")
     div(v-for="show in shows")
       .box.show2
         a.delete(v-show="$root.editMode" href="#" @click.prevent="removeShow(show._id)") remove show
-        h4.time {{show.startTime | time}} to {{show.endTime | time}}
+        h4.time
+          a(href="#" @click.prevent="setStartTime(show._id)") {{show.startTime | time}}
+          |  to&nbsp;
+          a(href="#" @click.prevent="setEndTime(show._id)") {{show.endTime | time}}
         div(v-if="show.host")
           a.delete(href="#" @click.prevent="removeHost(show._id)") remove host
           p
@@ -61,6 +64,46 @@ script.
       },
     },
     methods: {
+      setStartTime(showId) {
+        let startTime = window.prompt("Start time: ")
+        if (startTime == null) {;}
+        else {
+          startTime = parseInt(startTime)
+          if(Number.isNaN(startTime) || startTime < 100) alert("Invalid time")
+          else {
+            let self = this
+            axios
+              .put('/api/shows/' + showId, {startTime})
+              .then(function(response) {
+                self.$store.commit('updateShow', response.data)
+              })
+              .catch(function(error) {
+                alert("Error updating start time")
+                console.log(error)
+              })
+          }
+        }
+      },
+      setEndTime(showId) {
+        let endTime = window.prompt("End time: ")
+        if (endTime == null) {;}
+        else {
+          endTime = parseInt(endTime)
+          if(Number.isNaN(endTime) || endTime < 100) alert("Invalid time")
+          else {
+            let self = this
+            axios
+              .put('/api/shows/' + showId, {endTime})
+              .then(function(response) {
+                self.$store.commit('updateShow', response.data)
+              })
+              .catch(function(error) {
+                alert("Error updating start time")
+                console.log(error)
+              })
+          }
+        }
+      },
       removeHost(showId) {
         let self = this
         axios
