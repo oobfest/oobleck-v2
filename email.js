@@ -19,16 +19,14 @@ async function email() {
     let recipient = acceptedSubmission.contact.email
     let subject = acceptedSubmission.name + ", you're in Out of Bounds!"
     let message = acceptedEmailTemplate(acceptedSubmission)
-    //nodemailer.sendEmailFromProducers(recipient, subject, message)
-    console.log(recipient, subject, message, '\n')
+    nodemailer.sendEmailFromProducers(recipient, subject, message)
   }
 
   for (rejectedSubmission of rejectedSubmissions) {
     let recipient = rejectedSubmission.contact.email
     let subject = rejectedSubmission.name + " application status"
     let message = rejectedEmailTemplate(rejectedSubmission)
-    //nodemailer.sendEmailFromProducers(recipient, subject, message)
-    console.log(recipient, subject, message, '\n')
+    nodemailer.sendEmailFromProducers(recipient, subject, message)
   }
 }
 
