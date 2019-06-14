@@ -192,7 +192,7 @@ let SubmissionSchema = mongoose.Schema({
   confirmationStatus: String,
 
   // After confirming...
-  bonusShows: [],
+  specialtyShows: [],
   workshop: String,
   techRehearsalNeeded: Boolean,
 })

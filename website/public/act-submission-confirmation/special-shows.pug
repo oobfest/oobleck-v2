@@ -1,0 +1,50 @@
+if act.showType.includes('Standup')
+  h3 Specialty Shows
+  p We are considering some off-beat specialty shows. Please indicate if you are interested in participating in any or all of the following. (You will not be booked on more than one specialty show, so check as many as you want and you'll still also get plenty of normal stage time to do your best material, we promise.)
+  .form-group
+    .custom-control.custom-checkbox
+      input#mix-tape.custom-control-input(
+        type="checkbox"
+        value="tuesday"
+        name="specialtyShows[]"
+        checked=act.specialtyShows && act.specialtyShows.includes('mix-tape')
+      )
+      label.custom-control-label(for="mix-tape") MIX TAPE -- after your set, you'll be shown a music video of our choosing and provide commentary on it in real time.
+  .form-group
+    .custom-control.custom-checkbox
+      input#sextracurriculars.custom-control-input(
+        type="checkbox"
+        value="tuesday"
+        name="specialtyShows[]"
+        checked=act.specialtyShows && act.specialtyShows.includes('sextracurriculars')
+      )
+      label.custom-control-label(for="sextracurriculars") SEXTRACURRICULARS -- a sex-ed-themed show where you'll be encouraged to share bits about humpin'. (NOTE: nope, this isn't one of those awful underwear / naked shows, don't worry.)
+  .form-group
+    .custom-control.custom-checkbox
+      input#part-2.custom-control-input(
+        type="checkbox"
+        value="tuesday"
+        name="specialtyShows[]"
+        checked=act.specialtyShows && act.specialtyShows.includes('part-2')
+      )
+      label.custom-control-label(for="part-2") PART 2 -- you write a pitch for a sequel that doesn't exist (yet) and things get weirder from there. Judges are involved. Prizes are won.
+
+  .form-group
+    .custom-control.custom-checkbox
+      input#date-or-die.custom-control-input(
+        type="checkbox"
+        value="tuesday"
+        name="specialtyShows[]"
+        checked=act.specialtyShows && act.specialtyShows.includes('date-or-die')
+      )
+      label.custom-control-label(for="date-or-die") DATE OR DIE -- you're set up on a blind date with another fest performer from a different town and you go on that date live on stage. That's it. A terrifying show. Highlight of the festival.
+
+  .form-group
+    .custom-control.custom-checkbox
+      input#glow-show.custom-control-input(
+        type="checkbox"
+        value="tuesday"
+        name="specialtyShows[]"
+        checked=act.specialtyShows && act.specialtyShows.includes('glow-show')
+      )
+      label.custom-control-label(for="glow-show") GLOW SHOW -- a trippy standup showcase with glow sticks. Don't know why anyone would say no to this. Fear of glow sticks?
