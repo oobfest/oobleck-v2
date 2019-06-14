@@ -9,7 +9,7 @@ let nodemailer = require('./utilities/nodemailer')
 
 async function email() {
   await setupMongoose(process.env.CONNECTION_STRING)
-  await setupServer(process.env.PORT)
+  await setupServer(9001)
   let submissions = await actSubmissionModel.read()
 
   let acceptedSubmissions = submissions.filter(s=> s.stamp == 'in')
@@ -19,14 +19,14 @@ async function email() {
     let recipient = acceptedSubmission.contact.email
     let subject = acceptedSubmission.name + ", you're in Out of Bounds!"
     let message = acceptedEmailTemplate(acceptedSubmission)
-    nodemailer.sendEmailFromProducers(recipient, subject, message)
+    //nodemailer.sendEmailFromProducers(recipient, subject, message)
   }
 
   for (rejectedSubmission of rejectedSubmissions) {
     let recipient = rejectedSubmission.contact.email
     let subject = rejectedSubmission.name + " application status"
     let message = rejectedEmailTemplate(rejectedSubmission)
-    nodemailer.sendEmailFromProducers(recipient, subject, message)
+    //nodemailer.sendEmailFromProducers(recipient, subject, message)
   }
 }
 
