@@ -1,0 +1,9 @@
+form(action="/confirmation/"+act._id method="POST")
+  p You are now confirmed!
+  p You have until&nbsp;
+    strong July 22nd
+    |  to finalize your submission. You can update your photo, bio, contacts, social media and more&nbsp;
+    a(href="/submissions/edit/"+act._id) here
+    | .
+  .form-group.text-center
+    button.btn.btn-lg.btn-danger(type="submit" name="confirmation-status" value="no") Cancel Festival Attendance

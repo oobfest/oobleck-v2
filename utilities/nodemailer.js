@@ -27,5 +27,23 @@ module.exports = {
         emailLogger.error("Email error 💔")
         emailLogger.error(JSON.stringify(error))
       })
+  },
+  sendEmailFromProducers(recipient, subject="", htmlContent="") {
+    let email = {
+      to: recipient,
+      from: 'producers@oobfest.com',
+      subject: "[OoB] " + subject,
+      html: htmlContent
+    }
+    return transporter
+      .sendMail(email)
+      .then((response)=> {
+        console.log(`Email sent 💌 "${email.subject}"`)
+        console.log(`From ${response.envelope.from} to ${response.envelope.to}`)
+      })
+      .catch((error)=> {
+        console.log("Email error 💔")
+        console.log(JSON.stringify(error))
+      })
   }
 }

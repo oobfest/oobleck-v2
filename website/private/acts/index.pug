@@ -55,7 +55,11 @@ block content
                     option Yes
                     option No
               tr(v-for="act in filteredActs")
-                td.text-right {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : '👻'}}
+                td.text-right
+                  | {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : '👻'}}
+                  | &nbsp;
+                  a(:href="'/confirmation/' + act._id") link
+
                 td
                   a(@click.prevent="clicky(act)" href="#" data-toggle="modal" data-target="#act-modal") {{act.name}}
                 td {{act.showType.join(', ')}}

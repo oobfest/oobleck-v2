@@ -9,47 +9,6 @@ router.get('/', (request, response)=> {
   response.render('public', {alt: true})
 })
 
-router.get('/accept/:submissionId', async (request, response, next)=> {
-  let submissionId = request.params.submissionId
-  let submission = await submissionModel.read(submissionId)
-  if(submission.showType.includes('Standup')) response.render('public/act-submission-confirmation', {act: submission})
-  else {
-    let shows = await showModel.read()
-    let dates = shows.filter(s=> s.acts.filter(a=> String(a._id) == String(submission._id)).length > 0)
-    let days = ""
-    if (dates.length > 0) {
-      days = convertDay(dates[0].day)
-      if(dates.length > 1) days += " and " + convertDay(dates[1].day)
-    }
-    response.render('public/act-submission-confirmation', {act: submission, days})
-  }
-})
-
-function convertDay(day) {
-  switch(day) {
-    case "Monday": return "Monday, September 3rd"
-    case "Tuesday": return "Tuesday, August 28th"
-    case "Wednesday": return "Wednesday, August 29th"
-    case "Thursday": return "Thursday, August 30th"
-    case "Friday": return "Friday, August 31st"
-    case "Saturday": return "Saturday, September 1st"
-    case "Sunday": return "Sunday, September 2nd"
-  }
-}
-
-router.post('/accept/:submissionId', async (request, response, next)=> {
-  let submissionId = request.params.submissionId
-  let confirmationStatus = request.body['confirmation-status']
-
-  // set confirmation status of submission
-  let submission = await submissionModel.read(submissionId)
-  submission.confirmationStatus = confirmationStatus
-  let savedSubmission = await submissionModel.update(submissionId, submission)
-
-  // Then
-  response.redirect(savedSubmission._id)
-})
-
 
 router.get('/set-password/:id/:key', async (request, response, next)=> {
   let key = request.params.key
@@ -79,11 +38,6 @@ router.post('/set-password/', async (request, response)=> {
       next(error)
     }
   }
-})
-
-router.get('/edit-application/:submissionId', (request, response)=> {
-  let submissionId = request.params.submissionId
-  response.render('public/act-submission-edit', {submissionId})
 })
 
 router.get('/apply', (request, response)=> {
@@ -134,5 +88,11 @@ router.post('/stripe', async (request, response)=> {
 // Login and Logout pages
 let loginRouter = require('./login/router')
 router.use(loginRouter)
+
+let actSubmissionConfirmationRouter = require('./act-submission-confirmation/router')
+router.use(actSubmissionConfirmationRouter)
+
+let actSubmissionEditRouter = require('./act-submission-edit/router')
+router.use(actSubmissionEditRouter)
 
 module.exports = router

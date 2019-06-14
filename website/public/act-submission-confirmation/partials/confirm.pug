@@ -1,0 +1,33 @@
+p Congratulations on getting into this year's Out of Bounds!
+p Please confirm your availability:
+ul
+  if act.availability.includes('tuesday')
+    li Tuesday, August 27th
+  if act.availability.includes('wednesday')
+    li Wednesday, August 28th
+  if act.availability.includes('thursday')
+    li Thursday, August 29th
+  if act.availability.includes('friday')
+    li Friday, August 30th
+  if act.availability.includes('saturday')
+    li Saturday, August 31st
+  if act.availability.includes('sunday')
+    li Sunday, September 1st
+  if act.availability.includes('monday')
+    li Monday, September 2nd
+
+p  Please confirm by&nbsp;
+  strong June 19th
+  |  or your spot will be forfeited. Cancelling your attendance
+  strong  after June 19th
+  |  will result in a two-year ban from Out of Bounds.
+
+p If your availability has changed please note that this may affect your ability to be in the festival.
+
+form(action="/confirmation/"+act._id method="POST").text-center
+  .form-group
+    button.btn.btn-lg.btn-primary(type="submit" name="confirmation-status" value="yes") Commit to Availability
+  .form-group
+    button.btn.btn-lg.btn-secondary(type="submit" name="confirmation-status" value="reschedule") Change Availability
+  .form-group
+    button.btn.btn-lg.btn-danger(type="submit" name="confirmation-status" value="no") Cancel Festival Attendance

@@ -2,26 +2,123 @@ extends ../../_layout
 block content
   .container-fluid
     .row#app
-      .col-md-8.mx-auto.pb-5.mt-5
+      .col-md-6.mx-auto.pb-5.mt-5(v-if="updated")
         .box-head.box-head-accent-oob
+        .box-block
+          p Your submission has been updated!
+          .text-center
+            button.btn.btn-lg.btn-primary(onClick="window.location.reload()") Update Again
+      .col-md-8.mx-auto.pb-5.mt-5(v-else)
+        .box-head.box-head-accent-oob
+        .box-block(v-if="updated")
+          p Your submission has been updated!
         .box-block(v-if="found")
-          h3 {{submission.name}}
-          p(v-show="found") Submitted on {{Date.parse(submission.submissionDate)}}
+          h2 {{submission.name}}
 
-          include ../act-submission-form/01-act-details
-          include ../act-submission-form/02-primary-location
-          include ../act-submission-form/03-image-upload
-          include ../act-submission-form/04-personnel
-          include ../act-submission-form/05-contact-information
-          include ../act-submission-form/06-performance-requirements
-          include ../act-submission-form/07-video-link
-          include ../act-submission-form/08-social-media
-          include ../act-submission-form/09-availability
-          include ../act-submission-form/10-travel-agreement
+        .box-block.box-bt
+          h3.mb-4 Act Details
+          div(v-show="updated==false")
+            .box-block(v-show="validationErrors.length > 0")
+              .alert.alert-danger
+                h4#errors.alert-heading Required Fields Missing
+                ul
+                    li(v-for="validationError in validationErrors") {{validationError}}
 
-          .box-block.box-bt
-            .text-center
-              button.btn.btn-lg.btn-primary(@click="submit" type="button") Update
+
+          .form-group
+            label.col-form-label(for="act-name") Group or Performer Name
+            input#act-name.form-control(type="text" required autofocus name="act-name" maxlength="280" v-model.trim="submission.name" disabled)
+          .form-group
+            label.col-form-label(for="show-title") Show Title
+            small.form-text.text-muted Only fill this out if your show title should be different from your group or performer name.
+            input#show-title.form-control(type="text" required autofocus name="show-title" maxlength="280" v-model.trim="submission.showTitle")
+          .form-group
+            label.col-form-label.required-field(for="public-description") Public act description
+            small.form-text.text-muted This content will be published on our website and programs. Use third person active voice, e.g. "Miller &amp; Lies is..."
+              a(href="#" @click.prevent="seeExample = !seeExample") See an example
+            small.form-text.font-italic(v-show="seeExample") "Miller &amp; Lies is a comedy duo that performs a single story with awkward, emotionally vulnerable oddball characters. They've been doing improv together for ten years. Come hang with them and feel your feelings."
+            textarea#public-description.form-control(maxlength="1400" name="public-description" required v-model="submission.publicDescription")
+        .box-block.box-bt
+          h3 Primary Location
+          .form-group
+            include ../act-submission-form/primary-location/countries-dropdown
+          .form-group(v-if="submission.country == 'US'")
+            include ../act-submission-form/primary-location/states-dropdown
+          .form-group(v-else)
+            label.col-form-label(for="province") State / Territory / Province
+            input#province.form-control(type="text" name="province" maxlength="280" v-model="submission.state")
+          .form-group
+            label.col-form-label.required-field(for="city") City
+            input#city.form-control(type="text" name="city" required maxlength="280" v-model="submission.city")
+          .form-group
+            label.col-form-label(for="home-theater") What venue, theater or club are you associated with?
+            small.form-text.text-muted Leave blank if not applicable.
+            small.form-text.text-muted Just a single name is needed. Please do not write a short story about how and why no one place truly represents you.
+            input#home-theater.form-control(type="text" name="home-theater" maxlength="280" v-model="submission.home")
+
+        .box-block.box-bt
+          h3 Image Upload
+          p Accepted acts will have their submitted photo used for the festival website, trading cards and programs.
+          h4 Image Criteria
+          ul
+            li Image should be very large,
+              em at least
+              |  600 &times; 600 pixels
+            li The uploaded file size needs to be under 10MB (use JPEG!)
+            li Photos preferred; graphics or logos are fine but&nbsp;
+              em no text
+              | .
+
+          input#image-url(type="hidden" name="image-url" v-model="submission.image.url")
+          input#delete-image-url(type="hidden" name="delete-image-url" v-model="submission.image.deleteUrl")
+
+          .custom-file(v-show="!submission.image.processed")
+            input#image-upload-input.custom-file-input(type="file" accept="image/*" @change="imageUpload")
+            label.custom-file-label.reqiured-field(for="file-input") Select Image
+
+          p.form-text
+            em Image hosting powered by&nbsp;
+              a(href="https://imgur.com/" target="_blank") Imgur
+
+          .progress-block(v-show="!submission.image.processed")
+            .progress(v-show="submission.image.progress > 0")
+              .progress-bar.bg-primary(:style="{width: submission.image.progress + '%'}")
+            p(v-show="submission.image.progress == 100") Waiting for response from Imgur...
+
+          .box-banner(v-show="submission.image.processed")
+            img#image-preview.box-banner-image(:src="submission.image.url" alt="Image preview")
+
+          p.text-right.mt-2(v-show="submission.image.processed")
+            a.btn.btn-danger(:href="submission.image.deleteUrl" target="_blank" @click="removeImage") Delete
+
+        include ../act-submission-form/04-personnel
+        include ../act-submission-form/05-contact-information
+
+        .box-block.box-bt(v-if="!isStandup")
+          h3 Performance Requirements&nbsp;
+            small (Improv &amp; Sketch Only)
+          .form-group
+            label.col-form-label(for="special-requirements") What are the essential requirements you'll need from us for your act? Examples include video projection, sound effects, props (that you can't bring yourself) furniture and equipment. Please be specific!
+            textarea#special-requirements.form-control(maxlength="1500" name="special-requirements" rows=4 v-model="submission.specialRequirements")
+          .form-group
+            .custom-control.custom-checkbox
+              input#no-food.custom-control-input(type="checkbox" value="true" name="no-food" v-model="submission.notMessy")
+              label.custom-control-label(for="no-food") This show does not include food, liquid or anything else that will make a mess on stage.
+          .form-group
+            .custom-control.custom-checkbox
+              input#musician-required-checkbox.custom-control-input(type="checkbox" value="musician-required" v-model="musicianRequired")
+              label.custom-control-label(for="musician-required-checkbox") We require a musician and will not be bringing our own.
+          .form-group(v-show="musicianRequired")
+            label.col-form-label(for="musician-needs") What are your musician needs?
+            input#musician-needs.form-control(type="text" name="musician-needs" maxlength=1400 v-model="submission.musicianNeeds")
+
+
+
+        include ../act-submission-form/08-social-media
+
+        .box-block.box-bt
+          .text-center
+            button.btn.btn-lg.btn-primary(@click="submit" type="button") Update
 
   script.
 
@@ -34,7 +131,7 @@ block content
         videoUrlKey: 0,
         personnelKey: 0,
         uploadState: 0,
-        submitted: false,
+        updated: false,
         validationErrors: [],
         junk: 0,
         musicianRequired: false,
@@ -43,10 +140,7 @@ block content
           id: null,
           name: "",
           showTitle: "",
-          showType: [],
-          privateDescription: "",
           publicDescription: "",
-          accolades: "",
           country: 'US',
           state: "TX",
           city: "",
@@ -58,26 +152,18 @@ block content
             role: "Performer",
             attending: true,
           },
-          paid: false,
           personnel: [],
-          minimumLength: 5,
-          maximumLength: 60,
           specialRequirements: "",
           musicianNeeds: "",
           notMessy: false,
-          videoUrl: '',
-          extraVideoUrls: [],
-          videoInfo: "",
           image: {
-            processed: false,
+            processed: true,
             progress: 0,
             id: null,
             url: null,
             deleteUrl: null
           },
           socialMedia: [],
-          availability: [],
-          travelAgreement: ''
         }
       }},
       computed: {
@@ -85,7 +171,7 @@ block content
           return this.submission.personnel.length > 2 ? 4500 : 2500
         },
         isStandup() {
-          return this.submission.showType.includes('Standup')
+          return this.submission.showType && this.submission.showType.includes('Standup')
         }
       },
       methods: {
@@ -144,19 +230,11 @@ block content
           let self = this
           self.validationErrors = self.validate()
 
-          // Format Video URLs
-          let data = self.submission
-          data.videoUrls = []
-          data.videoUrls.push(data.videoUrl)
-          for(let url of data.extraVideoUrls) {
-            data.videoUrls.push(url.value)
-          }
-
           if(self.validationErrors.length == 0) {
             axios
-              .post('/api/act-submissions', self.submission)
+              .put('/api/act-submissions/' + self.submission._id, self.submission)
               .then((response)=> {
-                self.submitted = true
+                self.updated = true
                 self.submission.id = response.data._id
               })
               .catch((error)=> {
@@ -257,11 +335,13 @@ block content
       },
       created() {
         let self = this
-        axios.get('/api/act-submissions/edit/#{submissionId}')
+        axios.get('/api/act-submissions/edit-public/#{submissionId}')
           .then((response)=> {
             if(response.data != null) {
               self.found = true
               self.submission = response.data
+              if(self.submission.image.id) self.submission.image.processed = true
+              if(self.submission.musicianNeeds) self.musicianRequired = true
             }
           })
           .catch((error)=> {

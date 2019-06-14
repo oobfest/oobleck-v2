@@ -7,7 +7,7 @@ router.route('/')
   .get(isLoggedIn, controller.read)
   .post(controller.create)
 
-router.route('/edit/:id')
+router.route('/edit-public/:id')
   .get(controller.getPublic)
 
 router.route('/promo-code/')
@@ -18,12 +18,11 @@ router.route('/review/:userId')
 
 router.route('/reviews/:userId/:submissionId')
   .post(isLoggedIn, controller.createReview)
-  //.put(isLoggedIn, conttroller.updateReview)
   .delete(isLoggedIn, controller.removeReview)
 
 router.route('/:id')
   .get(isLoggedIn, controller.read)
-  .put(isLoggedIn, controller.update)
+  .put(controller.update)
   .delete(isLoggedIn, controller.destroy)
 
 

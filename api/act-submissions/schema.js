@@ -93,6 +93,10 @@ let SubmissionSchema = mongoose.Schema({
     required: false,
     type: String
   },
+  musicianNeeds: {
+    required: false,
+    type: String
+  },
   notMessy: {
     required: true,
     type: Boolean
@@ -117,6 +121,23 @@ let SubmissionSchema = mongoose.Schema({
     required: true,
     type: [{
       required: true,
+      type: String,
+      lowercase: true,
+      enum: [
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+        'monday'
+      ]
+    }],
+  },
+  newAvailability: {
+    required: false,
+    default: null,
+    type: [{
       type: String,
       lowercase: true,
       enum: [

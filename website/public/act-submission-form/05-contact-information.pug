@@ -14,11 +14,11 @@
   .form-group.row
     label.col-form-label.col-2.required-field(for="primary-contact-role") Role
     select#primary-contact-role.form-control.col-10(name="primary-contact-role" v-model="submission.contact.role")
-      option Performer
-      option Crew
-      option Director
-      option Producer
-      option Other
+      option(value="performer") Performer
+      option(value="crew") Crew
+      option(value="director") Director
+      option(value="producer") Producer
+      option(value="other") Other
   .form-group.row
     label.col-form-label.col-2 Attending
     select.form-control.col-10(name="primary-contact-attending" v-model="submission.contact.attending")

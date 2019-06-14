@@ -1,0 +1,110 @@
+form(action="/reschedule/"+act._id method="POST")
+  p Please update your availability. We will try our best to accommodate.
+
+  h3 Original Availability
+  ul
+    if act.availability.includes('tuesday')
+      li Tuesday, August 27th
+    if act.availability.includes('wednesday')
+      li Wednesday, August 28th
+    if act.availability.includes('thursday')
+      li Thursday, August 29th
+    if act.availability.includes('friday')
+      li Friday, August 30th
+    if act.availability.includes('saturday')
+      li Saturday, August 31st
+    if act.availability.includes('sunday')
+      li Sunday, September 1st
+    if act.availability.includes('monday')
+      li Monday, September 2nd
+
+  if act.newAvailability
+    h3 Updated Availability
+    ul
+      if act.newAvailability.includes('tuesday')
+        li Tuesday, August 27th
+      if act.newAvailability.includes('wednesday')
+        li Wednesday, August 28th
+      if act.newAvailability.includes('thursday')
+        li Thursday, August 29th
+      if act.newAvailability.includes('friday')
+        li Friday, August 30th
+      if act.newAvailability.includes('saturday')
+        li Saturday, August 31st
+      if act.newAvailability.includes('sunday')
+        li Sunday, September 1st
+      if act.newAvailability.includes('monday')
+        li Monday, September 2nd
+    hr
+
+  h3 Update Availability
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-tuesday.custom-control-input(
+        type="checkbox"
+        value="tuesday"
+        name="newAvailability[]"
+        checked=(act.newAvailability && act.newAvailability.includes('tuesday')) || (!act.newAvailability && act.availability.includes('tuesday'))
+      )
+      label.custom-control-label(for="available-tuesday") Tuesday, August 27th
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-wednesday.custom-control-input(
+        type="checkbox"
+        value="wednesday"
+        name="newAvailability[]"
+        checked=(act.newAvailability && act.newAvailability.includes('wednesday')) || (!act.newAvailability && act.availability.includes('wednesday'))
+      )
+      label.custom-control-label(for="available-wednesday") Wednesday, August 28th
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-thursday.custom-control-input(
+        type="checkbox"
+        value="thursday"
+        name="newAvailability[]"
+        checked=(act.newAvailability && act.newAvailability.includes('thursday')) || (!act.newAvailability && act.availability.includes('thursday'))
+      )
+      label.custom-control-label(for="available-thursday") Thursday, August 29th
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-friday.custom-control-input(
+        type="checkbox"
+        value="friday"
+        name="newAvailability[]"
+        checked=(act.newAvailability && act.newAvailability.includes('friday')) || (!act.newAvailability && act.availability.includes('friday'))
+      )
+      label.custom-control-label(for="available-friday") Friday, August 30th
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-saturday.custom-control-input(
+        type="checkbox"
+        value="saturday"
+        name="newAvailability[]"
+        checked=(act.newAvailability && act.newAvailability.includes('saturday')) || (!act.newAvailability && act.availability.includes('saturday'))
+      )
+      label.custom-control-label(for="available-saturday") Saturday, August 31st
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-sunday.custom-control-input(
+        type="checkbox"
+        value="sunday"
+        name="newAvailability[]"
+        checked=(act.newAvailability && act.newAvailability.includes('sunday')) || (!act.newAvailability && act.availability.includes('sunday'))
+      )
+      label.custom-control-label(for="available-sunday") Sunday, September 1st
+  .form-group
+    .custom-control.custom-checkbox
+      input#available-monday.custom-control-input(
+        type="checkbox"
+        value="monday"
+        name="newAvailability[]"
+        checked=(act.newAvailability && act.newAvailability.includes('monday')) || (!act.newAvailability && act.availability.includes('monday'))
+      )
+      label.custom-control-label(for="available-monday") Monday, September 2nd
+
+  .form-group.text-center
+    button.btn.btn-lg.btn-primary(type="submit") Update Availability
+
+form(action="/confirmation/"+act._id method="POST")
+  .form-group.text-center
+    button.btn.btn-lg.btn-secondary(type="submit" name="confirmation-status" value="cancel") Undo Reschedule Request
