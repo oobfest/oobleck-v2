@@ -55,10 +55,9 @@ block content
                     option Yes
                     option No
               tr(v-for="act in filteredActs")
-                td.text-right
-                  | {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : '👻'}}
-                  | &nbsp;
-                  a(:href="'/confirmation/' + act._id") link
+                td.text-center
+                  a(:href="'/confirmation/' + act._id" target="_blank")
+                    | {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : '👻'}}
 
                 td
                   a(@click.prevent="clicky(act)" href="#" data-toggle="modal" data-target="#act-modal") {{act.name}}
@@ -182,7 +181,7 @@ block content
         // TODO:
         // Get all *accepted* acts
         axios
-          .get('/api/act-submissions/')
+          .get('/api/acts/')
           .then(function(response) {
             self.acts = response.data.filter(a=> a.paid)
             // TODO: For getting the performers, filter only acts that have confirmed
