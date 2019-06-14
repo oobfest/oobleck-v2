@@ -44,7 +44,15 @@ script#act-modal-template(type="text/template")
             li.list-inline-item.code(v-show="act.availability.includes('saturday')") Saturday
             li.list-inline-item.code(v-show="act.availability.includes('sunday')") Sunday
             li.list-inline-item.code(v-show="act.availability.includes('monday')") Monday
-
+          h3(v-show="act.newAvailability") New Availability
+          ul.list-inline(v-if="act.newAvailability")
+            li.list-inline-item.code(v-show="act.newAvailability.includes('tuesday')") Tuesday
+            li.list-inline-item.code(v-show="act.newAvailability.includes('wednesday')") Wednesday
+            li.list-inline-item.code(v-show="act.newAvailability.includes('thursday')") Thursday
+            li.list-inline-item.code(v-show="act.newAvailability.includes('friday')") Friday
+            li.list-inline-item.code(v-show="act.newAvailability.includes('saturday')") Saturday
+            li.list-inline-item.code(v-show="act.newAvailability.includes('sunday')") Sunday
+            li.list-inline-item.code(v-show="act.newAvailability.includes('monday')") Monday
 
           h3 Set Length
           p Minimum {{act.minimumLength}}, Maximum {{act.maximumLength}}
