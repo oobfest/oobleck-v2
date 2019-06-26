@@ -28,6 +28,7 @@ block content
               tr
                 th(style="width:180px")
                   select.form-control(v-model="filterActsByConfirmation")
+                    option(value='confirmed') Confirmed
                     option(value='all') All
                     option(value='yes') ✅ Accepted
                     option(value='reschedule') 🚸 Reschedule
@@ -38,6 +39,7 @@ block content
                 th
                   select.form-control(v-model="filterActsByType")
                     option(selected value="") All
+                    option Not Standup
                     option Improv
                     option Sketch
                     option Standup
@@ -119,7 +121,7 @@ block content
           acts: [],
           performers: [],
           currentAct: {name: "YAY", contact:{}, personnel: [], socialMedia:[], videoUrls: [], image:{}, availability:[]},
-          filterActsByConfirmation: 'all',
+          filterActsByConfirmation: 'confirmed',
           filterActsByName: '',
           filterActsByType: '',
           filterActsByCity: '',
@@ -133,10 +135,13 @@ block content
       computed: {
         filteredActs() {
           let filteredActs = this.acts
-          if (this.filterActsByConfirmation === 'null') filteredActs = filteredActs.filter(a=> a.confirmationStatus == null)
+
+          if (this.filterActsByConfirmation === 'confirmed') filteredActs = filteredActs.filter(a=> a.confirmationStatus == 'yes' || a.confirmationStatus == 'reschedule')
+          else if (this.filterActsByConfirmation === 'null') filteredActs = filteredActs.filter(a=> a.confirmationStatus == null)
           else if (this.filterActsByConfirmation !== 'all') filteredActs = filteredActs.filter(a=> a.confirmationStatus === this.filterActsByConfirmation)
           if (this.filterActsByCity !== '') filteredActs = filteredActs.filter(a=> a.city.match(new RegExp(this.filterActsByCity, 'i')))
-          if (this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType.includes(this.filterActsByType))
+          if (this.filterActsByType === 'Not Standup') filteredActs = filteredActs.filter(a=> !a.showType.includes('Standup'))
+          else if (this.filterActsByType !== '') filteredActs = filteredActs.filter(a=> a.showType.includes(this.filterActsByType))
           if (this.filterActsByName !== '') filteredActs = filteredActs.filter(a=> a.name.match(new RegExp(this.filterActsByName, 'i')))
           if (this.filterActsByHeadliner == 'Yes') filteredActs = filteredActs.filter(a=> a.headliner)
           if (this.filterActsByHeadliner == 'No') filteredActs = filteredActs.filter(a=> !a.headliner) // Works for 'undefined'
