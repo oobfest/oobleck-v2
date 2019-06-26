@@ -1,10 +1,10 @@
 script#workshop-template(type="text/template")
   .box.workshop
-    a.delete(v-show="$root.editMode" href="#" @click.prevent="removeWorkshop(workshop._id)") remove workshop
-    h4.time {{workshop.time | time}}
+    a.delete(v-show="$root.editMode" href="#" @click.prevent="removeWorkshop(workshop._id)") remove
+    h4.time {{workshop.time | time}} to {{workshop.time | endTime}}
     p.font-weight-bold Workshop
     p {{workshop.name}}
-    p With
+    p With&nbsp;
       span.font-italic {{workshop.teacher}}
 
 script.
@@ -17,6 +17,12 @@ script.
         if(time=="20") return "12:00pm"
         if(time=="30") return "1:00pm"
         if(time=="40") return "3:00pm"
+      },
+      endTime(time) {
+        if(time=="10") return "2:00pm"
+        if(time=="20") return "3:00pm"
+        if(time=="30") return "4:00pm"
+        if(time=="40") return "6:00pm"
       }
     },
     methods: {
