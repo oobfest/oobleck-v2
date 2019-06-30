@@ -18,7 +18,7 @@ nav#dash-nav.dash-nav.dash-nav-accent-2
 
 		if isStaff || isAdmin
 
-			.dash-nav-dropdown
+			//.dash-nav-dropdown
 				a.dash-nav-item.dash-nav-dropdown-toggle(href="#!")
 					span.far.fa-star.fa-lg.fa-fw.fa-bounce &nbsp;
 					|  Acts
@@ -26,6 +26,10 @@ nav#dash-nav.dash-nav.dash-nav-accent-2
 					a.dash-nav-item(href="/act-submissions") Submissions
 					a.dash-nav-item(href="/act-submissions/stamp") Approve / Reject
 					a.dash-nav-item(href="/acts") Status
+
+			a.dash-nav-item(href="/acts")
+				span.far.fa-star.fa-lg.fa-fw.fa-bounce &nbsp;
+				|  Acts
 
 			//a.dash-nav-item(href="/badges")
 				span.far.fa-map.fa-lg.fa-fw &nbsp;
