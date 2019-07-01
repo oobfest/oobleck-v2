@@ -64,8 +64,6 @@ async function sendConfirmationEmails() {
     let recipient =  act.contact.email
     let subject = "OoB Show Days, Perks, Social, and Hotel Discount"
     let message = dateConfirmationTemplate({actName, days})
-    nodemailer.sendEmailFromProducers(recipient, subject, message)
+    //nodemailer.sendEmailFromProducers(recipient, subject, message)
   }
 }
-
-sendConfirmationEmails()
