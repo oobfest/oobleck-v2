@@ -44,7 +44,9 @@ async function sendConfirmationEmails() {
   console.log("MEOW")
   await setup()
   let submissions = await actSubmissionModel.read()
-  let acts = submissions.filter(s=> s.stamp == 'in' && (s.confirmationStatus == 'yes' || s.confirmationStatus == 'reschedule'))
+  let acts = submissions.filter(s=>
+    s.stamp == 'in' && !s.showType.includes('Standup') &&
+    (s.confirmationStatus == 'yes' || s.confirmationStatus == 'reschedule'))
   let shows = await showModel.read()
   for (act of acts) {
     let actName = act.name
