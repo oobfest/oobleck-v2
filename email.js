@@ -6,6 +6,7 @@ let actSubmissionModel = require('./api/act-submissions/model')
 let showModel = require('./api/shows/model')
 let acceptedEmailTemplate = require('./email-templates/compile')('acceptance')
 let rejectedEmailTemplate = require('./email-templates/compile')('rejection')
+let dateConfirmationTemplate = require('./email-templates/compile')('date-confirmation')
 let nodemailer = require('./utilities/nodemailer')
 
 async function setup() {
@@ -41,7 +42,6 @@ async function acceptanceAndRejectionEmails() {
 }
 
 async function sendConfirmationEmails() {
-  console.log("MEOW")
   await setup()
   let submissions = await actSubmissionModel.read()
   let acts = submissions.filter(s=>
@@ -50,7 +50,6 @@ async function sendConfirmationEmails() {
   let shows = await showModel.read()
   for (act of acts) {
     let actName = act.name
-    let email = act.contact.email
     let days = []
 
     // Get days they're performing
@@ -62,7 +61,10 @@ async function sendConfirmationEmails() {
       }
     }
 
-    console.log(actName, email, days)
+    let recipient =  act.contact.email
+    let subject = "OoB Show Days, Perks, Social, and Hotel Discount"
+    let message = dateConfirmationTemplate({actName, days})
+    nodemailer.sendEmailFromProducers(recipient, subject, message)
   }
 }
 
