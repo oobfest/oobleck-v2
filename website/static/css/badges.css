@@ -1,0 +1,45 @@
+.weekend {
+  font-size: 24px;
+  color: white;
+}
+.card {
+  border-radius: 5px;
+}
+.card-head {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.bg-blue {
+  background-color: rgba(20, 128, 140, 0.75)
+}
+.bg-blue .card-head {
+  background-color: #14808c;
+}
+.bg-gold {
+  background-color: rgba(249, 160, 27, 0.5)
+}
+.bg-gold.header {
+  background-color: #f9a01b;
+}
+.bg-red {
+  background-color: rgba(239, 76, 34, 0.2);
+}
+.bg-red .card-head {
+  background-color: #ef4c22
+}
+.price {
+  font-size: 80px;
+  font-weight: 300;
+  color: rgb(249, 160, 27);
+}
+.dollar-sign {
+  font-size: 40px;
+}
+.tiny {
+  margin: 0 0 0 12px;
+  font-size: 32px;
+}
+.max-width {
+  margin: 0 auto;
+  max-width: 500px;
+}

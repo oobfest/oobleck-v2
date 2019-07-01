@@ -1,0 +1,129 @@
+div.text-center
+  .row.justify-content-md-center
+    .col-md-10
+      .card-deck
+        .card.bg-blue
+          .card-head
+            h2.m-3 All-Access Badge
+          .card-body
+            .row
+              .col-md.align-self-center
+                img.img-fluid.img-thumbnail(src="~/assets/images/promo/immigrants.jpg")
+              .col.align-self-center(v-show="cardState==1")
+                .card-title
+                  h3.price
+                    sup.dollar-sign $
+                    span 129
+                p.font-italic * Special "early bird" price for a limited time
+                ul
+                  li All Shows (Including Headliners)
+                  li Reserve Your Seat Ahead of Time
+                  li After-Parties
+                  li Food and Drink Discounts
+
+                button.btn.btn-primary.btn-lg(type="button" @click="cardState++") Buy Now
+              .col(v-show="cardState==2").text-left.align-self-center
+                .max-width
+                  .form-group
+                    label(for="name") Name
+                    input#name.form-control(type="text" v-model="badge.name")
+                  .form-group
+                    label(for="email") Email
+                    input#email.form-control(type="email" v-model="badge.email")
+                  .form-group
+                    label(for="phone") Phone Number
+                    input#phone.form-control(type="tel" v-model="badge.phone")
+                  .form-group
+                    label(for="quantity") Quantity
+                    select#quantity.custom-select(name="quantity" v-model="badge.quantity")
+                      option(selected) 1
+                      option 2
+                      option 3
+                      option 4
+                      option 5
+                  .row
+                    .col.text-right
+                      .form-group
+                        #paypal-button
+                    .col.text-left
+                      button.btn.btn-secondary(type="button" @click="cardState--") Cancel
+              .col.align-self-center(v-show="cardState==3")
+                p Thank you for your purchase!
+                p An email has been sent to
+                  span.code {{badge.email}}
+  .row.justify-content-md-center
+    .col-md-10
+      .card-deck.mt-5
+        .card.bg-blue
+          .card-head
+            h2.m-3 Performer Upgrade
+          .card-body
+            .row
+              .col.align-self-center(v-show="state==0")
+                .card-title
+                  h3.price
+                    sup.dollar-sign $
+                    span 69
+                    span.tiny full-week
+                  h3.price
+                    sup.dollar-sign $
+                    span 45
+                    span.tiny weekend-only
+                ul
+                  li Upgrade your Performer badge to an All-Access badge
+                  li For festival performers who want to reserve tickets
+                  li Use the email included in your act's submission to verify
+                  li Purchase a special “Weekend Upgrade” for Fri – Mon only
+                .form-group
+                  button.btn.btn-primary.btn-lg(type="button" @click="performerBadge.weekendOnly=true; state++") Weekend Upgrade
+                .form-group
+                  button.btn.btn-primary.btn-lg(type="button" @click="performerBadge.weekendOnly=false; state++") Full Week Upgrade
+              .col.align-self-center(v-show="state==1")
+                .max-width
+                  .form-group
+                    label(for="performer-email") Confirm Email
+                    input#performer-email.form-control(type="text" v-model="performerBadge.email")
+                  button.btn.btn-secondary.btn-lg(type="button" @click="state--") Cancel
+                  | &nbsp;
+                  button.btn.btn-primary.btn-lg(:disabled="performerBadge.email==''" type="button" @click="confirmPerformerEmail") Confirm Email Address
+              .col.align-self-center(v-show="state==2")
+                p We did not find your email. Please try again!
+                button.btn.btn-secondary.btn-lg(type="button" @click="state--") Try Again
+                p If you continue to have problems, email
+                  span.code(style="white-space:nowrap") box-office@oobfest.com
+                  |  with your name, email and the act you are performing in.
+              .col.align-self-center.text-left(v-show="state==3")
+                .max-width
+                  p Email confirmed!
+                  .form-group
+                    label(for="performer-name") Name
+                    input#performer-name.form-control(type="text" v-model="performerBadge.name")
+                  .form-group
+                    label(for="performer-phone") Phone Number
+                    input#performer-phone.form-control(type="tel" v-model="performerBadge.phone")
+                  .row
+                    .col.text-right
+                      .form-group
+                        #paypal-button-2
+                    .col.text-left
+                      button.btn.btn-secondary(type="button" @click="state-=2") Cancel
+              .col.align-self-center(v-show="state==4")
+                p Thank you for your purchase!
+                p An email has been sent to
+                  span.code {{performerBadge.email}}
+
+              .col-md.align-self-center
+                img.img-fluid.img-thumbnail(src="~/assets/images/promo/echo-lake.jpg")
+  .row.justify-content-md-center
+    .col-md-10
+      .card-deck.mt-5
+        .card.bg-blue.mb-5
+          .card-head
+            h2.m-3 Individual Tickets
+          .card-body
+            .row
+              .col.align-self-center
+                p Individual tickets for shows can be bought directly from the
+                  a(href="/schedule" style="text-decoration: underline; color: #f9a01b;") schedule
+                  |  page.
+  script(src="/js/badges.js")

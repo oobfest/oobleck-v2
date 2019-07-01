@@ -22,7 +22,7 @@ script#add-badge-modal-template(type="text/template")
               option(value="all") All-Access
               option(value="performer-full-upgrade") Performer Upgrade
               option(value="performer-weekend-upgrade") Performer Weekend Upgrade
-              option(value="volunteer") 5+ Volunteer 
+              option(value="volunteer") 5+ Volunteer
               option(value="staff") Staff
               option(value="industry") Industry
           .form-group
@@ -51,7 +51,7 @@ script.
       getValidationError() {
         if(this.badge.name == '') return "Name required"
         if(this.badge.email == '') return "Email required"
-        if(this.badge.phone == '') return "Phone number required"
+        //if(this.badge.phone == '') return "Phone number required"
         return false
       },
       createBadge() {
@@ -70,7 +70,7 @@ script.
             alert("Error creating badge :(")
             console.log(error)
             self.reset()
-          })        
+          })
       },
       reset() {
         this.badge.name = ''

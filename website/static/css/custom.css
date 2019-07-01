@@ -94,3 +94,14 @@ label.required-field:after {
 
 /* Make nav nicer */
 .dash-nav-accent-2 .dash-nav-dropdown.show { background-color: inherit; }
+
+
+
+/* Badges Page */
+.badge { color: white; background-color: #999999 }
+.badge.all { background-color: #377eb8 }
+.badge.performer-full-upgrade { background-color: #1f78b4 }
+.badge.performer-weekend-upgrade { background-color: #7570b3 }
+.badge.volunteer { background-color: #ff7f00 }
+.badge.staff { background-color: #4daf4a }
+.badge.industry { background-color: #a6761d }

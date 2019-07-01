@@ -8,6 +8,9 @@ let isLoggedIn = require('./is-logged-in')
 let isRole = require('./is-role')
 
 
+router.get('/badges', isLoggedIn, (request, response)=> {
+  response.render('private/badges')
+})
 
 router.get('/screener-submissions', isLoggedIn, (request, response)=> {
   response.render('private/screener-submissions')
