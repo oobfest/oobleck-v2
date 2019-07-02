@@ -1,3 +1,6 @@
+body {
+  font-size: 20px;
+}
 
 nav {
   font-family: 'gotham-book', sans-serif;
@@ -30,3 +33,11 @@ li.nav-item {
 .standup { color: #f04c23 }
 .improv  { color: #f9a11b }
 .variety { color: #6d8e3b }
+
+.code {
+  font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  color: rgb(249, 160, 27);
+  background-color: #211d1e;
+  padding: 5px;
+  border-radius: 6px;
+}

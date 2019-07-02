@@ -9,6 +9,7 @@ block content
     ul
       li Total Badges:
         span.code  {{totals.total}}
+        |  (Not including quantity)
       li Paid All-Access:
         span.code  {{totals.allAccessTotal}}
       li Performer Upgrades (Weekend/Full/Total):
@@ -43,7 +44,7 @@ block content
                   a(:href="badge.payment.receipt_url" target="_blank") {{badge.payment.id}}
               div(v-else)
                 p No payment information
-              //button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete Badge
+              button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete Badge
     .form-group
       button.btn.btn-primary(type="button" data-toggle="modal" data-target="#add-badge-modal") Add Badge
 
@@ -83,7 +84,7 @@ block content
               this.totals.allAccessTotal += badge.quantity
 
             // Performer Upgrade (full)
-            if(badge.type == 'performer-full-upgrade')
+            if(badge.type == 'performer-upgrade')
               this.totals.performerFullTotal++
 
             // Performer Upgrade (weekend-only)
@@ -98,7 +99,7 @@ block content
         getBadgeName(type) {
           if(type=='all') return "All-Access"
           if(type=='performer-weekend-upgrade') return "Weekend Upgrade"
-          if(type=='performer-full-upgrade') return "Performer All-Access"
+          if(type=='performer-upgrade') return "Performer All-Access"
           if(type=='staff') return "Staff"
           if(type=='industry') return "Industry"
           if(type=='volunteer') return "5+ Volunteer"

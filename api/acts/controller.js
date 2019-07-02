@@ -2,6 +2,18 @@ let model = require('./model')
 
 let controller = {
 
+  async validatePerformerEmail(request, response) {
+    try {
+      let email = request.body.email
+      let results = await model.validatePerformerEmail(email)
+      response.json(results)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on validatePerformerEmail()")
+    }
+  },
+
   async read(request, response) {
     try {
       // Optional 'id' parameter

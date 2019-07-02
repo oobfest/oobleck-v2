@@ -4,38 +4,35 @@ div.text-center
       .card-deck
         .card.bg-blue
           .card-head
-            h2.m-3 All-Access Badge
+            h2.m-3 Purchase All-Access Badge
           .card-body
             .row
               .col-md.align-self-center
-                img.img-fluid.img-thumbnail(src="~/assets/images/promo/immigrants.jpg")
-              .col.align-self-center(v-show="cardState==1")
+                img.img-fluid.img-thumbnail(src="/img/ggg.jpg")
+              .col.align-self-center(v-show="card1State==1")
+                p.font-italic.mb-0 Special "early bird" price for a limited time!
                 .card-title
                   h3.price
                     sup.dollar-sign $
-                    span 129
-                p.font-italic * Special "early bird" price for a limited time
+                    span 99*
                 ul
-                  li All Shows (Including Headliners)
+                  li Access to All Shows (Including Headliners)
                   li Reserve Your Seat Ahead of Time
-                  li After-Parties
+                  li Invitation to the After-Parties
                   li Food and Drink Discounts
 
-                button.btn.btn-primary.btn-lg(type="button" @click="cardState++") Buy Now
-              .col(v-show="cardState==2").text-left.align-self-center
+                button.btn.btn-primary.btn-lg(type="button" @click="card1State++; badge.type='all'; badge.weekendOnly=null") Buy Now
+              .col(v-show="card1State==2").text-left.align-self-center
                 .max-width
                   .form-group
-                    label(for="name") Name
+                    label(for="name") Full Name
                     input#name.form-control(type="text" v-model="badge.name")
-                  .form-group
-                    label(for="email") Email
-                    input#email.form-control(type="email" v-model="badge.email")
                   .form-group
                     label(for="phone") Phone Number
                     input#phone.form-control(type="tel" v-model="badge.phone")
                   .form-group
                     label(for="quantity") Quantity
-                    select#quantity.custom-select(name="quantity" v-model="badge.quantity")
+                    select#quantity.custom-select(name="quantity" v-model.number="badge.quantity")
                       option(selected) 1
                       option 2
                       option 3
@@ -44,22 +41,25 @@ div.text-center
                   .row
                     .col.text-right
                       .form-group
-                        #paypal-button
+                        button#stripe-button.btn.btn-lg.btn-primary(@click.prevent="stripeHandler") Pay with Stripe
                     .col.text-left
-                      button.btn.btn-secondary(type="button" @click="cardState--") Cancel
-              .col.align-self-center(v-show="cardState==3")
+                      button.btn.btn-secondary.btn-lg(type="button" @click="card1State--") Cancel
+                  .row
+                    .col.text-center
+                      img(src="/img/powered-by-stripe.svg" height="55px")
+              .col.align-self-center(v-show="card1State==3")
                 p Thank you for your purchase!
-                p An email has been sent to
+                p A confirmation email has been sent to&nbsp;
                   span.code {{badge.email}}
   .row.justify-content-md-center
     .col-md-10
       .card-deck.mt-5
         .card.bg-blue
           .card-head
-            h2.m-3 Performer Upgrade
+            h2.m-3 Purchase Performer Badge Upgrade
           .card-body
             .row
-              .col.align-self-center(v-show="state==0")
+              .col.align-self-center(v-show="card2State==0")
                 .card-title
                   h3.price
                     sup.dollar-sign $
@@ -70,51 +70,54 @@ div.text-center
                     span 45
                     span.tiny weekend-only
                 ul
-                  li Upgrade your Performer badge to an All-Access badge
                   li For festival performers who want to reserve tickets
+                  li Upgrade your Performer badge to an All-Access badge
                   li Use the email included in your act's submission to verify
                   li Purchase a special “Weekend Upgrade” for Fri – Mon only
                 .form-group
-                  button.btn.btn-primary.btn-lg(type="button" @click="performerBadge.weekendOnly=true; state++") Weekend Upgrade
+                  button.btn.btn-primary.btn-lg(type="button" @click="badge.type='performer-weekend-upgrade'; badge.quantity=1; badge.weekendOnly=true; card2State++") Weekend Upgrade
                 .form-group
-                  button.btn.btn-primary.btn-lg(type="button" @click="performerBadge.weekendOnly=false; state++") Full Week Upgrade
-              .col.align-self-center(v-show="state==1")
+                  button.btn.btn-primary.btn-lg(type="button" @click="badge.type='performer-upgrade'; badge.quantity=1; badge.weekendOnly=false; card2State++") Full Week Upgrade
+              .col.align-self-center(v-show="card2State==1")
                 .max-width
                   .form-group
-                    label(for="performer-email") Confirm Email
-                    input#performer-email.form-control(type="text" v-model="performerBadge.email")
-                  button.btn.btn-secondary.btn-lg(type="button" @click="state--") Cancel
+                    label(for="performer-email") Please confirm your email. Use the email address that was included on your submission form.
+                    input#performer-email.form-control(type="text" v-model="badge.email")
+                  button.btn.btn-primary.btn-lg(:disabled="badge.email==''" type="button" @click="validatePerformerEmail") Confirm Email Address
                   | &nbsp;
-                  button.btn.btn-primary.btn-lg(:disabled="performerBadge.email==''" type="button" @click="confirmPerformerEmail") Confirm Email Address
-              .col.align-self-center(v-show="state==2")
+                  button.btn.btn-secondary.btn-lg(type="button" @click="card2State--") Cancel
+              .col.align-self-center(v-show="card2State==2")
                 p We did not find your email. Please try again!
-                button.btn.btn-secondary.btn-lg(type="button" @click="state--") Try Again
-                p If you continue to have problems, email
+                button.btn.btn-secondary.btn-lg.mb-2(type="button" @click="card2State--") Try Again
+                p If you continue to have problems, email&nbsp;
                   span.code(style="white-space:nowrap") box-office@oobfest.com
                   |  with your name, email and the act you are performing in.
-              .col.align-self-center.text-left(v-show="state==3")
+              .col.align-self-center.text-left(v-show="card2State==3")
                 .max-width
                   p Email confirmed!
                   .form-group
-                    label(for="performer-name") Name
-                    input#performer-name.form-control(type="text" v-model="performerBadge.name")
+                    label(for="performer-name") Full Name
+                    input#performer-name.form-control(type="text" v-model="badge.name")
                   .form-group
                     label(for="performer-phone") Phone Number
-                    input#performer-phone.form-control(type="tel" v-model="performerBadge.phone")
+                    input#performer-phone.form-control(type="tel" v-model="badge.phone")
                   .row
                     .col.text-right
                       .form-group
-                        #paypal-button-2
+                        button#stripe-button-2.btn.btn-lg.btn-primary(@click.prevent="stripeHandler") Pay with Stripe
                     .col.text-left
-                      button.btn.btn-secondary(type="button" @click="state-=2") Cancel
-              .col.align-self-center(v-show="state==4")
+                      button.btn.btn-secondary.btn-lg(type="button" @click="card2State-=2") Cancel
+                  .row
+                    .col.text-center
+                      img(src="/img/powered-by-stripe.svg" height="55px")
+              .col.align-self-center(v-show="card2State==4")
                 p Thank you for your purchase!
-                p An email has been sent to
-                  span.code {{performerBadge.email}}
+                p A confirmation email has been sent to&nbsp;
+                  span.code {{badge.email}}
 
               .col-md.align-self-center
-                img.img-fluid.img-thumbnail(src="~/assets/images/promo/echo-lake.jpg")
-  .row.justify-content-md-center
+                img.img-fluid.img-thumbnail(src="/img/brendan-gay.jpg")
+  //.row.justify-content-md-center
     .col-md-10
       .card-deck.mt-5
         .card.bg-blue.mb-5
@@ -126,4 +129,3 @@ div.text-center
                 p Individual tickets for shows can be bought directly from the
                   a(href="/schedule" style="text-decoration: underline; color: #f9a01b;") schedule
                   |  page.
-  script(src="/js/badges.js")

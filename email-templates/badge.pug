@@ -1,0 +1,36 @@
+p #{name},
+
+p
+  | This is a confirmation email for the following:&nbsp;
+  i
+    | #{quantity}
+    if type == 'all' && quantity == 1
+      |  All-Access Badge
+    if type == 'all' && quantity > 1
+      |  All-Access Badges
+    if type == 'performer-weekend-upgrade'
+      |  Performer Badge Upgrade (Weekend Only)
+    if type == 'performer-upgrade'
+      |  Performer Badge Upgrade
+
+p Thank you for purchasing an Out of Bounds Festival badge! This means you get to reserve your ticket to as many shows as you want throughout the entire week.
+
+h3 How do I get my badge?
+p We do not mail out badges. Soon you'll be able to pick it up. We'll let you know when and where. You'll also be able to reserve tickets online once the schedule is published.
+
+h3 How do I reserve tickets?
+p You'll be able to reserve tickets online once the schedule has been published. You'll use the email address that this email was sent to.
+
+h3 Then what?
+p Just show up with your badge at least 5 minutes before show time! Your name and email will be listed on our box office sheet the day of the show. You'll be required to show us your badge to receive a ticket.
+
+h3 What if I'm late?
+p Unfortunately,&nbsp;
+  i if you do not show up at least 5 minutes before the show start time we will release your ticket to others on our wait-list.
+  |  If you plan on driving, please remember to factor in time it will take to park!
+
+p Issues with tickets, website or payment? Email box-office@oobfest.com
+
+p General thoughts or questions about shows, the festival, etc? Email hospitality@oobfest.com
+
+// p <a href="https://goo.gl/forms/lCNpPR68wMBbBRKn2">Please take our audience survey!</a> OoB is a non-profit and taking this survey will help us in accurate reporting to our current and potential funders and sponsors.

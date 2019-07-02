@@ -9,6 +9,9 @@ router.use(isLoggedIn)
 router.route('/')
   .get(controller.read)
 
+router.route('/validate-performer-email/')
+  .post(controller.validatePerformerEmail)
+
 router.route('/:id')
   .get(controller.read)
   .put(controller.update)
