@@ -181,6 +181,8 @@ let SubmissionSchema = mongoose.Schema({
     required: false,
     type: Boolean
   },
+
+  // in, out, reschedule
   stamp: {
     required: false,
     type: String

@@ -7,6 +7,7 @@ let router = express.Router()
 router.use(isLoggedIn)
 
 router.route('/')
+  .post(controller.create)
   .get(controller.read)
 
 router.route('/validate-performer-email/')

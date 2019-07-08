@@ -6,4 +6,8 @@ router.get('/', isLoggedIn, (request, response, next)=> {
   response.render('private/acts')
 })
 
+router.get('/create', isLoggedIn, (request, response, next)=> {
+  response.render('private/acts/create')
+})
+
 module.exports = router

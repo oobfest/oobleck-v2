@@ -2,6 +2,18 @@ let model = require('./model')
 
 let controller = {
 
+  async create(request, response) {
+    try {
+      let act = request.body
+      let results = await model.create(act)
+      response.json(results)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on create()")
+    }
+  },
+
   async validatePerformerEmail(request, response) {
     try {
       let email = request.body.email
