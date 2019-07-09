@@ -10,4 +10,8 @@ router.get('/create', isLoggedIn, (request, response, next)=> {
   response.render('private/acts/create')
 })
 
+router.get('/social', isLoggedIn, (request, response, next)=> {
+  response.render('private/acts/social')
+})
+
 module.exports = router

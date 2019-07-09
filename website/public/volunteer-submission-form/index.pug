@@ -1,0 +1,209 @@
+extends ../../_layout
+block content
+  .text-center
+    a(href="http://oobfest.com/" target="_parent")
+      img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    h1.p-3.text-light.font-weight-bold 2018 Volunteer Application
+  #app.container-fluid
+    .row
+      .col-md-8.mx-auto.pb-5
+        .box
+          form
+            .box-head.box-head-accent-oob
+            div(v-show="submitted==false")
+              .box-block
+                .alert.alert-danger(v-show="validationErrors.length > 0")
+                  h4.alert-heading Errors
+                  ul
+                      li(v-for="validationError in validationErrors") {{validationError}}
+                h3 Volunteer Application
+                p The&nbsp;
+                  strong Out of Bounds Comedy Festival
+                  |  is currently seeking applicants to be a part of our team! OoB runs August 28 to September 3. We are looking for volunteers for box office, ushers, performer registration, airport drivers, party assistance and more! Sign up now and a staff member will be in contact with you soon. More info on volunteer roles can be found in the&nbsp;
+                  a(href="https://www.facebook.com/groups/1813770925598511/" target="_blank") OoB Volunteers 2018 Facebook group
+                  | .
+                p Please note that shifts take place at our festival venues:
+                ul
+                  li Spider House Ballroom
+                  li Hideout Theatre
+                  li ColdTowne Theater
+                  li Fallout Theater
+                  li The Institution Theater
+                  li Velveeta Room
+                  li Additional downtown party venues TBA
+                p Out of Bounds relies on our volunteers to make the festival run smoothly and to make sure everyone has fun. It's important that our volunteers have fun, too!  Snacks will be available for show and registration volunteers during shifts, and all volunteers are entitled to attend to any non-sold-out show the day of their shift(s).
+                p All volunteers are eligible to perform in our OoB Volunteer Showcase (details pending).
+                p Any volunteer completing 5 or more shifts will earn a&nbsp;
+                  em Volunteer 5+ Shifts Badge
+                  | . This is equivalent to a performer badge and gives you entry to any non-sold-out show for the entirety of the festival!
+                p If you are an OoB 2018 performer and would like to volunteer, each shift earns you one entry in the MegaRaffle.
+                h4 MegaRaffle
+                p All 5+ shift volunteers and all performer-volunteers earn a raffle ticket for each shift completed. Raffle prizes will include:
+                ul
+                  li FREE submission to next year's OoB
+                  li FREE diagnostic workshop from Asaf Ronen
+                  li FREE improv coaching from Ellen Pizarek
+                  li Gift cards from local Austin businesses
+                  li OoB swag
+                  li and more...
+                p Send any questions to&nbsp;
+                  a(href="mailto:volunteer@oobfest.com" target="_blank") volunteer@oobfest.com
+                  | !
+              .box-block.box-bt
+                h3 General Information
+                .form-group
+                  label.col-form-label.required-field(for="name") Full Name
+                  input#name.form-control(type="text" required autofocus maxlength="280" name="name" v-model="volunteer.name")
+                .form-group
+                  label.col-form-label.required-field(for="email") Email
+                  input#email.form-control(type="email" required  maxlength="280" name="email" v-model="volunteer.email")
+                .form-group
+                  label.col-form-label.required-field(for="phone") Phone Number
+                  input#phone.form-control(type="tel" required maxlength="280" name="phone" v-model="volunteer.phone")
+              .box-block.box-bt
+                h3 Volunteering Specifics
+                .form-group
+                  label.col-form-label.required-field(for="type") What type of volunteering are you interested in?
+                  .form-check
+                    input#show-checkbox.form-check-input(type="checkbox" value="show" v-model="volunteer.type")
+                    label.form-check-label(for="show-checkbox") Show and Workshop (including box office, ushering &amp; performer registration)
+                  .form-check
+                    input#driver-checkbox.form-check-input(type="checkbox" value="driver" v-model="volunteer.type")
+                    label.form-check-label(for="driver-checkbox") Driver
+                  .form-check
+                    input#party-checkbox.form-check-input(type="checkbox" value="party" v-model="volunteer.type")
+                    label.form-check-label(for="party-checkbox") Party
+                .form-group
+                  label.col-form-label.required-field(for="hours") How many hours are you able to commit to?
+                  select#hours.form-control(v-model="volunteer.hours")
+                    option(value=0)
+                    option 1
+                    option 2
+                    option 3
+                    option 4
+                    option 5
+                    option 6
+                    option 7
+                    option 8
+                    option 9
+                    option 10
+                    option 11
+                    option 12
+                    option 13
+                    option 14
+                    option 15
+                    option 16
+                    option 17
+                    option 18
+                    option 19
+                    option 20
+                .form-group
+                  label.col-form-label(for="referral") How did you hear about volunteering?
+                  textarea#referral.form-control(maxlength="1500" name="referral" v-model="volunteer.referral")
+                .form-group
+                  label.col-form-label.required-field(for="volunteered-before") Have you volunteered at Out of Bounds before?
+                  select#volunteered-before.form-control(v-model="volunteer.volunteeredBefore")
+                    option(value="no") No
+                    option(value="yes") Yes
+                .form-group
+                  label.col-form-label.required-field(for="performing") Are you performing during the festival?
+                  select#performing.form-control(v-model="volunteer.performing")
+                    option(value="no") No
+                    option(value="yes") Yes
+              .box-block.box-bt(v-show="volunteer.type.includes('driver')")
+                h3 Driver Information
+                .form-group
+                  label.col-form-label.required-field(for="car-type") What is your car's make and model?
+                  input#car-type.form-control(type="text" autofocus maxlength="280" name="car-type" v-model="volunteer.carType")
+                .form-group
+                  label.col-form-label.required-field(for="passenger-count") How many additional passengers can you fit?
+                  select#passenger-count.form-control(v-model="volunteer.passengerCount")
+                    option 1
+                    option 2
+                    option 3
+                    option 4
+                    option 5
+                .form-group
+                  label.col-form-label.required-field(for="license-plate-number") What is your car's license plate number?
+                  input#license-plate-number.form-control(type="text" autofocus maxlength="280" name="license-plate-number" v-model="volunteer.licensePlateNumber")
+              .box-block.box-bt
+                .form-group
+                  label.col-form-label.required-field(for="attending-orientation") We will have an orientation meeting on
+                    span.code August 25th
+                    |, will you be able to attend?
+                  select#attending-orientation.form-control(v-model="volunteer.attendingOrientation")
+                    option(value="no") No
+                    option(value="yes") Yes
+                .form-group
+                  label.col-form-label(for="notes") Anything else that we should know?
+                  textarea#notes.form-control(maxlength="1500" name="notes" v-model="volunteer.notes")
+                .text-center
+                  button.btn.btn-primary.btn-lg(type="button" @click="create") Submit
+            .box-block(v-show="submitted")
+              h3 Thank You!
+              p Your submission has been recorded!
+              p Any questions, email
+                a(href="mailto:volunteer@oobfest.com" target="_blank") volunteer@oobfest.com
+
+  script(src="/js/vue.js")
+  script(src="/js/axios.min.js")
+  script.
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          submitted: false,
+          validationErrors: [],
+          volunteer: {
+            name: '',
+            email: '',
+            phone: '',
+            type: [],
+            hours: 0,
+            referral: '',
+            volunteeredBefore: 'no',
+            performing: 'no',
+            attendingOrientation: 'yes',
+            notes: '',
+
+            carType: '',
+            passengerCount: 4,
+            licensePlateNumber: ''
+          }
+        }
+      },
+      methods: {
+        getValidationErrors() {
+          let validationErrors = []
+          if(this.volunteer.name == '') validationErrors.push("Your name is required")
+          if(this.volunteer.email == '') validationErrors.push("Your email is required")
+          if(this.volunteer.phone == '') validationErrors.push("Your phone number is required")
+          if(this.volunteer.type == '') validationErrors.push("The type of volunteering is required")
+          if(this.volunteer.hours == 0) validationErrors.push("How many hours available is required")
+          if(this.volunteer.type == 'driver') {
+            if(this.volunteer.carType == '') validationErrors.push("Car Type is required for driver volunteers")
+            if(this.volunteer.licensePlateNumber == '') validationErrors.push("License Plate Number is required for driver volunteers")
+          }
+          return validationErrors
+        },
+        create() {
+          let validationErrors = this.getValidationErrors()
+          let self = this
+          if(validationErrors.length == 0) {
+            axios
+              .post('/api/volunteers', self.volunteer)
+              .then(function(response) {
+                self.submitted = true
+              })
+              .catch(function(error) {
+                alert("Error submitting application :(")
+              })
+          }
+          else {
+            alert("Some required fields were left blank")
+            this.validationErrors = validationErrors
+          }
+        }
+      }
+    })
+

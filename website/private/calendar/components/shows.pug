@@ -33,6 +33,7 @@ script#shows-template(type="text/template")
           a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show, act._id)") remove act
         p(v-show="$root.editMode")
           a(href="#" @click="showAddActModal(day, venue, show)" data-toggle="modal" data-target="#add-act-modal") add act
+          a.float-right(href="#" @click.prevent="setPrice(show._id)") {{show.price ? '$' + show.price : 'set price'}}
 
 script.
   Vue.component('shows', {
@@ -100,7 +101,27 @@ script.
                 self.$store.commit('updateShow', response.data)
               })
               .catch(function(error) {
-                alert("Error updating start time")
+                alert("Error updating end time")
+                console.log(error)
+              })
+          }
+        }
+      },
+      setPrice(showId) {
+        let price = window.prompt("Price (in dollars)")
+        if (price == null) {;}
+        else {
+          price = parseInt(price)
+          if(Number.isNaN(price)) alert("Invalid price")
+          else {
+            let self = this
+            axios
+              .put('/api/shows/' + showId, {price})
+              .then(function(response) {
+                self.$store.commit('updateShow', response.data)
+              })
+              .catch(function(error) {
+                alert("Error updating price")
                 console.log(error)
               })
           }
@@ -182,6 +203,3 @@ script.
       }
     }
   })
-
-style.
-  .delete{ float: right}

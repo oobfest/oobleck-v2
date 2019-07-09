@@ -105,3 +105,6 @@ label.required-field:after {
 .badge.volunteer { background-color: #ff7f00 }
 .badge.staff { background-color: #4daf4a }
 .badge.industry { background-color: #a6761d }
+
+/* Calendar Page, Shows component */
+.delete { float: right }

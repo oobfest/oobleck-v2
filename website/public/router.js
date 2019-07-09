@@ -95,4 +95,7 @@ router.use(actSubmissionConfirmationRouter)
 let actSubmissionEditRouter = require('./act-submission-edit/router')
 router.use(actSubmissionEditRouter)
 
+let volunteerSubmissionFormRouter = require('./volunteer-submission-form/router')
+router.use('/volunteer-submission-form', volunteerSubmissionFormRouter)
+
 module.exports = router

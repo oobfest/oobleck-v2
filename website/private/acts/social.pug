@@ -1,4 +1,4 @@
-extends ../_layout
+extends ../../_layout
 block content
   header.dash-titlebar
     .mb-md-0.mb-3
@@ -16,29 +16,28 @@ block content
             th Social
         tbody
           tr(v-for="act in acts")
-            td 
+            td
               figure.figure
-                a(:href="act.imageUrl" target="_blank")
-                  img.figure-img.img-thumbnail(:src="getImageSrc(act.imageUrl)")
-                figcaption.figure-caption {{act.actName}}
-            td {{act.showType}}
+                a(:href="act.image.url" target="_blank")
+                  img.figure-img.img-thumbnail(:src="getImageThumbnail(act.image.id)")
+                figcaption.figure-caption {{act.name}}
+            td
+              ul
+                li(v-for="type in act.showType") {{type}}
             td(style="line-height: 1")
               small {{act.publicDescription}}
             td {{act.city}}, {{act.state}}
               span(v-if="act.country != 'US'") , {{act.country}}
-            td 
+            td
               ul
-                li(v-for="social in act.socialMedia") 
-                  a(:href="social.url" target="_blank") {{social.type}}
+                li(v-for="socialMedia in act.socialMedia")
+                  a(:href="socialMedia.url" target="_blank") {{socialMedia.type}}
             td
 
-
-  script(src="/js/axios.min.js")
-  script(src="/js/vue.js")
   script.
-    let app = new Vue({ 
+    let app = new Vue({
       el: "#app",
-      data() { 
+      data() {
         return {
           acts: [],
         }
@@ -46,14 +45,14 @@ block content
       computed: {
       },
       methods: {
-        getImageSrc(url) {
-          return url.substr(0, url.length-4) + 's.jpeg'
+        getImageThumbnail(imageId) {
+          return 'https://i.imgur.com/' + imageId + 's.jpeg'
         }
       },
       created() {
         let self = this
         axios
-          .get('/api/submissions/get-valid-acts')
+          .get('/api/acts')
           .then(function(response) {
             self.acts = response.data
           })
