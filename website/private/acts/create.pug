@@ -138,33 +138,6 @@ block content
 
 
         .box-block.box-bx.box-bt
-          h3 Contact Information
-          h4 Submission Contact
-          p Who is the primary contact?
-          .form-group.row
-            label.col-form-label.col-2(for="primary-contact-name") Name
-            input#primary-contact-name.form-control.col-10(type="text" name="primary-contact-name" maxlength="280" v-model="submission.contact.name")
-          .form-group.row
-            label.col-form-label.col-2(for="primary-contact-email") Email
-            input#primary-contact-email.form-control.col-10(type="email" name="primary-contact-email" maxlength="280" v-model="submission.contact.email")
-          .form-group.row
-            label.col-form-label.col-2(for="primary-contact-phone") Phone
-            input#primary-contact-phone.form-control.col-10(type="text" name="primary-contact-phone" required maxlength="280" v-model="submission.contact.phone")
-          .form-group.row
-            label.col-form-label.col-2(for="primary-contact-role") Role
-            select#primary-contact-role.form-control.col-10(name="primary-contact-role" v-model="submission.contact.role")
-              option(value="performer") Performer
-              option(value="crew") Crew
-              option(value="director") Director
-              option(value="producer") Producer
-              option(value="other") Other
-          .form-group.row
-            label.col-form-label.col-2 Attending
-            select.form-control.col-10(name="primary-contact-attending" v-model="submission.contact.attending")
-              option(:value="true") Yes
-              option(:value="false") No
-
-        .box-block.box-bx.box-bt
           h3 Performance Requirements
           h4 Set Length
           .form-group

@@ -37,8 +37,8 @@ async function sendRejectionEmails(submissions) {
 async function acceptanceAndRejectionEmails() {
   await setup()
   let submissions = await actSubmissionModel.read()
-  sendAcceptanceEmails(submissions)
-  sendRejectionEmails(submissions)
+  //sendAcceptanceEmails(submissions)
+  //sendRejectionEmails(submissions)
 }
 
 async function sendConfirmationEmails() {
@@ -67,3 +67,38 @@ async function sendConfirmationEmails() {
     //nodemailer.sendEmailFromProducers(recipient, subject, message)
   }
 }
+
+async function getStuff() {
+
+  // Set up server
+  await setup()
+
+  // Get acts
+  let submissions = await actSubmissionModel.read()
+  let acts = submissions.filter(s=>
+    s.stamp == 'in' &&
+    (s.confirmationStatus == 'yes' || s.confirmationStatus == 'reschedule'))
+
+  // Get shows
+  let allShows = await showModel.read()
+
+  for (act of acts) {
+    let emailData = {name: act.name, shows: []}
+
+    // Get days they're performing
+    for(show of allShows) {
+      for (showAct of show.acts) {
+        if (showAct.name == act.name) {
+          show.duration = showAct.duration  // Include duration for specific act
+          emailData.shows.push(show)
+        }
+      }
+    }
+
+    console.log('\n', emailData.name)
+    for (show of emailData.shows)
+      console.log(`${show.day}, ${show.startTime} at ${show.venue} for ${show.duration} minutes`)
+  }
+}
+
+getStuff()
