@@ -114,11 +114,9 @@ async function getStuff() {
     for(person of act.personnel) {
       emails.push(person.email)
     }
-    let recipients = "sld.potato@gmail.com" //act.contact.email
     let subject = act.name + " Performance Times"
     let message = performerShowDetailsTemplate({name: act.name, shows: emailData.shows})
-    console.log(emails, '\n', message, '\n')
-    //nodemailer.sendEmailFromProducers(recipients, subject, message)
+    nodemailer.sendEmailFromProducers(emails, subject, message)
   }
 }
 
