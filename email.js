@@ -7,6 +7,7 @@ let showModel = require('./api/shows/model')
 let acceptedEmailTemplate = require('./email-templates/compile')('acceptance')
 let rejectedEmailTemplate = require('./email-templates/compile')('rejection')
 let dateConfirmationTemplate = require('./email-templates/compile')('date-confirmation')
+let performerShowDetailsTemplate = require('./email-templates/compile')('performer-show-details')
 let nodemailer = require('./utilities/nodemailer')
 
 async function setup() {
@@ -76,7 +77,7 @@ async function getStuff() {
   // Get acts
   let submissions = await actSubmissionModel.read()
   let acts = submissions.filter(s=>
-    s.stamp == 'in' &&
+    s.stamp == 'in' && !s.headliner && !s.showType.includes('Standup') &&
     (s.confirmationStatus == 'yes' || s.confirmationStatus == 'reschedule'))
 
   // Get shows
@@ -89,16 +90,41 @@ async function getStuff() {
     for(show of allShows) {
       for (showAct of show.acts) {
         if (showAct.name == act.name) {
-          show.duration = showAct.duration  // Include duration for specific act
-          emailData.shows.push(show)
+
+          let newShow = {day: show.day}
+
+          newShow.duration = showAct.duration  // Include duration for specific act
+
+          // Format venue name
+          if (show.venue == 'Hideout Up') newShow.venue = 'the Hideout Theatre (Upstairs)'
+          else if (show.venue == 'Hideout Down') newShow.venue = 'the Hideout Theatre (Downstairs)'
+          else if (show.venue == 'Fallout') newShow.venue = 'Fallout Theater'
+          else if (show.venue == 'ColdTowne') newShow.venue = 'ColdTowne Theater'
+          else if (show.venue == 'Velveeta') newShow.venue = 'The Velveeta Rooom'
+          else newShow.venue = show.venue
+
+          // Format show time
+          newShow.startTime = formatTime(show.startTime)
+          emailData.shows.push(newShow)
         }
       }
     }
 
-    console.log('\n', emailData.name)
-    for (show of emailData.shows)
-      console.log(`${show.day}, ${show.startTime} at ${show.venue} for ${show.duration} minutes`)
+    emails = []
+    for(person of act.personnel) {
+      emails.push(person.email)
+    }
+    let recipients = "sld.potato@gmail.com" //act.contact.email
+    let subject = act.name + " Performance Times"
+    let message = performerShowDetailsTemplate({name: act.name, shows: emailData.shows})
+    console.log(emails, '\n', message, '\n')
+    //nodemailer.sendEmailFromProducers(recipients, subject, message)
   }
+}
+
+let formatTime = function(time) {
+  time = String(time)
+  return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
 }
 
 getStuff()

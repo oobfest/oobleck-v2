@@ -10,9 +10,9 @@ let transporter = nodemailer.createTransport({
 })
 
 module.exports = {
-  sendEmail(recipient, subject="", htmlContent="") {
+  sendEmail(recipients, subject="", htmlContent="") {
     let email = {
-      to: recipient,
+      to: recipients,
       from: 'no-reply@oobfest.com',
       subject: "[OoB] " + subject,
       html: htmlContent
@@ -28,9 +28,9 @@ module.exports = {
         emailLogger.error(JSON.stringify(error))
       })
   },
-  sendEmailFromProducers(recipient, subject="", htmlContent="") {
+  sendEmailFromProducers(recipients, subject="", htmlContent="") {
     let email = {
-      to: recipient,
+      to: recipients,
       from: 'producers@oobfest.com',
       subject: "[OoB] " + subject,
       html: htmlContent

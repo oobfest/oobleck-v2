@@ -1,6 +1,25 @@
+p The Out of Bounds schedule is complete! We'll be going public with the schedule soon.
+p
+  strong #{name}
+  |  will be performing
+ul
+  for show in shows
+    if show.day == 'Tuesday'
+      li Tuesday, August 27th, #{show.startTime} at #{show.venue} for #{show.duration} minutes
+    if show.day == 'Wednesday'
+      li Wednesday, August 28th, #{show.startTime} at #{show.venue} for #{show.duration} minutes
+    if show.day == 'Thursday'
+      li Thursday, August 29th, #{show.startTime} at #{show.venue} for #{show.duration} minutes
+    if show.day == 'Friday'
+      li Friday, August 30th, #{show.startTime} at #{show.venue} for #{show.duration} minutes
+    if show.day == 'Saturday'
+      li Saturday, August 31st, #{show.startTime} at #{show.venue} for #{show.duration} minutes
+    if show.day == 'Sunday'
+      li Sunday, September 1st, #{show.startTime} at #{show.venue} for #{show.duration} minutes
+    if show.day == 'Monday'
+      li Monday, September 2nd, #{show.startTime} at #{show.venue} for #{show.duration} minutes
+p
+  em If you have any major issues or conflicts with these shows please let us know ASAP.
 
-
-p #{name}, thank you for applying to Out of Bounds for 2019.
-p We have recieved your application for
-  em=name
-  |. Expect to hear back from us in July!
+p Cheers,
+p The Out of Bounds Producer Team
