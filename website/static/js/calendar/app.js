@@ -52,6 +52,7 @@ let app = new Vue({
         ]},
         {day: "Monday",
         venues: [
+          {name: "Hideout Up"},
           {name: "Hideout Down"}
         ]}
       ],
