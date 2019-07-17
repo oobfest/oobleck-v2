@@ -10,7 +10,7 @@ script#shows-template(type="text/template")
         div(v-if="show.host" v-show="$root.editMode")
           a.delete(href="#" @click.prevent="removeHost(show._id)") remove host
           p
-            strong Host:
+            strong Host:&nbsp;
             | {{show.host.name}}
         div(v-else)
           p(v-show="$root.editMode")
