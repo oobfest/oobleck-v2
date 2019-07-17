@@ -1,0 +1,24 @@
+
+script#tile-template(type="text/template")
+  a(:href="'/lineup/' + name")
+    .act(:style="thumbnailUrl")
+      .banner(:class="{'headliner': headliner}")
+        span.name(:style="fontSize") {{name}}
+
+script.
+  Vue.component('tile', {
+    template: "#tile-template",
+    props: ['name', 'imageId', 'headliner'],
+    computed: {
+      thumbnailUrl() {
+        return `background-image: url("https://i.imgur.com/${this.imageId}l.jpg")`
+      },
+      fontSize() {
+        let length = this.name.length
+        if(length > 30) return 'font-size: 20px'
+        if(length > 20) return 'font-size: 24px'
+        if(length > 12) return 'font-size: 30px'
+        else return 'font-size: 36px'
+      }
+    }
+  })

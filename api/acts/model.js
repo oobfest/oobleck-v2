@@ -4,6 +4,10 @@ let mongooseModel = mongoose.model('act-submission', actSubmissionSchema)
 
 let model = {
 
+  async getByName(name) {
+    return mongooseModel.findOne({name}).lean().exec()
+  },
+
   async create(act){
     act.stamp = 'in'
     act.confirmationStatus = 'yes'
@@ -33,10 +37,16 @@ let model = {
     }
     return false
   },
+
   read(id = null) {
     if(id) return mongooseModel.findById(id).lean().exec()
     else return mongooseModel.find({stamp: 'in'}).lean().exec()
   },
+
+  readPublic() {
+    return mongooseModel.find({stamp: 'in'}).lean().exec()
+  },
+
   update(id, updatedShow) {
     // "new" option returns modified document rather than the original
     return mongooseModel.findByIdAndUpdate(id, updatedShow, {new: true}).lean().exec()

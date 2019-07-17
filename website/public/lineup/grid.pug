@@ -1,0 +1,45 @@
+script#grid-template(type="text/template")
+  #grid
+    .row
+      .col-md.text-center
+        .form-group
+          button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='all'",:class="actTypeFilter == 'all' ? 'btn-primary' : 'btn-secondary'") All Acts
+          //button.btn.btn-lg.m-1(type="button" @click="featuredActFilter = !featuredActFilter",:class="featuredActFilter ? 'warning' : 'btn-secondary'") Featured
+          button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Improv'",:class="actTypeFilter == 'Improv' ? 'btn-primary' : 'btn-secondary'") Improv
+          button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Sketch'",:class="actTypeFilter == 'Sketch' ? 'btn-primary' : 'btn-secondary'") Sketch
+          button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Stand-Up'",:class="actTypeFilter == 'Stand-Up' ? 'btn-primary' : 'btn-secondary'") Stand-Up
+          button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Podcast'",:class="actTypeFilter == 'Podcast' ? 'btn-primary' : 'btn-secondary'") Podcast
+    .row
+      .col-md
+        .form-group
+          input#search.form-control.form-control-lg(type="text" v-model="search" placeholder="Search by name" style="max-width: 500px; margin: auto")
+    .row
+      .col
+        transition-group.acts(name="act")
+          tile.act-item(v-for="act in filteredActs",:key="act._id",:name="act.name",:imageId="act.image.id",:headliner="act.headliner")
+
+script.
+  Vue.component('grid', {
+    template: "#grid-template",
+    props: ['acts'],
+    data() {
+      return {
+        featuredActFilter: false,
+        actTypeFilter: 'all',
+        search: ''
+      }
+    },
+    computed: {
+      filteredActs() {
+        let acts = this.acts
+        if(this.featuredActFilter) acts = acts.filter(a=> a.headliner)
+        if(this.search != '') {
+          let searchFilter = new RegExp(this.search, 'i')
+          acts = acts.filter(a=> a.name.match(searchFilter))
+        }
+        if(this.actTypeFilter === 'all') return acts
+        if(this.actTypeFilter === 'Sketch') return acts.filter(a=> a.showType == 'Sketch' || a.showType == 'Individual')
+        return acts.filter(a=> a.showType == this.actTypeFilter)
+      }
+    }
+  })

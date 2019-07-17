@@ -46,6 +46,17 @@ let controller = {
     }
   },
 
+  async readPublic(request, response) {
+    try {
+      let results = await model.readPublic()
+      response.json(results)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on readPublic()")
+    }
+  },
+
   async update(request, response) {
     try {
       let id = request.params.id

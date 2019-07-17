@@ -1,0 +1,99 @@
+extends ../../_layout
+block content
+  #schedule.container-fluid
+    //show-modal(:show="modalModel")
+    .row
+      .col.text-center
+        p.mb-0 Online sales for each show end one hour before show time.
+        p.mb-0 Tickets will be for sale at the venue's box office.
+        p You must show up 10 minutes before show time to claim your ticket.
+    .row
+      .col
+        .tabs
+          ul.nav.nav-pills
+            li.nav-item(v-for="(day, index) in schedule",:key="index")
+              a.nav-link(:class="{'active': selectedDay == day.name}" href="#" @click.prevent="selectedDay = day.name") {{formatDay(day.name)}}
+          .tab-content
+            .tab-pane.show.active(v-for="day in schedule" v-show="selectedDay == day.name")
+              ul.list-unstyled.d-flex.flex-wrap.justify-content-around
+                li.venue(v-for="venue in day.venues")
+                  h3 {{formatVenue(venue)}}
+                  ul.list-unstyled
+                    li.showy.text-center(v-for="show in getShowsByDayAndVenue(day.name, venue)" @click="modalModel = show")
+                      .mb-1
+                        span.time {{formatTime(show.startTime)}} to {{show.endTime}}
+                      .media.mb-2(v-if="show.host")
+                        .media-body.align-self-center
+                          small Hosted by {{show.host.name}}
+                      ul.list-unstyled
+                        li.media(v-for="act in show.acts")
+                          img(:src="'https://i.imgur.com/' + act.image.id + 's.jpg'")
+                          .media-body.ml-2.align-self-center(style="line-height: 1")
+                            span.act-name {{act.name}}
+                            br
+                            span.act-location(v-if="act.city && act.city != 'Austin'") {{act.city}}, {{act.state}}
+                      .text-center(v-if="show.remaining <= 0")
+                        span.sold-out Sold out!
+
+  link(href="/css/schedule.css" rel="stylesheet")
+  script.
+    let schedule = new Vue ({
+      el: "#schedule",
+      data() {
+        return {
+          shows: [],
+          modalModel: {},
+          selectedDay: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date().getDay()],
+          days: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'],
+          venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta', 'Spider House', 'Institution'],
+          schedule: [
+            {name: 'Tuesday',    venues: ['Hideout Down', 'Hideout Up', 'ColdTowne']},
+            {name: 'Wednesday',  venues: ['Hideout Down', 'Hideout Up', 'ColdTowne']},
+            {name: 'Thursday',   venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta']},
+            {name: 'Friday',     venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta', 'Spider House']},
+            {name: 'Saturday',   venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta', 'Spider House', 'Institution']},
+            {name: 'Sunday',     venues: ['Hideout Down', 'Fallout', 'Velveeta']},
+            {name: 'Monday',     venues: ['Hideout Up', 'Hideout Down']},
+          ]
+        }
+      },
+      methods: {
+        getShowsByDayAndVenue(day, venue) {
+          return this.shows.filter(s=> s.day == day && s.venue == venue)
+        },
+        formatVenue(venue) {
+          switch(venue) {
+            case 'Hideout Up':        return 'Hideout Theatre Upstairs'
+            case 'Hideout Down':      return 'Hideout Theatre Downstairs'
+            case 'ColdTowne':         return 'ColdTowne Theater'
+            case 'Fallout':           return 'Fallout Theater'
+            case 'Velveeta':          return 'Velveeta Room'
+            case 'Spider House':      return 'Spider House Ballroom'
+            case 'Institution':       return 'Institution Theater'
+          }
+        },
+        formatTime(time) {
+          time = String(time)
+          return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+        },
+        formatDay(day) {
+          switch(day) {
+            case 'Tuesday':   return 'Tue, Aug. 28th'
+            case 'Wednesday': return 'Wed, Aug. 29th'
+            case 'Thursday':  return 'Thu, Aug. 30th'
+            case 'Friday':    return 'Fri, Aug. 31st'
+            case 'Saturday':  return 'Sat, Sep. 1st'
+            case 'Sunday':    return 'Sun, Sep. 2nd'
+            case 'Monday':    return 'Mon, Sep. 3rd'
+          }
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/shows')
+          .then(function(response) {
+            self.shows = response.data
+          })
+      }
+    })

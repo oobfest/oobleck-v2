@@ -1,0 +1,68 @@
+extends ../../_layout
+block content
+  .container-fluid#schedule
+    .row
+      .col
+        ul.list-unstyled
+          li(v-for="day in schedule")
+            h2.mt-3.mb-1 {{day.name}}
+            ul.list-unstyled
+              li(v-for="venue in day.venues")
+                ul
+                  li(v-for="show in getShowsByDayAndVenue(day.name, venue)")
+                    a(:href="`/shows/${day.name.toLowerCase()}/${venue}/${show.startTime}/`") {{formatVenue(venue)}}, {{formatTime(show.startTime)}}
+
+  link(href="/css/schedule.css" rel="stylesheet")
+  script.
+    let app = new Vue ({
+      el: "#schedule",
+      data() {
+        return {
+          shows: [],
+          modalModel: {},
+          selectedDay: 'Tuesday',
+          days: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'],
+          venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta', 'Spider House', 'Institution'],
+          schedule: [
+            {name: 'Tuesday',    venues: ['Hideout Down', 'Hideout Up', 'ColdTowne']},
+            {name: 'Wednesday',  venues: ['Hideout Down', 'Hideout Up', 'ColdTowne']},
+            {name: 'Thursday',   venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta']},
+            {name: 'Friday',     venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta', 'Spider House']},
+            {name: 'Saturday',   venues: ['Hideout Down', 'Hideout Up', 'ColdTowne', 'Fallout', 'Velveeta', 'Spider House', 'Institution']},
+            {name: 'Sunday',     venues: ['Hideout Down', 'Fallout', 'Velveeta']},
+            {name: 'Monday',     venues: ['Hideout Down']},
+          ]
+        }
+      },
+      methods: {
+        limax(input) {
+          return limax(input)
+        },
+        getShowsByDayAndVenue(day, venue) {
+          return this.shows.filter(s=> s.day == day && s.venue == venue)
+        },
+        formatVenue(venue) {
+          switch(venue) {
+            case 'Hideout Up':        return 'Hideout Theatre Upstairs'
+            case 'Hideout Down':      return 'Hideout Theatre Downstairs'
+            case 'ColdTowne':         return 'ColdTowne Theater'
+            case 'Fallout':           return 'Fallout Theater'
+            case 'Velveeta':          return 'Velveeta Room'
+            case 'Spider House':      return 'Spider House Ballroom'
+            case 'Institution':       return 'Institution Theater'
+          }
+        },
+        formatTime(time) {
+          time = String(time)
+          return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/shows')
+          .then(function(response) {
+            self.shows = response.data
+          })
+      }
+    })

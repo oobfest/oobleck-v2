@@ -8,6 +8,9 @@ router.route('/')
   .post(isLoggedIn, controller.create)
   .get(isLoggedIn, controller.read)
 
+router.route('/public')
+  .get(controller.readPublic)
+
 router.route('/validate-performer-email/')
   .post(controller.validatePerformerEmail)
 

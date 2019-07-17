@@ -1,0 +1,41 @@
+include ../../_layout
+block content
+  #lineup.container
+    grid(:acts="acts")
+
+  include grid
+  include tile
+  link(href="/css/lineup.css" rel="stylesheet")
+
+  script.
+    let getActs = function() {
+      axios
+        .get('/api/acts/public')
+        .then(response=> { console.log(response.data)})
+          /*
+          let featuredActs = response.data
+            .filter(a=> a.headliner)
+            .sort((a, b)=> {return (a.actName < b.actName) ? -1 : (a.actName > b.actName) ? 1 : 0})
+          let nonFeaturedActs = response.data
+            .filter(a=>!a.headliner)
+            .sort((a, b)=> {return (a.actName < b.actName) ? -1 : (a.actName > b.actName) ? 1 : 0})
+          return { acts : featuredActs.concat(nonFeaturedActs) }
+        }) */
+    }
+
+    let lineup = new Vue({
+      el: "#lineup",
+      data() {
+        return {
+          acts: []
+        }
+      },
+
+      created() {
+        let self = this
+
+        axios
+          .get('/api/acts/public')
+          .then(response=> { self.acts = response.data })
+      }
+    })

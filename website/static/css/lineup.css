@@ -1,0 +1,75 @@
+.acts {
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  transition: transform 1s;
+}
+
+.act-item {
+  transition: all 1s;
+  display: inline-block;
+}
+
+.act-enter, .act-leave-to {
+  opacity: 0;
+}
+.act-leave-active {
+  display: none;
+}
+
+/* Tile */
+
+.act-item {
+  transition: all 1s;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  z-index: 1;
+  text-decoration: none;
+}
+
+.act {
+  display: flex;
+  flex: 1 1 370px;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  width: 370px;
+  height: 370px;
+
+  transition: all 0.1s ease-in-out;
+  transform: scale(1,1);
+}
+
+.act:hover {
+  transform: scale(1.1,1.1);
+}
+
+.banner {
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  background-color: rgba(21, 128, 140, 0.75);
+  font-size: 36px;
+  color: white;
+  font-variant: small-caps;
+  align-self: flex-end;
+  width: 100%;
+  height: 74px;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner.headliner {
+  background-color: rgba(240, 76, 35, 0.75)
+}
+
+.name {
+  text-align: center;
+}

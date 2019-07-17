@@ -4,11 +4,9 @@ let userModel = require('../../api/users/model')
 let submissionModel = require('../../api/act-submissions/model')
 let showModel = require('../../api/shows/model')
 
-
 router.get('/', (request, response)=> {
   response.render('public', {alt: true})
 })
-
 
 router.get('/set-password/:id/:key', async (request, response, next)=> {
   let key = request.params.key
@@ -44,10 +42,6 @@ router.get('/apply', (request, response)=> {
   response.render('public/act-submission-form/closed')
 })
 
-router.get('/host-submission-form/', (request, response)=> {
-  response.render('public/host-submission-form')
-})
-
 router.get('/apply-secret/:secret', (request, response)=> {
   let secret = request.params.secret
   if (secret == process.env.LATE_SUBMISSION_SECRET) {
@@ -56,10 +50,6 @@ router.get('/apply-secret/:secret', (request, response)=> {
   else {
     response.render('public/act-submission-form/closed')
   }
-})
-
-router.get('/apply-screener', (request, response)=> {
-  response.render('public/screener-submission-form')
 })
 
 let stripe = require('stripe')(process.env.STRIPE_TEST_SECRET_KEY)
@@ -82,12 +72,7 @@ router.post('/stripe', async (request, response)=> {
   catch(error) {
     next(error)
   }
-
 })
-
-// Login and Logout pages
-let loginRouter = require('./login/router')
-router.use(loginRouter)
 
 let actSubmissionConfirmationRouter = require('./act-submission-confirmation/router')
 router.use(actSubmissionConfirmationRouter)
@@ -95,7 +80,27 @@ router.use(actSubmissionConfirmationRouter)
 let actSubmissionEditRouter = require('./act-submission-edit/router')
 router.use(actSubmissionEditRouter)
 
+let hostSubmissionFormRouter = require('./host-submission-form/router')
+router.use('/host-submission-form', hostSubmissionFormRouter)
+
+let lineupRouter = require('./lineup/router')
+router.use('/lineup', lineupRouter)
+
+let loginRouter = require('./login/router')
+router.use(loginRouter)
+
+let scheduleRouter = require('./schedule/router')
+router.use('/schedule', scheduleRouter)
+
+let screenerSubmissionFormRouter = require('./screener-submission-form/router')
+router.use('/apply-screener', screenerSubmissionFormRouter)
+
 let volunteerSubmissionFormRouter = require('./volunteer-submission-form/router')
 router.use('/volunteer-submission-form', volunteerSubmissionFormRouter)
+
+// 404, redirect to homepage
+router.use(function (request, response, next) {
+  response.redirect('/')
+})
 
 module.exports = router
