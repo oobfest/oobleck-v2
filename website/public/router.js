@@ -98,9 +98,4 @@ router.use('/apply-screener', screenerSubmissionFormRouter)
 let volunteerSubmissionFormRouter = require('./volunteer-submission-form/router')
 router.use('/volunteer-submission-form', volunteerSubmissionFormRouter)
 
-// 404, redirect to homepage
-//router.use(function (request, response, next) {
-//  response.redirect('/')
-//})
-
 module.exports = router
