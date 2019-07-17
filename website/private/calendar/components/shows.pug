@@ -28,8 +28,8 @@ script#shows-template(type="text/template")
           span(v-if="act.showType.includes('One-person-show')") 🗣
           span(v-if="act.showType.includes('Variety')") 🤹🏻‍♂️
           span(v-if="act.showType.includes('Other')") 🕶
+          | &nbsp;
           span(:class="actStatus") {{act.name | shorten(24)}}
-
           a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show, act._id)") remove act
         p(v-show="$root.editMode")
           a(href="#" @click="showAddActModal(day, venue, show)" data-toggle="modal" data-target="#add-act-modal") add act
