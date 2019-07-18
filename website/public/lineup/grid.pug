@@ -4,11 +4,9 @@ script#grid-template(type="text/template")
       .col-md.text-center
         .form-group
           button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='all'",:class="actTypeFilter == 'all' ? 'btn-primary' : 'btn-secondary'") All Acts
-          //button.btn.btn-lg.m-1(type="button" @click="featuredActFilter = !featuredActFilter",:class="featuredActFilter ? 'warning' : 'btn-secondary'") Featured
           button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Improv'",:class="actTypeFilter == 'Improv' ? 'btn-primary' : 'btn-secondary'") Improv
           button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Sketch'",:class="actTypeFilter == 'Sketch' ? 'btn-primary' : 'btn-secondary'") Sketch
-          button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Standup'",:class="actTypeFilter == 'Stand-Up' ? 'btn-primary' : 'btn-secondary'") Stand-Up
-          button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Podcast'",:class="actTypeFilter == 'Podcast' ? 'btn-primary' : 'btn-secondary'") Podcast
+          button.btn.btn-lg.m-1(type="button" @click="actTypeFilter='Standup'",:class="actTypeFilter == 'Standup' ? 'btn-primary' : 'btn-secondary'") Stand-Up
     .row
       .col-md
         .form-group
@@ -38,7 +36,7 @@ script.
           acts = acts.filter(a=> a.name.match(searchFilter))
         }
         if(this.actTypeFilter === 'all') return acts
-        return acts.filter(a=> a.showType.includes(this.actTypeFilter))
+        else return acts.filter(a=> a.showType.includes(this.actTypeFilter))
       }
     }
   })

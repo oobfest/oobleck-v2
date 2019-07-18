@@ -10,7 +10,7 @@ block content
         h1 #{act.name}
           small &mdash; #{act.showType}
         h5 #{act.city}, #{act.state}
-          if country != 'US'
+          if act.country != 'US'
             span , #{act.country}
         p #{act.publicDescription}
 
