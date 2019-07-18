@@ -4,6 +4,8 @@ let createModel = require('../create-model')
 let mongooseModel = mongoose.model('show', schema)
 let actModel = require('../acts/model')
 let badgeModel = require('../badges/model')
+let nodeMailer = require('../../utilities/nodemailer')
+let reservationConfirmationEmailTemplate = require('../../email-templates/compile')('reservation-confirmation')
 
 
 let overrides = {
@@ -105,8 +107,17 @@ let overrides = {
     show.markModified('tickets')
     let savedShow = await show.save()
 
-    // Todo: send email
-    //emailModel.sendShowConfirmationEmail(ticket.email, ticket.name, formatVenue(show.venue), formatDayAndTime(show.day, String(show.time)), true, quantity)
+
+    let recipient = badge.email
+    let subject = 'Booking Confirmation for Out of Bounds'
+    let message = reservationConfirmationEmailTemplate({
+      name: badge.name,
+      where: formatVenue(show.venue),
+      when: formatDayAndTime(show.day, String(show.startTime)),
+      isBadge: true,
+      quantity
+    })
+    nodeMailer.sendEmail(recipient, subject, message)
 
     return {reservationSuccessful: true, savedShow}
   },
@@ -130,6 +141,38 @@ let overrides = {
     else show.remaining = capacity - (show.capacity - show.remaining)
     show.capacity = capacity
     return await show.save()
+  }
+}
+
+function formatDayAndTime(day, time) {
+  return formatDay(day) + ", " + formatTime(time)
+}
+
+function formatTime(time) {
+  return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+}
+
+function formatDay(day) {
+  switch(day) {
+    case 'Tuesday':   return 'Tuesday, August 27th'
+    case 'Wednesday': return 'Wednesday, August 28th'
+    case 'Thursday':  return 'Thursday, August 29th'
+    case 'Friday':    return 'Friday, August 30th'
+    case 'Saturday':  return 'Saturday, August 31st'
+    case 'Sunday':    return 'Sunday, September 1st'
+    case 'Monday':    return 'Monday, September 2nd'
+    default: return day
+  }
+}
+
+function formatVenue(venue) {
+  switch(venue) {
+    case 'Hideout Up':        return 'Hideout Theatre (Upstairs), 617 Congress Ave, Austin, TX 78701'
+    case 'Hideout Down':      return 'Hideout Theatre (Downstairs), 617 Congress Ave, Austin, TX 78701'
+    case 'ColdTowne':         return 'ColdTowne Theater, 4803 Airport Blvd, Austin, TX 78751'
+    case 'Fallout':           return 'Fallout Theater, 616 Lavaca St, Austin, TX 78701'
+    case 'Velveeta':          return 'Velveeta Room, 521 E 6th St, Austin, TX 78701'
+    case 'North Door':        return 'The North Door, 501 Brushy St, Austin, TX 78702'
   }
 }
 
