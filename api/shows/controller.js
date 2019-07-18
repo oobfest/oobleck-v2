@@ -31,6 +31,17 @@ let overrides = {
       console.log(error.message)
       response.status(500).send("Error on removeAct()")
     }
+  },
+
+  async refresh(request, response) {
+    try {
+      await model.refresh()
+      response.json({ok: true})
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on refresh()")
+    }
   }
 }
 

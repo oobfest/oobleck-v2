@@ -16,7 +16,7 @@ script#modal-template(type="text/template")
                   h5(v-if="act.city") {{act.city}}, {{act.state}}
                   p.modal-act-description {{act.publicDescription}}
             .media(v-if="show.host")
-              img.mr-3.mb-3.align-self-center(:src="'https://i.imgur.com/' + show.host.image.id + 'b.jpg'" v-if="show.host.image")
+              img.mr-3.mb-3.align-self-center(:src="show.host.imageUrl + 'b.jpg'" v-if="show.host.image")
               .media-body.align-self-center
                 h2.modal-act-name Hosted by {{show.host.name}}
                 p.modal-act-description {{show.host.bio}}
@@ -111,6 +111,7 @@ script.
         let backdrop = document.getElementById('modal-backdrop')
         backdrop.remove()
         document.getElementById('show-modal').style.display = "none"
+        document.body.classList.remove('modal-open')
       },
       boxOfficeClosed() {
         /*

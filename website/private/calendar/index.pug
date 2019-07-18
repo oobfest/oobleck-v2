@@ -10,6 +10,8 @@ block content
         a(href="#" @click.prevent="editMode = !editMode" v-cloak) {{ editMode ? 'Hide Edit Links' : 'Show Edit Links' }}
       p
         a(href="#" @click.prevent="toggleNavigation") {{ hideNavigation ? 'Show Navigation' : 'Hide Navigation'  }}
+      p
+        a(href="#" @click.prevent="refresh") Refresh
     add-act-modal
     add-show-modal
     add-workshop-modal

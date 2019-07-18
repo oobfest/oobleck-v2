@@ -61,6 +61,17 @@ let app = new Vue({
     }
   },
   methods: {
+    refresh() {
+      axios
+        .post('/api/shows/refresh')
+        .then(response=> {
+          console.log(response.data)
+        })
+        .catch(error=> {
+          alert("Error on refresh :(")
+          console.log(error)
+        })
+    },
     toggleNavigation() {
       if(this.hideNavigation) {
         document.getElementById("dash-nav").style.display = 'flex';
