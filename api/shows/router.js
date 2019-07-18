@@ -11,5 +11,7 @@ router.post('/refresh', controller.refresh)
 router.post('/ticket', controller.addTicket)
 router.post('/remove-ticket', controller.removeTicket)
 router.post('/set-capacity', controller.setCapacity)
+router.post('/check-remaining-tickets/:showId', controller.setCapacity)
+router.post('/add-badge-reservation/:showId', controller.addBadgeReservation)
 
 module.exports = createRouter(router, controller)

@@ -1,6 +1,6 @@
 script#modal-template(type="text/template")
   .modal#show-modal
-    .modal-dialog.modal-xl
+    .modal-dialog.modal-lg
       .modal-content
         .modal-header
           span.modal-title {{show.day}}, {{show.venue | venue}} at {{show.startTime | time}}
@@ -20,27 +20,31 @@ script#modal-template(type="text/template")
               .media-body.align-self-center
                 h2.modal-act-name Hosted by {{show.host.name}}
                 p.modal-act-description {{show.host.bio}}
-            .mb-3
-              //a(href="#" @click.prevent="showUrl= !showUrl") Share this event
-              //| &nbsp;
-              //font-awesome-icon(:icon="['fas', 'share-square']" size="sm")
+
+            //- URL for Social Media
+            //-.mb-3
+              a(href="#" @click.prevent="showUrl= !showUrl") Share this event
+              | &nbsp;
+              font-awesome-icon(:icon="['fas', 'share-square']" size="sm")
               div(v-show="showUrl==true")
                 input#share-url.form-control.url(:value="getUrlForShow(show)" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
 
-            div.text-right(v-if="remaining == null")
-              strong.text-info Getting ticket information...
-            div.text-right(v-if="remaining != null && remaining<=0")
-              strong.text-danger This show is sold out!
-            div.text-center.text-info(v-else-if="boxOfficeClosed()")
-              p.m-0 Online sales for this show are now closed.
-              p.m-0(v-show="remaining !== null && remaining > 0") Tickets are still available at the door!
-            div(v-else)
-              .text-right
-                button.btn.btn-secondary(type="button" @click="hide") Cancel
-                | &nbsp;
-                //button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
-                | &nbsp;
-                button.btn.btn-primary(type="button" @click="state++") Reserve with Badge
+            //- Check for remaining tickets
+              div.text-right(v-if="remaining == null")
+                strong.text-info Getting ticket information...
+              div.text-right(v-if="remaining != null && remaining<=0")
+                strong.text-danger This show is sold out!
+              div.text-center.text-info(v-else-if="boxOfficeClosed()")
+                p.m-0 Online sales for this show are now closed.
+                p.m-0(v-show="remaining !== null && remaining > 0") Tickets are still available at the door!
+              div(v-else)
+
+            .text-right
+              button.btn.btn-primary(type="button" @click="hide") Cancel
+              | &nbsp;
+              //- button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
+              | &nbsp;
+              button.btn.btn-primary(type="button" @click="state=1") Reserve with Badge
           section(v-show="state==1")
             .form-group
               label Badge Email
@@ -52,7 +56,7 @@ script#modal-template(type="text/template")
                 option 2
                 option 3
             .text-right
-              button.btn.btn-secondary(type="button" @click="state--") Back
+              button.btn.btn-primary(type="button" @click="state--") Back
               | &nbsp;
               button.btn.btn-primary(type="button" @click="reserveWithBadge(show._id)") Make Reservation
           section(v-show="state==2")
@@ -61,12 +65,12 @@ script#modal-template(type="text/template")
               p A confirmation email has been sent to &nbsp;
                 span.code {{email}}
             .text-right
-              button.btn.btn-primary(type="button" @click="$refs.showModal.hide()") Close
+              button.btn.btn-primary(type="button" @click="hide") Close
           section(v-show="state==3")
             p Stripe Goes Here
             //paypal(:show-id="show._id", :remaining="remaining" @paid="paid")
             .text-right
-              button.btn.btn-secondary(type="button" @click="state=0") Back
+              button.btn.btn-primary(type="button" @click="state=0") Back
 
 script.
   Vue.component('modal', {
@@ -112,17 +116,20 @@ script.
         backdrop.remove()
         document.getElementById('show-modal').style.display = "none"
         document.body.classList.remove('modal-open')
+        this.reset()
       },
       boxOfficeClosed() {
-        /*
-        let now = new Date()
-        let nowDay = now.getDay() <= 1 ? now.getDay() + 5 : now.getDay() - 2
-        let nowTime = ( (now.getHours() - 11) * 100) + now.getMinutes()
-        let showDay = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'].indexOf(this.show.day)
-        let showTime = this.show.time
-        return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
-        */
-        return false
+        // Todo: Update!
+        let weekOfFestival = false
+        if(weekOfFestival) {
+          let now = new Date()
+          let nowDay = now.getDay() <= 1 ? now.getDay() + 5 : now.getDay() - 2
+          let nowTime = ( (now.getHours() - 11) * 100) + now.getMinutes()
+          let showDay = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'].indexOf(this.show.day)
+          let showTime = this.show.time
+          return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
+        }
+        else return false
       },
       getUrlForShow(show) {
         if (show.day && show.venue && show.time)
@@ -133,24 +140,12 @@ script.
         this.email = email
         this.state = 2
       },
-      shown() {
-        let self = this
-        return axios
-          .get('https://app.oobfest.com/api/shows/get-remaining-tickets/' + self.show._id)
-          .then((response)=> {
-            self.remaining = Number(response.data.remaining)
-          })
-          .catch((error)=> {
-            alert("Error getting ticket data")
-            console.log(error)
-          })
-      },
       reserveWithBadge(showId) {
         if (this.email == '') return alert("Please enter email")
 
         let self = this
         axios
-          .post('https://app.oobfest.com/api/shows/badge-reservation/' + showId, {email: self.email, quantity: self.quantity})
+          .post('/api/shows/add-badge-reservation/' + showId, {email: self.email, quantity: self.quantity})
           .then(function(response) {
             if(response.data.reservationSuccessful) {
               self.state++

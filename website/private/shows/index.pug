@@ -10,7 +10,7 @@ block content
         a.nav-link.active(data-toggle="tab" href="#shows") Shows
       //-li.nav-item
         a.nav-link(href="/shows/tickets") Tickets
-      li.nav-item
+      //-li.nav-item
         a.nav-link(data-toggle="tab" href="#print-tickets") Print Tickets
     .tab-content.mt-3
       #shows.tab-pane.fade.show.active
@@ -55,7 +55,7 @@ block content
                   .collapse(:id="'collapse'+index")
                     ul
                       li(:class="{'font-weight-bold' : act.headliner}" v-for="act in show.acts") {{act.name}}
-                    p(v-if="show.price") Price:
+                    p(v-if="show.price") Price:&nbsp;
                       a(href="#" @click.prevent="setPrice(show._id)") ${{show.price}}
                     p(v-else)
                       a(href="#" @click.prevent="setPrice(show._id)") No price set

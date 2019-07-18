@@ -57,6 +57,20 @@ let overrides = {
     }
   },
 
+  async addBadgeReservation(request, response) {
+    try {
+      let showId = request.params.showId
+      let email = request.body.email
+      let quantity = request.body.quantity
+      let soSleepy = await model.addBadgeReservation(showId, email, quantity)
+      response.json(soSleepy)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on addBadgeReservation()")
+    }
+  },
+
   async removeTicket(request, response) {
     try {
       let showId = request.body.showId
@@ -67,6 +81,18 @@ let overrides = {
     catch(error) {
       console.log(error.message)
       response.status(500).send("Error on removeTicket()")
+    }
+  },
+
+  async checkRemainingTickets(request, response) {
+    try {
+      let showId = request.params.showId
+      let remaining = await model.checkRemainingTickets(showId)
+      response.json(remaining)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on checkRemainingTickets()")
     }
   },
 
