@@ -42,6 +42,45 @@ let overrides = {
       console.log(error.message)
       response.status(500).send("Error on refresh()")
     }
+  },
+
+  async addTicket(request, response) {
+    try {
+      let showId = request.body.showId
+      let ticket = request.body.ticket
+      let show = await model.addTicket(showId, ticket)
+      response.json(show)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on addTicket()")
+    }
+  },
+
+  async removeTicket(request, response) {
+    try {
+      let showId = request.body.showId
+      let ticketId = request.body.ticketId
+      let show = await model.removeTicket(showId, ticketId)
+      response.json(show)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on removeTicket()")
+    }
+  },
+
+  async setCapacity(request, response) {
+    try {
+      let showId = request.body.showId
+      let capacity = request.body.capacity
+      let show = await model.setCapacity(showId, capacity)
+      response.json(show)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on setCapacity()")
+    }
   }
 }
 

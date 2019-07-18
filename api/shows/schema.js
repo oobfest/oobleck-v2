@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
-let actSchema = require('./schemas/act')
-let hostSchema = require('../hosts/schema')
+let ActSchema = require('./schemas/act')
+let HostSchema = require('../hosts/schema')
+let TicketSchema = require('./schemas/ticket')
 
 let showSchema = mongoose.Schema({
   day: String,
@@ -13,46 +14,18 @@ let showSchema = mongoose.Schema({
   remaining: Number,
   price: Number,
 
-  acts: [actSchema],
+  acts: [ActSchema],
   host: {
     required: false,
     default: null,
-    type: hostSchema
+    type: HostSchema
   },
-  tickets: [],
+  tickets: [TicketSchema],
 
   volunteerBoxOffice1: mongoose.Schema.Types.ObjectId,
   volunteerBoxOffice2: mongoose.Schema.Types.ObjectId,
   volunteerTicketTaker1: mongoose.Schema.Types.ObjectId,
   volunteerTicketTaker2: mongoose.Schema.Types.ObjectId,
 })
-
-/* Ticket
-  ID
-  Name String
-  Email String
-  Phone String
-  Quantity Number
-  Badge:
-    false,
-    'all',
-    'performer-all',
-    'performer-weekend-upgrade'
-    'volunteer'
-    'staff'
-    'panelist'
-    'comp'
-  Payment: {paypal}, false
-*/
-
-/* Act
-  name
-  type
-  _id
-  duration
-  imageUrl
-  domain
-  public description
-*/
 
 module.exports = showSchema

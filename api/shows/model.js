@@ -41,6 +41,39 @@ let overrides = {
       show.markModified('acts')
       mongooseModel.findByIdAndUpdate(show._id, show, {new: true}).lean().exec()
     }
+  },
+
+  async addTicket(showId, ticket) {
+    let show = await mongooseModel.findById(showId).exec()
+
+    // Show is sold out
+    if(show.remaining <= 0) return { reservationSuccessful: false, message: "Show is sold out"}
+
+      // Not enough tickets remaining for requested quantity
+    else if (ticket.quantity > show.remaining) return { reservationSuccessful: false, message: `There are less than ${ticket.quantity} tickets available for this show`}
+
+    else {
+      show.tickets.push(ticket)
+      show.remaining = (show.remaining - ticket.quantity)
+      show.markModified('tickets')
+      return await show.save()
+    }
+  },
+
+  async removeTicket(showId, ticketId) {
+    let show = await mongooseModel.findById(showId).exec()
+    let ticketIndex = show.tickets.findIndex(t=> t._id == ticketId)
+    show.remaining += Number(show.tickets[ticketIndex].quantity)
+    show.tickets.splice(ticketIndex, 1)
+    return await show.save()
+  },
+
+  async setCapacity(showId, capacity) {
+    let show = await mongooseModel.findById(showId).exec()
+    if (show.capacity == undefined) show.remaining = capacity
+    else show.remaining = capacity - (show.capacity - show.remaining)
+    show.capacity = capacity
+    return await show.save()
   }
 }
 

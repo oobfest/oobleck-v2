@@ -127,19 +127,23 @@ a.no-underline-on-hover:hover { text-decoration: none !important; }
 /* Modals END */
 
 /* WOW */
-.nav-link {
+#schedule .nav-link {
   font-variant: small-caps;
   font-weight: bold;
   color: #f9a01b;
   background-color: unset;
   font-size: 1.25rem;
 }
-.nav-pills .nav-link.active {
+#schedule .nav-pills .nav-link.active {
   color: black;
   background-color: #f9a01b;
 }
 
-h3 {
+#schedule a.nav-link:hover {
+  box-shadow: none;
+}
+
+#schedule h3 {
   font-size: 1.5rem;
   text-decoration: underline;
   text-transform: none;

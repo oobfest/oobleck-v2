@@ -8,13 +8,13 @@ block content
     ul.nav.nav-pills
       li.nav-item
         a.nav-link.active(data-toggle="tab" href="#shows") Shows
-      //- li.nav-item
+      //-li.nav-item
         a.nav-link(href="/shows/tickets") Tickets
       li.nav-item
         a.nav-link(data-toggle="tab" href="#print-tickets") Print Tickets
     .tab-content.mt-3
       #shows.tab-pane.fade.show.active
-        .box.box-b(v-if="shows.length > 0")
+        .box.box-b
           table.box-table.table.table-sm.text-center
             thead
               tr
@@ -42,8 +42,7 @@ block content
                           option ColdTowne
                           option Fallout
                           option(value="Velveeta") Velveeta Room
-                          option Spider House
-                          option Institution
+                          option North Door
                 th Cap
                 th
                   a(href="#" @click.prevent="sortByRemaining = false") Sold
@@ -52,7 +51,7 @@ block content
             tbody
               tr(v-for="(show, index) in filteredShows")
                 td.text-left
-                  a(:href="'#collapse'+index" data-toggle="collapse") {{show.day}}, {{show.venue}}, {{show.time | time}}
+                  a(:href="'#collapse'+index" data-toggle="collapse") {{show.day}}, {{show.venue | venue}}, {{show.startTime | time}}
                   .collapse(:id="'collapse'+index")
                     ul
                       li(:class="{'font-weight-bold' : act.headliner}" v-for="act in show.acts") {{act.name}}
@@ -75,10 +74,7 @@ block content
                           td {{ticket.email}}
                           td {{ticket.quantity}}
 
-                          td(v-if="ticket.badge") {{formatBadge(ticket.badge)}}
-                          td(v-else)
-                            a(:href="'https://www.paypal.com/activity/payment/' + ticket.payment.transactions[0].related_resources[0].sale.id" target="_blank") {{ticket.payment.transactions[0].related_resources[0].sale.id}}
-
+                          td {{ticket.type}}
                           td
                             a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
                     p(v-else) No tickets sold
@@ -87,10 +83,9 @@ block content
                     button.btn.btn-secondary.btn-xs(type="button" @click="reserveWithBadge(show._id)") Add Badge Reservation
 
                 td
-                  a.digits(href="#" @click.prevent="setCapacity(show._id)") {{show.capacity}}
+                  a.digits(href="#" @click.prevent="setCapacity(show._id)") {{show.capacity ? show.capacity : 'set' }}
                 td.digits {{show.capacity - show.remaining}}
                 td.digits {{show.remaining}}
-        p.m2(v-else) No shows yet
 
       #print-tickets.tab-pane.fade
         .row
@@ -244,7 +239,7 @@ block content
         removeReservation(showId, ticketId) {
           let self = this
           axios
-            .post('/api/shows/remove-reservation/' + showId, {ticketId: ticketId})
+            .post('/api/shows/remove-ticket/', {showId, ticketId})
             .then(function(response) {
               let showIndex = self.shows.findIndex(s=> s._id == showId)
               Vue.set(self.shows, showIndex, response.data)
@@ -254,38 +249,20 @@ block content
               console.log(error)
             })
         },
-        setCapacity(id) {
+        setCapacity(showId) {
           let capacity = Number(prompt("New capacity"))
           if(capacity == 0) return
           let self = this
           axios
-            .post('/api/shows/set-capacity/' + id, {capacity: capacity})
+            .post('/api/shows/set-capacity/', {showId, capacity})
             .then((response)=> {
-              let index = self.shows.findIndex(s=> s._id == id)
+              let index = self.shows.findIndex(s=> s._id == showId)
               Vue.set(self.shows, index, response.data)
             })
             .catch((error)=> {
               alert("Failed to set capacity for show :(")
               console.log(error)
             })
-        },
-        setPrice(id) {
-          let price = prompt("New price")
-          if(price == null) return
-          else price = Number(price)
-
-          let self = this
-          axios
-            .post('/api/shows/set-price/' + id, {price: price})
-            .then((response)=> {
-              let index = self.shows.findIndex(s=> s._id == id)
-              Vue.set(self.shows, index, response.data)
-            })
-            .catch((error)=> {
-              alert("Failed to set price for show :(")
-              console.log(error)
-            })
-
         }
       },
       filters: {
@@ -293,6 +270,17 @@ block content
           time = String(time)
           return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
         },
+        venue(venue) {
+          switch(venue) {
+            case 'Hideout Up':    return 'Hideout Theatre (Upstairs)'
+            case 'Hideout Down':  return 'Hideout Theatre (Downstairs)'
+            case 'ColdTowne':     return 'ColdTowne Theater'
+            case 'Fallout':       return 'Fallout Theater'
+            case 'Velveeta':      return 'Velveeta Room'
+            case 'North Door':    return 'North Door'
+            default:              return venue
+          }
+        }
       },
       created() {
         let self = this

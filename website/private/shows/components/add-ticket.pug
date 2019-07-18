@@ -51,18 +51,21 @@ script.
 
         let self = this
         axios
-          .post('/api/shows/comp-reservation/' + self.showId, self.ticket)
+          .post('/api/shows/ticket/', {showId: self.showId, ticket: self.ticket})
           .then(function(response) {
+
+            // TODO: Fix this!
             let savedShow = response.data.savedShow
             let index = self.$parent.shows.map(s=> s._id).indexOf(self.showId)
             Vue.set(self.$parent.shows, index, savedShow)
+
             self.reset()
           })
           .catch(function(error){
             alert("Error creating ticket :(")
             console.log(error)
             self.reset()
-          })        
+          })
       },
       reset() {
         this.ticket.name = ''
