@@ -1,13 +1,18 @@
 extends ../../_layout
 block content
+  .row
+    .col.text-center
+      h1.display-3.mb-2.text-uppercase Schedule
   #schedule
     modal(:show="modalModel")
     .container-fluid
       .row
         .col.text-center
-          p.mb-0 Online sales for each show end one hour before show time.
-          p.mb-0 Tickets will also be for sale at the venue's box office.
-          p You must show up 10 minutes before show time to claim your ticket.
+          //p.mb-0 Online sales for each show end one hour before show time.
+          //p.mb-0 Tickets will also be for sale at the venue's box office.
+          //p You must show up 10 minutes before show time to claim your ticket.
+          p.mb-0 You can make reservations online with a badge.
+          p You will be able to buy individual tickets closer to the festival.
       .row
         .col
           .tabs

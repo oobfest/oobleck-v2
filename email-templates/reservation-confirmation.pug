@@ -1,0 +1,22 @@
+p Dear #{name},
+p This is a confirmation email for the following show:
+p
+  b Where:
+  |  #{where}
+  br
+  b When:
+  |  #{when}
+  br
+  b Quantity:
+  |  #{quantity}
+
+if isBadge
+  p Check-in at the box office
+  i  at least ten minutes before show time
+  |  with your badge to pick up your ticket. You will lose your spot if you arrive late or do not have your badge.
+else
+  p Check-in at the box office
+  i  at least ten minutes before show time
+  |  with your name to pick up your ticket. You will lose your spot if you arrive late.
+
+p You can email box-office@oobfest.com for any ticket-related concerns and email hospitality@oobfest.com for general questions about the festival.

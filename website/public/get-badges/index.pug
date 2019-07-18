@@ -1,0 +1,10 @@
+extends ../../_layout
+block content
+  script(src="https://checkout.stripe.com/checkout.js")
+  .row
+    .col.text-center
+      h1.display-3.mb-4.text-uppercase Badges
+  .container-fluid.text-white.text-center
+    .row
+      .col
+        include badge-form

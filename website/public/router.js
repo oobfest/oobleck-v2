@@ -80,6 +80,9 @@ router.use(actSubmissionConfirmationRouter)
 let actSubmissionEditRouter = require('./act-submission-edit/router')
 router.use(actSubmissionEditRouter)
 
+let badgeFormRouter = require('./get-badges/router')
+router.use('/get-badges', badgeFormRouter)
+
 let hostSubmissionFormRouter = require('./host-submission-form/router')
 router.use('/host-submission-form', hostSubmissionFormRouter)
 

@@ -15,7 +15,6 @@ block content
         h2.display-4.mt-3 Labor Day Weekend
         h2.text-light August 27th to September 2nd
 
-
     .row.justify-content-center.mt-8
       .col-lg-8
         h2.display-4 What is Out of Bounds?
@@ -25,8 +24,8 @@ block content
           em the largest multi-disciplinary comedy festival in the south
           | .
 
-    #badges.mt-8
-      include badges/index
+    .mt-8
+      include get-badges/badge-form
 
     .row.justify-content-center.mt-8
       .col-sm-3
@@ -49,104 +48,3 @@ block content
       .col-lg-8
         h2.display-4 Sponsors
         img.img-fluid(src="/img/cultural-arts-logo.png")
-
-  script.
-
-    let handler = StripeCheckout.configure({
-      //key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
-      key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
-      image: '/img/oob-logo-fire.jpg',
-      locale: 'auto',
-      zipCode: true,
-      currency: 'usd',
-      allowRememberMe: false,
-      token: function(token) {
-        badgeApp.badge.email = token.email
-        let data = { token, badge: badgeApp.badge }
-        axios
-          .post('/api/stripe/badges/', data)
-          .then((response)=> {
-            if(response.data.paid) {
-              if (badgeApp.badge.type =='all') badgeApp.card1State++
-              else badgeApp.card2State++
-            }
-            else alert("Payment failed 😟")
-          })
-          .catch((error)=> {
-            console.log("ERROR :(")
-            console.log(error)
-          })
-      }
-    })
-
-    let badgeApp = new Vue({
-      el: "#badges",
-      data() {
-        return {
-          card1State: 1,
-          card2State: 0,
-          badge: {
-            type: 'all',
-            name: '',
-            email: '',
-            phone: '',
-            quantity: 1,
-            weekendOnly: false
-          }
-        }
-      },
-      methods: {
-        stripeHandler() {
-          if (this.isValid()) {
-            handler.open({
-              name: 'Out Of Bounds Comedy',
-              description: 'All-Access Badge',
-              amount: this.getBadgeCost()
-            })
-          }
-          else alert("All fields are required!")
-        },
-        getBadgeCost() {
-          if (this.badge.type == 'all') return (9900 * this.badge.quantity)
-          if (this.badge.type == 'performer-upgrade') return 6900
-          if (this.badge.type == 'performer-weekend-upgrade') return 4500
-        },
-        isValid() {
-          return this.badge.name != '' &&
-                 this.badge.phone != ''
-        },
-        isValidPerformer() {
-          return this.performerBadge.name != '' &&
-                 this.performerBadge.email != '' &&
-                 this.performerBadge.phone != ''
-        },
-        validate(actions) {
-          this.isValid() ? actions.enable() : actions.disable()
-        },
-        onChange(handler) {
-          document.querySelector('#name').addEventListener('change', handler)
-          document.querySelector('#email').addEventListener('change', handler)
-          document.querySelector('#phone').addEventListener('change', handler)
-        },
-        validatePerformerBadge(actions) {
-          this.isValidPerformer() ? actions.enable() : actions.disable()
-        },
-        onChangePerformerBadge(handler) {
-          document.querySelector('#performer-name').addEventListener('change', handler)
-          document.querySelector('#performer-phone').addEventListener('change', handler)
-        },
-        validatePerformerEmail() {
-          let self = this
-          axios
-            .post('/api/acts/validate-performer-email', {email: this.badge.email})
-            .then(function(response) {
-              let isValid = response.data
-              if(isValid) self.card2State+= 2
-              else self.card2State++
-            })
-            .catch(function() {
-              alert("Email check failed. Please try again later. ")
-            })
-        }
-      },
-    })
