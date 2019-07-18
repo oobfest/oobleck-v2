@@ -11,7 +11,7 @@ router.get('/:actName', async(request, response)=> {
   console.log(actName)
   let act = await actModel.getByName(actName)
   console.log(act)
-  response.render('public/lineup/act', act)
+  response.render('public/lineup/act', {act, shows: []})
 })
 
 module.exports = router

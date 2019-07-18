@@ -1,32 +1,42 @@
 include ../../_layout
 block content
-  div(style="padding-bottom:3em")
+  link(href="/css/acts.css" rel="stylesheet")
+  .container(style="padding-bottom:3em")
     //show-modal(:show="modalModel")
     .row.align-items-center
       .col-md
-        img.img-fluid.rounded.float-right(:src="scaledImageUrl")
+        img.img-fluid.rounded.float-right(src="https://i.imgur.com/" + act.image.id + "l.jpg")
       .col-md.lineup-act-details
-        h1 #{actName}
-          small &mdash; #{showType}
-        h5 #{city}, #{state}
-          span(v-if="country != 'US'") , #{country}
-        p #{publicDescription}
-        section(v-if="performers.length > 1")
-          h3 Cast &amp; Crew
-          ul
-            li(v-for="performer in performers") #{performer}
-        section(v-if="socialMedia.length > 0")
-          h3 Social Media
-          ul
-            li(v-for="socialMediaLink in socialMedia")
-              a(:href="socialMediaLink.url" target="_blank") #{socialMediaLink}
-        section(v-if="shows.length > 0")
-          h3 Shows
-          ul
-            li(v-for="show in shows")
-              //a(href="#" @click.prevent="modalModel=show" v-b-modal.show-modal) #{formatDay(show.day)}, #{formatTime(show.time)} at #{formatVenue(show.venue)}
+        h1 #{act.name}
+          small &mdash; #{act.showType}
+        h5 #{act.city}, #{act.state}
+          if country != 'US'
+            span , #{act.country}
+        p #{act.publicDescription}
+
+        if act.personnel.length > 1
+          section
+            h3 Cast &amp; Crew
+            ul
+              for person in act.personnel
+                li #{person.name}
+
+        if act.socialMedia.length > 0
+          section(v-if="socialMedia.length > 0")
+            h3 Social Media
+            ul
+              for socialMediaLink in act.socialMedia
+                li
+                  a(href=socialMediaLink.url target="_blank") #{socialMediaLink.type}
+
+        if shows.length > 0
+          section(v-if="shows.length > 0")
+            h3 Shows
+            ul
+              li(v-for="show in shows")
+                //a(href="#" @click.prevent="modalModel=show" v-b-modal.show-modal) #{formatDay(show.day)}, #{formatTime(show.time)} at #{formatVenue(show.venue)}
 
         p.text-right
           font-awesome-icon(:icon="['fas', 'arrow-circle-left']" size="sm")
           | &nbsp;
-          a(href="/acts") Back to Lineup
+          a(href="/lineup") Back to Lineup

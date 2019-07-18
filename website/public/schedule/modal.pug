@@ -1,0 +1,179 @@
+script#modal-template(type="text/template")
+  .modal#show-modal
+    .modal-dialog.modal-xl
+      .modal-content
+        .modal-header
+          span.modal-title {{show.day}}, {{show.venue | venue}} at {{show.startTime | time}}
+          button.close(type="button" @click="hide") &times;
+        .modal-body
+          section(v-show="state==0")
+            ul.list-unstyled.mb-2
+              li.media(v-for="act in show.acts")
+                img.mr-3.align-self-center(:src="'https://i.imgur.com/' + act.image.id + 'b.jpg'")
+                .media-body.align-self-center
+                  h2.modal-act-name {{act.name}}
+                    small &mdash; {{act.showType.join(', ')}}
+                  h5(v-if="act.city") {{act.city}}, {{act.state}}
+                  p.modal-act-description {{act.publicDescription}}
+            .media(v-if="show.host")
+              img.mr-3.mb-3.align-self-center(:src="'https://i.imgur.com/' + show.host.image.id + 'b.jpg'" v-if="show.host.image")
+              .media-body.align-self-center
+                h2.modal-act-name Hosted by {{show.host.name}}
+                p.modal-act-description {{show.host.bio}}
+            .mb-3
+              //a(href="#" @click.prevent="showUrl= !showUrl") Share this event
+              //| &nbsp;
+              //font-awesome-icon(:icon="['fas', 'share-square']" size="sm")
+              div(v-show="showUrl==true")
+                input#share-url.form-control.url(:value="getUrlForShow(show)" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
+
+            div.text-right(v-if="remaining == null")
+              strong.text-info Getting ticket information...
+            div.text-right(v-if="remaining != null && remaining<=0")
+              strong.text-danger This show is sold out!
+            div.text-center.text-info(v-else-if="boxOfficeClosed()")
+              p.m-0 Online sales for this show are now closed.
+              p.m-0(v-show="remaining !== null && remaining > 0") Tickets are still available at the door!
+            div(v-else)
+              .text-right
+                button.btn.btn-secondary(type="button" @click="hide") Cancel
+                | &nbsp;
+                //button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
+                | &nbsp;
+                button.btn.btn-primary(type="button" @click="state++") Reserve with Badge
+          section(v-show="state==1")
+            .form-group
+              label Badge Email
+              input.form-control(type="email" v-model="email")
+            .form-group
+              label Quantity
+              select.custom-select(v-model="quantity")
+                option 1
+                option 2
+                option 3
+            .text-right
+              button.btn.btn-secondary(type="button" @click="state--") Back
+              | &nbsp;
+              button.btn.btn-primary(type="button" @click="reserveWithBadge(show._id)") Make Reservation
+          section(v-show="state==2")
+            .text-center
+              h2 Success!
+              p A confirmation email has been sent to &nbsp;
+                span.code {{email}}
+            .text-right
+              button.btn.btn-primary(type="button" @click="$refs.showModal.hide()") Close
+          section(v-show="state==3")
+            p Stripe Goes Here
+            //paypal(:show-id="show._id", :remaining="remaining" @paid="paid")
+            .text-right
+              button.btn.btn-secondary(type="button" @click="state=0") Back
+
+script.
+  Vue.component('modal', {
+    template: "#modal-template",
+    props: ['show', 'acts'],
+    data() {
+      return {
+        state: 0,
+        email: "",
+        quantity: 1,
+        remaining: null,
+        clickCounter: 0,
+        showUrl: false
+      }
+    },
+    computed: {
+      modalSize() {
+        return this.state == 0 || this.state == 2
+          ? 'lg'
+          : 'md'
+      }
+    },
+    filters: {
+      time(time) {
+        time = String(time)
+        return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+      },
+      venue(venue) {
+        switch(venue) {
+          case 'Hideout Up':        return 'Hideout Upstairs'
+          case 'Hideout Down':      return 'Hideout Downstairs'
+          case 'ColdTowne':         return 'ColdTowne'
+          case 'Fallout':           return 'Fallout'
+          case 'Velveeta':          return 'Velveeta'
+          case 'Spider House':      return 'Spider House'
+          case 'Institution':       return 'Institution'
+        }
+      },
+    },
+    methods: {
+      hide(){
+        let backdrop = document.getElementById('modal-backdrop')
+        backdrop.remove()
+        document.getElementById('show-modal').style.display = "none"
+      },
+      boxOfficeClosed() {
+        /*
+        let now = new Date()
+        let nowDay = now.getDay() <= 1 ? now.getDay() + 5 : now.getDay() - 2
+        let nowTime = ( (now.getHours() - 11) * 100) + now.getMinutes()
+        let showDay = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'].indexOf(this.show.day)
+        let showTime = this.show.time
+        return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
+        */
+        return false
+      },
+      getUrlForShow(show) {
+        if (show.day && show.venue && show.time)
+          return 'https://oobfest.com/shows/' + show.day.toLowerCase() + '/' + show.venue.toLowerCase().split(' ').join('-') + '/' + show.time
+        else return ''
+      },
+      paid(email) {
+        this.email = email
+        this.state = 2
+      },
+      shown() {
+        let self = this
+        return axios
+          .get('https://app.oobfest.com/api/shows/get-remaining-tickets/' + self.show._id)
+          .then((response)=> {
+            self.remaining = Number(response.data.remaining)
+          })
+          .catch((error)=> {
+            alert("Error getting ticket data")
+            console.log(error)
+          })
+      },
+      reserveWithBadge(showId) {
+        if (this.email == '') return alert("Please enter email")
+
+        let self = this
+        axios
+          .post('https://app.oobfest.com/api/shows/badge-reservation/' + showId, {email: self.email, quantity: self.quantity})
+          .then(function(response) {
+            if(response.data.reservationSuccessful) {
+              self.state++
+            }
+            else {
+              alert(response.data.message)
+            }
+          })
+          .catch(function(error) {
+            alert("Error reserving for show with badge :(")
+            console.log(error)
+            this.reset()
+          })
+      },
+      reset() {
+        this.state = 0
+        this.showUrl = false
+        // Keep the same email address for convenience!
+        this.quantity = 1
+      },
+      formatActType(type) {
+        return type == 'Individual'
+          ? 'Sketch'
+          : type
+      }
+    }
+  })

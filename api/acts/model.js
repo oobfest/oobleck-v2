@@ -44,7 +44,7 @@ let model = {
   },
 
   readPublic() {
-    return mongooseModel.find({stamp: 'in'}).lean().exec()
+    return mongooseModel.find({stamp: 'in', confirmationStatus: { $ne: "no"}}, "headliner name image.id").lean().exec()
   },
 
   update(id, updatedShow) {

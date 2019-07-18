@@ -8,21 +8,6 @@ block content
   link(href="/css/lineup.css" rel="stylesheet")
 
   script.
-    let getActs = function() {
-      axios
-        .get('/api/acts/public')
-        .then(response=> { console.log(response.data)})
-          /*
-          let featuredActs = response.data
-            .filter(a=> a.headliner)
-            .sort((a, b)=> {return (a.actName < b.actName) ? -1 : (a.actName > b.actName) ? 1 : 0})
-          let nonFeaturedActs = response.data
-            .filter(a=>!a.headliner)
-            .sort((a, b)=> {return (a.actName < b.actName) ? -1 : (a.actName > b.actName) ? 1 : 0})
-          return { acts : featuredActs.concat(nonFeaturedActs) }
-        }) */
-    }
-
     let lineup = new Vue({
       el: "#lineup",
       data() {
@@ -33,9 +18,18 @@ block content
 
       created() {
         let self = this
-
+        let alphabetize = (a, b)=> (a.name<b.name? -1: a.name>b.name? 1: 0)
         axios
           .get('/api/acts/public')
-          .then(response=> { self.acts = response.data })
+          .then(response=> {
+            let headliners = response.data
+              .filter(a=>a.headliner)
+              .sort(alphabetize)
+            let nonHeadliners = response.data
+              .filter(a=>!a.headliner)
+              .sort(alphabetize)
+            self.acts = headliners.concat(nonHeadliners)
+          })
       }
     })
+

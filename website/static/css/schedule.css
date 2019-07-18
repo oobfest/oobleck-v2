@@ -11,8 +11,8 @@ h1, h2 {
   font-family: 'gotham-black', sans-serif;
   color: #f9a01b;
   font-size: 46px;
-  a:focus { color: #f9a01b; }
 }
+h1 a:focus, h2 a:focus { color: #f9a01b; }
 
 h1 {
   text-transform: uppercase;
@@ -56,10 +56,10 @@ a:focus, .btn-link:focus { color: white; }
 
 .modal { color: #212529; text-shadow: none; }
 
-/*
+
 .btn-primary { background-color: #15808c; border-color: #15808c;}
 .btn-primary:hover, .btn-primary:active, .btn-primary:active:focus { background-color: #116a73 !important; border-color: #116a73 !important}
-*/
+
 
 .container { margin-bottom: 125px; }
 
@@ -127,10 +127,6 @@ a.no-underline-on-hover:hover { text-decoration: none !important; }
 /* Modals END */
 
 /* WOW */
-
-.nav.nav-pills {
-  margin-bottom: 1rem;
-}
 .nav-link {
   font-variant: small-caps;
   font-weight: bold;
@@ -159,7 +155,6 @@ h3 {
 
 .tabs {
   background-color: rgba(0,0,0,0.5);
-  margin-top: 2rem;
 }
 
 .venue {
@@ -171,7 +166,7 @@ h3 {
   background-color: rgba(20, 128, 140, .75);
   padding: 0.5rem;
   border-radius: 5px;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
 }
 .showy:hover {
   background-color: rgba(20,128,140,1);
@@ -188,6 +183,8 @@ h3 {
 
 .act-location {
   font-size: 12px;
+  display: block;
+  margin-top: 6px;
 }
 
 .media + .media {
@@ -196,3 +193,19 @@ h3 {
 
 
 /* WOW */
+
+.modal-body {
+  font-size:  1rem;
+}
+
+.modal-act-name {
+  font-size: 1.5rem;
+}
+
+.modal-act-description {
+  font-size: 1rem;
+}
+
+.url {
+  font-family: monospace;
+}
