@@ -47,6 +47,10 @@ let overrides = {
     }
   },
 
+  async find(day, venue, time) {
+    return mongooseModel.findOne({day, venue, time})
+  },
+
   async addTicket(showId, ticket) {
     let show = await mongooseModel.findById(showId).exec()
 

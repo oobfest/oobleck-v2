@@ -22,10 +22,10 @@ script#modal-template(type="text/template")
                 p.modal-act-description {{show.host.bio}}
 
             //- URL for Social Media
-            //-.mb-3
+            .mb-3
               a(href="#" @click.prevent="showUrl= !showUrl") Share this event
               | &nbsp;
-              font-awesome-icon(:icon="['fas', 'share-square']" size="sm")
+              //font-awesome-icon(:icon="['fas', 'share-square']" size="sm")
               div(v-show="showUrl==true")
                 input#share-url.form-control.url(:value="getUrlForShow(show)" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
 
@@ -132,8 +132,8 @@ script.
         else return false
       },
       getUrlForShow(show) {
-        if (show.day && show.venue && show.time)
-          return 'https://oobfest.com/shows/' + show.day.toLowerCase() + '/' + show.venue.toLowerCase().split(' ').join('-') + '/' + show.time
+        if (show.day && show.venue && show.startTime)
+          return 'https://oobfest.com/schedule/' + show.day + '/' + show.venue + '/' + show.startTime
         else return ''
       },
       paid(email) {
