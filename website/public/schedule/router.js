@@ -18,7 +18,7 @@ router.get('/:day/:venue/:time', async (request, response)=> {
   if (show == null) response.redirect('/')
   else {
     show.venue = formatVenue(show.venue)
-    show.startTime = formatTime(show.startTime)
+    show.time = formatTime(show.startTime)
     response.render('public/schedule/show', {show: show, alt: true})
   }
 })
