@@ -47,8 +47,8 @@ let overrides = {
     }
   },
 
-  async find(day, venue, time) {
-    return mongooseModel.findOne({day, venue, time})
+  async find(day, venue, startTime) {
+    return mongooseModel.findOne({day, venue, startTime})
   },
 
   async addTicket(showId, ticket) {

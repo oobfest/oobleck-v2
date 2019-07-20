@@ -21,8 +21,7 @@ script#modal-template(type="text/template")
                 h2.modal-act-name Hosted by {{show.host.name}}
                 p.modal-act-description {{show.host.bio}}
 
-            //- URL for Social Media
-            //-.mb-3
+            .mb-3
               a(href="#" @click.prevent="showUrl= !showUrl") Share this event
               | &nbsp;
               //font-awesome-icon(:icon="['fas', 'share-square']" size="sm")
