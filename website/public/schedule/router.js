@@ -2,6 +2,7 @@ let express = require('express')
 let router = express.Router()
 let showModel = require('../../../api/shows/model')
 
+
 router.get('/', (request, response)=> {
   response.render('public/schedule', {alt: true})
 })
@@ -11,15 +12,13 @@ router.get('/list', (request, response)=> {
 })
 
 router.get('/:day/:venue/:time', async (request, response)=> {
-  let day = request.params.day
-  let venue = request.params.venue
-  let time = request.params.time
-  let show = await showModel.find(day, venue, time)
+  let url = `${request.params.day}/${request.params.venue}/${request.params.time}`
+  let show = await showModel.find(url)
   if (show == null) response.redirect('/')
   else {
     show.venue = formatVenue(show.venue)
     show.time = formatTime(show.startTime)
-    response.render('public/schedule/show', {show: show, alt: true})
+    response.render('public/schedule/show', {show, alt: true})
   }
 })
 

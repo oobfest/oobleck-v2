@@ -6,9 +6,19 @@ let actModel = require('../acts/model')
 let badgeModel = require('../badges/model')
 let nodeMailer = require('../../utilities/nodemailer')
 let reservationConfirmationEmailTemplate = require('../../email-templates/compile')('reservation-confirmation')
-
+let urlSlug = require('url-slug')
 
 let overrides = {
+
+  async getShowsByActName(actName) {
+    return mongooseModel.find()
+  },
+
+  async create(show) {
+    show.url = `${urlSlug(show.day)}/${urlSlug(show.venue)}/${show.startTime}`
+    return mongooseModel.create(show)
+  },
+
   async addAct(show, act) {
     show.acts.push(act)
     return show
@@ -28,11 +38,18 @@ let overrides = {
     show.host = null
     return show
   },
+
   async refresh() {
     let shows = await mongooseModel.find()
-    let acts = await actModel.read()
+    let acts = await actModel.readFat()
+
+    for(act of acts) {
+      act.url = urlSlug(act.name)
+      act.save()
+    }
 
     for (show of shows) {
+      show.url = `${urlSlug(show.day)}/${urlSlug(show.venue)}/${show.startTime}`
       for (oldAct of show.acts) {
         for (newAct of acts) {
           if (oldAct.name == newAct.name) {
@@ -47,8 +64,8 @@ let overrides = {
     }
   },
 
-  async find(day, venue, startTime) {
-    return mongooseModel.findOne({day, venue, startTime})
+  async find(url) {
+    return mongooseModel.findOne({url})
   },
 
   async addTicket(showId, ticket) {

@@ -1,4 +1,4 @@
-script#modal-template(type="text/template")
+cvzscript#modal-template(type="text/template")
   .modal#show-modal
     .modal-dialog.modal-lg
       .modal-content
@@ -21,12 +21,13 @@ script#modal-template(type="text/template")
                 h2.modal-act-name Hosted by {{show.host.name}}
                 p.modal-act-description {{show.host.bio}}
 
-            .mb-3
-              a(href="#" @click.prevent="showUrl= !showUrl") Share this event
+            .mb-3.text-right
+              a(href="#" @click.prevent="showUrl= !showUrl")
+                i.far.fa-share-square
+                |  Share this event
               | &nbsp;
-              //font-awesome-icon(:icon="['fas', 'share-square']" size="sm")
               div(v-show="showUrl==true")
-                input#share-url.form-control.url(:value="getUrlForShow(show)" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
+                input#share-url.form-control.url(:value="'https://oobfest.com/' + show.url" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
 
             //- Check for remaining tickets
               div.text-right(v-if="remaining == null")

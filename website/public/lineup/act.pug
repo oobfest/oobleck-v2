@@ -1,7 +1,7 @@
 extends ../../_layout
 block content
   link(href="/css/acts.css" rel="stylesheet")
-  .container(style="padding-bottom:3em")
+  .container.mt-3
     //show-modal(:show="modalModel")
     .row.align-items-center
       .col-md
@@ -29,14 +29,14 @@ block content
                 li
                   a(href=socialMediaLink.url target="_blank") #{socialMediaLink.type}
 
-        if shows.length > 0
-          section(v-if="shows.length > 0")
+        if act.shows && act.shows.length > 0
+          section(v-if="act.shows.length > 0")
             h3 Shows
             ul
-              li(v-for="show in shows")
+              li(v-for="show in act.shows")
                 //a(href="#" @click.prevent="modalModel=show" v-b-modal.show-modal) #{formatDay(show.day)}, #{formatTime(show.time)} at #{formatVenue(show.venue)}
 
-        p.text-right
+        //-p.text-right
           font-awesome-icon(:icon="['fas', 'arrow-circle-left']" size="sm")
           | &nbsp;
           a(href="/lineup") Back to Lineup

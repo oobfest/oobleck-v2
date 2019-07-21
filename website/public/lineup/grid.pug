@@ -14,7 +14,7 @@ script#grid-template(type="text/template")
     .row
       .col
         transition-group.acts(name="act")
-          tile.act-item(v-for="act in filteredActs",:key="act._id",:name="act.name",:imageId="act.image.id",:headliner="act.headliner")
+          tile.act-item(v-for="act in filteredActs",:key="act._id",:name="act.name",:imageId="act.image.id",:headliner="act.headliner",:url="act.url")
 
 script.
   Vue.component('grid', {

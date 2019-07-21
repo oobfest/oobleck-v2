@@ -10,7 +10,7 @@ block content
               li(v-for="venue in day.venues")
                 ul
                   li(v-for="show in getShowsByDayAndVenue(day.name, venue)")
-                    a(:href="`/shows/${day.name.toLowerCase()}/${venue}/${show.startTime}/`") {{formatVenue(venue)}}, {{formatTime(show.startTime)}}
+                    a(:href="`/schedule/${show.url}`") {{venue | venue}}, {{show.startTime | time}}
 
   link(href="/css/schedule.css" rel="stylesheet")
   script.
@@ -34,14 +34,8 @@ block content
           ]
         }
       },
-      methods: {
-        limax(input) {
-          return limax(input)
-        },
-        getShowsByDayAndVenue(day, venue) {
-          return this.shows.filter(s=> s.day == day && s.venue == venue)
-        },
-        formatVenue(venue) {
+      filters: {
+        venue(venue) {
           switch(venue) {
             case 'Hideout Up':        return 'Hideout Theatre Upstairs'
             case 'Hideout Down':      return 'Hideout Theatre Downstairs'
@@ -52,10 +46,17 @@ block content
             case 'Institution':       return 'Institution Theater'
           }
         },
-        formatTime(time) {
+        time(time) {
           time = String(time)
           return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
         }
+      },
+      methods: {
+        getShowsByDayAndVenue(day, venue) {
+          return this.shows
+            .filter(s=> s.day == day && s.venue == venue)
+            .sort((a, b)=> a.startTime - b.startTime)
+        },
       },
       created() {
         let self = this

@@ -15,12 +15,16 @@ let showSchema = mongoose.Schema({
   price: Number,
 
   acts: [ActSchema],
+
   host: {
     required: false,
     default: null,
     type: HostSchema
   },
+
   tickets: [TicketSchema],
+
+  url: String,
 
   volunteerBoxOffice1: mongoose.Schema.Types.ObjectId,
   volunteerBoxOffice2: mongoose.Schema.Types.ObjectId,

@@ -197,6 +197,9 @@ let SubmissionSchema = mongoose.Schema({
   specialtyShows: [],
   workshop: String,
   techRehearsalNeeded: Boolean,
+
+  // Formerly "domain"
+  url: String,
 })
 
 module.exports = SubmissionSchema
