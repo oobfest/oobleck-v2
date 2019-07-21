@@ -27,7 +27,7 @@ cvzscript#modal-template(type="text/template")
                 |  Share this event
               | &nbsp;
               div(v-show="showUrl==true")
-                input#share-url.form-control.url(:value="'https://oobfest.com/' + show.url" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
+                input#share-url.form-control.url(:value="'https://oobfest.com/schedule' + show.url" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
 
             //- Check for remaining tickets
               div.text-right(v-if="remaining == null")
