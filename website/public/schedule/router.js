@@ -1,7 +1,7 @@
 let express = require('express')
 let router = express.Router()
 let showModel = require('../../../api/shows/model')
-
+let urlSlug = require('url-slug')
 
 router.get('/', (request, response)=> {
   response.render('public/schedule', {alt: true})
@@ -18,6 +18,7 @@ router.get('/:day/:venue/:time', async (request, response)=> {
   else {
     show.venue = formatVenue(show.venue)
     show.time = formatTime(show.startTime)
+    for(act of show.acts) { act.url = urlSlug(act.name) }
     response.render('public/schedule/show', {show, alt: true})
   }
 })

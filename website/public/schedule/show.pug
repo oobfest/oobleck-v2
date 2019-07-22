@@ -10,7 +10,8 @@ block content
               .media.align-items-center.flex-wrap-reverse
                 img(src='https://i.imgur.com/' + act.image.id + 'b.jpg')
                 .media-body.m-3
-                  h2 #{act.name}
+                  h2
+                    a(href='/lineup/' + act.url style="color: #f9a01b") #{act.name}
                     small &mdash; #{act.showType.join(', ')}
                   h3
                     small  from #{act.city}, #{act.state}

@@ -30,13 +30,13 @@ block content
                   a(href=socialMediaLink.url target="_blank") #{socialMediaLink.type}
 
         if act.shows && act.shows.length > 0
-          section(v-if="act.shows.length > 0")
-            h3 Shows
-            ul
-              li(v-for="show in act.shows")
-                //a(href="#" @click.prevent="modalModel=show" v-b-modal.show-modal) #{formatDay(show.day)}, #{formatTime(show.time)} at #{formatVenue(show.venue)}
+          h3 Shows
+          ul
+            for show in act.shows
+              li
+                a(href='/schedule/' + show.url) #{show.day}, #{show.venue}, #{show.time}
 
-        //-p.text-right
-          font-awesome-icon(:icon="['fas', 'arrow-circle-left']" size="sm")
+        p.text-right
+          span.fas.fa-arrow-circle-left
           | &nbsp;
           a(href="/lineup") Back to Lineup
