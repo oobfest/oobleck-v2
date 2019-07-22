@@ -15,51 +15,9 @@ block content
                   h3
                     small  from #{act.city}, #{act.state}
                   p.d-none.d-sm-block #{act.publicDescription}
-          //li.list-group-item
-            section(v-show="state==0")
-              div
-                div.text-right(v-if="remaining === null")
-                  strong.text-info Getting ticket information...
-                div.text-right(v-if="remaining !== null && remaining<=0")
-                  strong.text-danger This show is sold out!
-                div.text-center.text-info(v-else-if="boxOfficeClosed()")
-                  p.m-0 Online sales for this show are now closed.
-                  p.m-0(v-show="remaining !== null && remaining > 0") Tickets are still available at the door!
-                div(v-else)
-                  .text-right
-                    button.btn.btn-secondary(type="button" @click="$refs.showModal.hide()") Cancel
-                    | &nbsp;
-                    button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – #{show.price}
-                    | &nbsp;
-                    button.btn.btn-primary(type="button" @click="state++") Reserve with Badge
-            section.form(v-show="state==1")
-              .form-group
-                label Badge Email
-                input.form-control(type="email" v-model="email")
-              .form-group
-                label Quantity
-                select.custom-select(v-model="quantity")
-                  option 1
-                  option 2
-                  option 3
-              .text-center
-                button.btn.btn-secondary(type="button" @click="state--") Back
-                | &nbsp;
-                button.btn.btn-primary(type="button" @click="reserveWithBadge(show._id)") Make Reservation
-            section(v-show="state==2")
-              .text-center
-                h2 Success!
-                p A confirmation email has been sent to &nbsp;
-                  span.code #{email}
-            section(v-show="state==3")
-              paypal(:show-id="show._id", :remaining="remaining" @paid="paid")
-              .text-center
-                button.mt-3.btn.btn-secondary(type="button" @click="state=0") Cancel
-            section.mt-3
-              .text-center
-                font-awesome-icon(:icon="['fas', 'arrow-circle-left']" size="sm")
-                | &nbsp;
-                a(href="/schedule") Back to the full schedule
+    .row.justify-content-md-center
+      .col.col-lg-6
+        include _reserve
 
     //include modal
     link(href="/css/schedule.css" rel="stylesheet")

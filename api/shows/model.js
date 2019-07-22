@@ -10,10 +10,6 @@ let urlSlug = require('url-slug')
 
 let overrides = {
 
-  async getShowsByActName(actName) {
-    return mongooseModel.find()
-  },
-
   async create(show) {
     show.url = `${urlSlug(show.day)}/${urlSlug(show.venue)}/${show.startTime}`
     return mongooseModel.create(show)

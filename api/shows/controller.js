@@ -2,6 +2,19 @@ let model = require('./model')
 let createController = require('../create-controller')
 
 let overrides = {
+
+  async getShow(request, response) {
+    try {
+      let url = request.body.url
+      let show = await model.find(url)
+      response.json(show)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on getShow()")
+    }
+  },
+
   async addAct(request, response) {
     try {
       let show = request.body.show
