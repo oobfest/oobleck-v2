@@ -4,6 +4,7 @@ let createModel = require('../create-model')
 let mongooseModel = mongoose.model('show', schema)
 let actModel = require('../acts/model')
 let badgeModel = require('../badges/model')
+let hostModel = require('../hosts/model')
 let nodeMailer = require('../../utilities/nodemailer')
 let reservationConfirmationEmailTemplate = require('../../email-templates/compile')('reservation-confirmation')
 let urlSlug = require('url-slug')
@@ -38,6 +39,7 @@ let overrides = {
   async refresh() {
     let shows = await mongooseModel.find()
     let acts = await actModel.readFat()
+    let hosts = await hostModel.read()
 
     for(act of acts) {
       act.url = urlSlug(act.name)
@@ -46,6 +48,11 @@ let overrides = {
 
     for (show of shows) {
       show.url = `${urlSlug(show.day)}/${urlSlug(show.venue)}/${show.startTime}`
+      if(show.host) {
+        show.host = hosts.find(h=> h._id == String(show.host._id))
+        show.markModified('host')
+      }
+
       for (oldAct of show.acts) {
         for (newAct of acts) {
           if (oldAct.name == newAct.name) {

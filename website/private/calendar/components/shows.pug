@@ -29,7 +29,7 @@ script#shows-template(type="text/template")
           span(v-if="act.showType.includes('Variety')") 🤹🏻‍♂️
           span(v-if="act.showType.includes('Other')") 🕶
           | &nbsp;
-          span(:class="actStatus") {{act.name | shorten(24)}}
+          span {{act.name | shorten(24)}}
           a.delete(v-show="$root.editMode" href="#" @click.prevent="removeAct(show, act._id)") remove act
         p(v-show="$root.editMode")
           a(href="#" @click="showAddActModal(day, venue, show)" data-toggle="modal" data-target="#add-act-modal") add act
@@ -44,10 +44,6 @@ script.
         return store.getters
           .getShows(this.day, this.venue)
           .sort((a,b)=> a.startTime > b.startTime ? 1 : -1)
-      },
-      actStatus() {
-        // Todo: get confirmation status
-        return 'font-weight-bold'
       }
     },
     filters: {

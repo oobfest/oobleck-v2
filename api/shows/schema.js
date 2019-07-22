@@ -26,10 +26,8 @@ let showSchema = mongoose.Schema({
 
   url: String,
 
-  volunteerBoxOffice1: mongoose.Schema.Types.ObjectId,
-  volunteerBoxOffice2: mongoose.Schema.Types.ObjectId,
-  volunteerTicketTaker1: mongoose.Schema.Types.ObjectId,
-  volunteerTicketTaker2: mongoose.Schema.Types.ObjectId,
+  name: String,
+  description: String
 })
 
 module.exports = showSchema
