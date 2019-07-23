@@ -1,6 +1,6 @@
-cvzscript#modal-template(type="text/template")
+script#modal-template(type="text/template")
   .modal#show-modal
-    .modal-dialog.modal-lg
+    .modal-dialog(:class="modalSize")
       .modal-content
         .modal-header
           span.modal-title {{show.day}}, {{show.venue | venue}} at {{show.startTime | time}}
@@ -29,22 +29,10 @@ cvzscript#modal-template(type="text/template")
               div(v-show="showUrl==true")
                 input#share-url.form-control.url(:value="'https://oobfest.com/schedule/' + show.url" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
 
-            //- Check for remaining tickets
-              div.text-right(v-if="remaining == null")
-                strong.text-info Getting ticket information...
-              div.text-right(v-if="remaining != null && remaining<=0")
-                strong.text-danger This show is sold out!
-              div.text-center.text-info(v-else-if="boxOfficeClosed()")
-                p.m-0 Online sales for this show are now closed.
-                p.m-0(v-show="remaining !== null && remaining > 0") Tickets are still available at the door!
-              div(v-else)
-
             .text-right
-              button.btn.btn-primary(type="button" @click="hide") Cancel
-              | &nbsp;
-              //- button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
-              | &nbsp;
               button.btn.btn-primary(type="button" @click="state=1") Reserve with Badge
+              | &nbsp;
+              button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
           section(v-show="state==1")
             .form-group
               label Badge Email
@@ -64,15 +52,56 @@ cvzscript#modal-template(type="text/template")
               h2 Success!
               p A confirmation email has been sent to &nbsp;
                 span.code {{email}}
-            .text-right
-              button.btn.btn-primary(type="button" @click="hide") Close
           section(v-show="state==3")
-            p Stripe Goes Here
-            //paypal(:show-id="show._id", :remaining="remaining" @paid="paid")
-            .text-right
+            .form-group
+              label(for="name") Name
+              input#paypal-name.form-control(type="text" v-model="ticket.name")
+            .form-group
+              label(for="phone") Phone Number
+              input#paypal-phone.form-control(type="tel" v-model="ticket.phone")
+            .form-group
+              label(for="quantity") Quantity
+              select#paypal-quantity.custom-select(name="quantity" v-model="ticket.quantity")
+                option(v-for="n in quantityToSell") {{n}}
+            .form-group.text-center
               button.btn.btn-primary(type="button" @click="state=0") Back
+              | &nbsp;
+              button#stripe-button.btn.btn-primary(@click.prevent="stripeHandler") Pay with Stripe
+            .row
+              .col.text-center
+                img(src="/img/powered-by-stripe.svg" height="55px")
+            .text-right
 
+script(src="https://checkout.stripe.com/checkout.js")
 script.
+  let handler = StripeCheckout.configure({
+    //key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
+    key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
+    image: '/img/oob-logo-fire.jpg',
+    locale: 'auto',
+    zipCode: true,
+    currency: 'usd',
+    allowRememberMe: true,
+    token: function(token) {
+      let showModal = schedule.$children[0]
+      showModal.ticket.email = token.email
+      showModal.email = token.email
+      let data = { token, ticket: showModal.ticket }
+      axios
+        .post('/api/stripe/show/' + showModal.show._id, data)
+        .then(response=>{
+          if(response.data.paid) {
+            showModal.state = 2
+          }
+          else alert("Payment failed 😟")
+        })
+        .catch(error=> {
+          console.log("ERROR :(")
+          console.log(error)
+        })
+    }
+  })
+
   Vue.component('modal', {
     template: "#modal-template",
     props: ['show', 'acts'],
@@ -83,15 +112,24 @@ script.
         quantity: 1,
         remaining: null,
         clickCounter: 0,
-        showUrl: false
+        showUrl: false,
+        ticket: {
+          name: '',
+          phone: '',
+          quantity: 1
+        }
       }
     },
     computed: {
       modalSize() {
         return this.state == 0 || this.state == 2
-          ? 'lg'
-          : 'md'
-      }
+          ? 'modal-lg'
+          : 'modal-md'
+      },
+      quantityToSell() {
+        if(this.show.remaining) return Math.min(this.show.remaining, 15)
+        else return 0
+      },
     },
     filters: {
       time(time) {
@@ -111,6 +149,21 @@ script.
       },
     },
     methods: {
+      isValid() {
+        return this.ticket.name != '' && this.ticket.phone != ''
+      },
+      stripeHandler() {
+        if (this.isValid()) {
+          let time = String(this.show.startTime)
+          time = time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+          handler.open({
+            name: 'Out Of Bounds Comedy',
+            description: this.show.day + ", " + this.show.venue + " at " + time,
+            amount: (this.show.price * this.ticket.quantity) * 100
+          })
+        }
+        else alert("All fields are required!")
+      },
       hide(){
         let backdrop = document.getElementById('modal-backdrop')
         backdrop.remove()

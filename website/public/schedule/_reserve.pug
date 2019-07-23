@@ -1,4 +1,4 @@
-
+script(src="https://checkout.stripe.com/checkout.js")
 #reserve
   section(v-if="show.remaining == 0")
     .text-center
@@ -8,13 +8,12 @@
       p Online sales for this show have ended.
       p Tickets are still available at the door!
 
-  section(v-else-if="state==0 && show.remaining > 0")
-    .text-center
-      //- button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
-      | &nbsp;
-      button.btn.btn-primary.btn-lg(type="button" @click="state=1") Reserve with Badge
+  section.text-center(v-else-if="state==0 && show.remaining > 0")
+      p
+        button.btn.btn-primary.btn-lg(type="button" @click="state=3") Buy Tickets – ${{show.price}}
+      p
+        button.btn.btn-primary.btn-lg(type="button" @click="state=1") Reserve with Badge
   section(v-show="state==1")
-    h5 Reserve with Badge
     .form-group
       label Badge Email
       input.form-control(type="email" v-model="email")
@@ -25,22 +24,63 @@
         option 2
         option 3
     .text-right
-      button.btn.btn-primary(type="button" @click="state--") Back
+      button.btn.btn-lg.btn-primary(type="button" @click="state--") Back
       | &nbsp;
-      button.btn.btn-primary(type="button" @click="reserveWithBadge(show._id)") Make Reservation
+      button.btn.btn-lg.btn-primary(type="button" @click="reserveWithBadge(show._id)") Make Reservation
   section(v-show="state==2")
     .text-center
       h2 Success!
       p A confirmation email has been sent to &nbsp;
         span.code {{email}}
   section(v-show="state==3")
-    p Stripe Goes Here
-    //paypal(:show-id="show._id", :remaining="remaining" @paid="paid")
+    .form-group
+      label(for="name") Name
+      input#paypal-name.form-control(type="text" v-model="ticket.name")
+    .form-group
+      label(for="phone") Phone Number
+      input#paypal-phone.form-control(type="tel" v-model="ticket.phone")
+    .form-group
+      label(for="quantity") Quantity
+      select#paypal-quantity.custom-select(name="quantity" v-model="ticket.quantity")
+        option(v-for="n in quantityToSell") {{n}}
+    .form-group.text-center
+      button.btn.btn-lg.btn-primary(type="button" @click="state=0") Back
+      | &nbsp;
+      button#stripe-button.btn.btn-lg.btn-primary(@click.prevent="stripeHandler") Pay with Stripe
+    .row
+      .col.text-center
+        img(src="/img/powered-by-stripe.svg" height="55px")
     .text-right
-      button.btn.btn-primary(type="button" @click="state=0") Back
-
 
 script.
+  let handler = StripeCheckout.configure({
+    //key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
+    key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
+    image: '/img/oob-logo-fire.jpg',
+    locale: 'auto',
+    zipCode: true,
+    currency: 'usd',
+    allowRememberMe: true,
+    token: function(token) {
+      reserve.ticket.email = token.email
+      reserve.email = token.email
+      let data = { token, ticket: reserve.ticket }
+      axios
+        .post('/api/stripe/show/' + reserve.show._id, data)
+        .then(response=>{
+          if(response.data.paid) {
+            reserve.state = 2
+          }
+          else alert("Payment failed 😟")
+        })
+        .catch(error=> {
+          console.log("ERROR :(")
+          console.log(error)
+        })
+    }
+  })
+
+
   let reserve = new Vue({
     el: "#reserve",
     data() {
@@ -49,9 +89,13 @@ script.
         state: 0,
         email: "",
         quantity: 1,
-        remaining: null,
         clickCounter: 0,
-        showUrl: false
+        showUrl: false,
+        ticket: {
+          name: '',
+          phone: '',
+          quantity: 1
+        }
       }
     },
     filters: {
@@ -84,8 +128,25 @@ script.
         let showTime = this.show.time
         return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
       },
+      quantityToSell() {
+        if(this.show.remaining) return Math.min(this.show.remaining, 15)
+        else return 0
+      },
     },
     methods: {
+      isValid() {
+        return this.ticket.name != '' && this.ticket.phone != ''
+      },
+      stripeHandler() {
+        if (this.isValid()) {
+          handler.open({
+            name: 'Out Of Bounds Comedy',
+            description: this.show.day + " Show Ticket",
+            amount: (this.show.price * this.ticket.quantity) * 100
+          })
+        }
+        else alert("All fields are required!")
+      },
       paid(email) {
         this.email = email
         this.state = 2
