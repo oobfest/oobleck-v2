@@ -13,7 +13,8 @@ let workshopSchema = mongoose.Schema({
 
   image: {
     type: imageSchema,
-    required: false
+    required: true,
+    default: null
   },
 
   day: {
@@ -50,7 +51,9 @@ let workshopSchema = mongoose.Schema({
     default: 0
   },
 
-  students: [studentSchema]
+  students: [studentSchema],
+
+  price: Number
 
 })
 

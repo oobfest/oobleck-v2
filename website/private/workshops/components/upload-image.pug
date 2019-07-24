@@ -1,22 +1,24 @@
 script#upload-image-template(type="text/template")
   div
-    h3 Image Upload
-    div(v-show="uploadState=='no-upload'")
-      .custom-file
-        input#file-input.custom-file-input(type="file" accept="image/*" @change="uploadImage")
-        label.custom-file-label(for="file-input") Select Image
-      p.form-text
-        em Image hosting powered by 
-          a(href="https://imgur.com/" target="_blank") Imgur
-          | .
-    div(v-show="uploadState=='uploading'")
-      p {{uploadMessage}}
-      .progress
-        .progress-bar.bg-primary(:style="{width: uploadPercent + '%'}")
-    div(v-show="uploadState=='uploaded'")
-      img.img-thumbnail(:src="$parent.workshop.imageUrl ? $parent.workshop.imageUrl + '.jpg' : '#'" alt="Image preview")
+    div(v-if="$parent.workshop.image")
+      h3 Image
+      img.img-thumbnail(:src="$parent.workshop.image.url" alt="Image preview")
       .text-right
         a.btn.btn-danger(:href="$parent.workshop.deleteImageUrl" target="_blank" @click="deleteImage") Delete Image
+    div(v-else)
+      h3 Image Upload
+      div(v-show="uploadState!='uploading'")
+        .custom-file
+          input#file-input.custom-file-input(type="file" accept="image/*" @change="uploadImage")
+          label.custom-file-label(for="file-input") Select Image
+        p.form-text
+          em Image hosting powered by
+            a(href="https://imgur.com/" target="_blank") Imgur
+            | .
+      div(v-show="uploadState=='uploading'")
+        p {{uploadMessage}}
+        .progress
+          .progress-bar.bg-primary(:style="{width: uploadPercent + '%'}")
 
 script.
   Vue.component('upload-image', {
@@ -30,12 +32,12 @@ script.
     },
     methods: {
       deleteImage() {
-        this.$parent.workshop.imageUrl = ""
-        this.$parent.workshop.deleteImageUrl = ""
+        this.$parent.workshop.image = false
         this.uploadMessage = ""
         this.uploadPercent = 0
         this.uploadState = 'no-upload'
       },
+
       uploadImage(event) {
         let self = this // keep 'this' scope for Axios
         let image = event.target.files[0]
@@ -60,7 +62,7 @@ script.
               url: 'https://imgur-apiv3.p.mashape.com/3/image',
               method: 'POST',
 
-              headers: { 
+              headers: {
                 'content-type': 'multipart/form-data',
 
                 // Mashape Credentials
@@ -79,9 +81,11 @@ script.
 
             })
             .then(function(response) {
-              // IDK why "data" is inside "response.data"
-              self.$parent.workshop.imageUrl = 'http://imgur.com/' + response.data.data.id
-              self.$parent.workshop.deleteImageUrl = 'http://imgur.com/delete/' + response.data.data.deletehash
+              let data = response.data.data  // lol
+              self.$parent.workshop.image = {}
+              self.$parent.workshop.image.deleteUrl = 'https://imgur.com/delete/' + data.deletehash
+              self.$parent.workshop.image.id = data.id
+              self.$parent.workshop.image.url = data.link
               self.uploadState = 'uploaded'
             })
             .catch(function(error) {

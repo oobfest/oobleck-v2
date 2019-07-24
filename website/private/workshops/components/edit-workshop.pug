@@ -22,7 +22,7 @@ script#edit-workshop-modal-template(type="text/template")
             label(for="edit-workshop-modal-bio") Teacher Bio
             textarea#edit-workshop-modal-bio.form-control.code(v-model="workshop.bio" rows=5)
           .form-group
-            label(for="edit-workshop-modal-affiliation") Home Base 
+            label(for="edit-workshop-modal-affiliation") Home Base
             input#edit-workshop-modal-affiliation.form-control(v-model="workshop.affiliation")
           .form-group
             label(for="edit-workshop-modal-capacity") Maximum Number of Students
@@ -30,13 +30,7 @@ script#edit-workshop-modal-template(type="text/template")
           .form-group
             label(for="edit-workshop-modal-audit-capacity") Maximum Number of Auditors
             input#edit-workshop-modal-audit-capacity.form-control(type="number" v-model="workshop.auditCapacity" min=0 max=120)
-          input(type="hidden" name="imageUrl" v-model="workshop.imageUrl")
-          input(type="hidden" name="deleteImageUrl" v-model="workshop.deleteImageUrl")
-          div(v-if="workshop.imageUrl")
-            h3 Image
-            img.img-thumbnail(:src="workshop.imageUrl + '.jpg'" alt="Image preview")
-          div(v-if="!workshop.imageUrl")
-            upload-image
+          upload-image
         .modal-footer
           button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
           button.btn.btn-primary(type="button" @click="updateWorkshop" data-dismiss="modal") Save

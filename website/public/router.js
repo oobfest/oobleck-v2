@@ -98,6 +98,9 @@ router.use('/schedule', scheduleRouter)
 let screenerSubmissionFormRouter = require('./screener-submission-form/router')
 router.use('/apply-screener', screenerSubmissionFormRouter)
 
+let secretWorkshopsRouter = require('./secret-workshops/router')
+router.use('/secret-workshops', secretWorkshopsRouter)
+
 let volunteerSubmissionFormRouter = require('./volunteer-submission-form/router')
 router.use('/volunteer-submission-form', volunteerSubmissionFormRouter)
 

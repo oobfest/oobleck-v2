@@ -1,0 +1,59 @@
+extends ../../_layout
+block content
+  .container-fluid
+    .row
+      .col.text-center
+        h1.display-3.mb-2.text-uppercase Workshops
+    .row
+      .col
+        h2 Workshop Information
+        ul
+          li Each workshop is 3 hours long.
+          li If a workshop sells out you can get on a waiting list. As students drop reservations will become available to people on the waitlist in the order they signed up.
+          li Workshops are open to anyone but it is recommended that students have some improv experience.
+          li On the day of the class students can register in-person if the workshop has not sold out.
+          li A student’s spot in a workshop is forfeited if they are more than 10 minutes late without notification. Their spot will become available to those on the waitlist.
+        //h2 Questions?
+        //p Contact Asaf, asaf at oobfest dot com
+    .row.pb-4#workshops
+      .col
+        ul.list-group
+        for workshop in workshops
+          li.list-group-item
+            .media.align-items-center.flex-wrap-reverse
+              .media-body.m-3
+                h2 #{workshop.name}
+                  small.font-italic &mdash; #{workshop.teacher}
+                h3 #{workshop.affiliation}
+                h4 #{workshop.day}, #{workshop.time} at #{workshop.venue}
+                p.d-none.d-sm-block #{workshop.description}
+                button.btn.btn-primary.btn-lg(type="button") Read More
+              if workshop.image
+                img(src=workshop.image.url style="max-width: 250px")
+
+
+  link(href="/css/acts.css" rel="stylesheet")
+  link(href="/css/workshops.css" rel="stylesheet")
+  script.
+    let workshops = new Vue({
+      el: "#workshops",
+      data() {
+        return {
+        }
+      },
+      methods: {
+      },
+      /*
+      created() {
+        let self = this
+        axios
+          .get('/api/workshops/public')
+          .then(response=> {
+            self.workshops = response.data
+          })
+          .catch(error=> {
+            console.log(error)
+            alert("Error getting workshops")
+          })
+      }*/
+    })
