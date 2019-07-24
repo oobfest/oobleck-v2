@@ -11,7 +11,9 @@ router.get('/', async (request, response)=> {
     .map(day=> workshops
       .filter(w=>w.day==day)
       .sort((a,b)=>a.time - b.time))
-    .flat()
+
+  // Flatten
+  sortedWorkshops = sortedWorkshops.reduce((acc, val) => acc.concat(val), [])
 
   for (workshop of sortedWorkshops) {
     // Time
