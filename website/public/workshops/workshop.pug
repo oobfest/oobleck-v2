@@ -1,0 +1,28 @@
+extends ../../_layout
+block content
+  .container-fluid
+    .row.justify-content-center
+      .col-md-8.workshop.box
+        h2 #{workshop.name}
+          small.font-italic &mdash; #{workshop.teacher}
+        if workshop.affiliation
+          h3 #{workshop.affiliation}
+        h4 #{workshop.day}, #{workshop.time} at #{workshop.venue}
+        .text-center
+          img.m-2.img-fluid(src='https://i.imgur.com/' + workshop.image.id + 'h.jpg')
+        section.mt-4
+          h3 Workshop Details
+          p.
+            #{workshop.description}
+          h3 Teacher Bio(s)
+          p.
+            #{workshop.bio}
+        section.mt-4
+          p.text-right
+            span.fas.fa-arrow-circle-left
+            | &nbsp;
+            a(href="/workshops") Back to Workshops
+        //include _reserve
+
+  link(href="/css/acts.css" rel="stylesheet")
+  link(href="/css/workshops.css" rel="stylesheet")

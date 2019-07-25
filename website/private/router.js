@@ -61,7 +61,7 @@ router.use('/acts', require('./acts/router'))
 router.use('/act-submissions', require('./act-submissions/router'))
 router.use('/shows', require('./shows/router'))
 router.use('/calendar', require('./calendar/router'))
-router.use('/workshops', require('./workshops/router'))
+router.use('/set-workshops', require('./set-workshops/router'))
 router.use('/hosts', require('./hosts/router'))
 
 

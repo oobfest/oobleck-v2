@@ -1,0 +1,155 @@
+script(src="https://checkout.stripe.com/checkout.js")
+#reserve
+  section(v-if="remaining == 0")
+    .text-center
+      h3 This show is sold out!
+  section(v-else-if="boxOfficeClosed")
+    .text-center
+      p Online sales for this show have ended.
+      p Tickets are still available at the door!
+
+  section.text-center(v-else-if="state==0 && remaining > 0")
+    button.btn.btn-primary.btn-lg(type="button" @click="state=3") Attend Workshop – ${{workshop.price}}
+  section(v-show="state==1")
+    .form-group
+      label Badge Email
+      input.form-control(type="email" v-model="email")
+    .form-group
+      label Quantity
+      select.custom-select(v-model="quantity")
+        option 1
+        option 2
+        option 3
+    .text-right
+      button.btn.btn-lg.btn-primary(type="button" @click="state--") Back
+      | &nbsp;
+      button.btn.btn-lg.btn-primary(type="button" @click="reserveWithBadge(workshop._id)") Make Reservation
+  section(v-show="state==2")
+    .text-center
+      h2 Success!
+      p A confirmation email has been sent to &nbsp;
+        span.code {{email}}
+  section(v-show="state==3")
+    .form-group
+      label(for="name") Name
+      input#paypal-name.form-control(type="text" v-model="ticket.name")
+    .form-group
+      label(for="phone") Phone Number
+      input#paypal-phone.form-control(type="tel" v-model="ticket.phone")
+    .form-group
+      label(for="quantity") Quantity
+      select#paypal-quantity.custom-select(name="quantity" v-model="ticket.quantity")
+        option(v-for="n in quantityToSell") {{n}}
+    .form-group.text-center
+      button.btn.btn-lg.btn-primary(type="button" @click="state=0") Back
+      | &nbsp;
+      button#stripe-button.btn.btn-lg.btn-primary(@click.prevent="stripeHandler") Pay with Stripe
+    .row
+      .col.text-center
+        img(src="/img/powered-by-stripe.svg" height="55px")
+    .text-right
+
+script.
+  let handler = StripeCheckout.configure({
+    //key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
+    key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
+    image: '/img/oob-logo-fire.jpg',
+    locale: 'auto',
+    zipCode: true,
+    currency: 'usd',
+    allowRememberMe: true,
+    token: function(token) {
+      reserve.ticket.email = token.email
+      reserve.email = token.email
+      let data = { token, ticket: reserve.ticket }
+      axios
+        .post('/api/stripe/workshop/' + reserve.workshop._id, data)
+        .then(response=>{
+          if(response.data.paid) {
+            reserve.state = 2
+          }
+          else alert("Payment failed 😟")
+        })
+        .catch(error=> {
+          console.log("ERROR :(")
+          console.log(error)
+        })
+    }
+  })
+
+
+  let reserve = new Vue({
+    el: "#reserve",
+    data() {
+      return {
+        workshop: {},
+        state: 0,
+        email: "",
+        quantity: 1,
+        showUrl: false,
+        ticket: {
+          name: '',
+          phone: '',
+          quantity: 1
+        }
+      }
+    },
+    computed: {
+      remaining() {
+        return this.workshop.capacity - this.workshop.sold
+      },
+      boxOfficeClosed() {
+        // Todo: Update!
+        return false
+
+        // When it is the week of the festival:
+        let now = new Date()
+        let nowDay = now.getDay() <= 1 ? now.getDay() + 5 : now.getDay() - 2
+        let nowTime = ( (now.getHours() - 11) * 100) + now.getMinutes()
+        let showDay = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'].indexOf(this.workshop.day)
+        let showTime = this.workshop.time
+        return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
+      },
+      quantityToSell() {
+        if(this.remaining) return Math.min(this.remaining, 5)
+        else return 0
+      },
+    },
+    methods: {
+      isValid() {
+        return this.ticket.name != '' && this.ticket.phone != ''
+      },
+      stripeHandler() {
+        if (this.isValid()) {
+          handler.open({
+            name: 'Out Of Bounds Comedy',
+            description: this.workshop.name,
+            amount: (this.workshop.price * this.ticket.quantity) * 100
+          })
+        }
+        else alert("All fields are required!")
+      },
+      paid(email) {
+        this.email = email
+        this.state = 2
+      },
+      reset() {
+        this.state = 0
+        this.showUrl = false
+        // Keep the same email address for convenience!
+        this.quantity = 1
+      },
+    },
+    created() {
+      let workshopId = '#{workshop._id}'
+      let self = this
+      axios
+        .get('/api/workshops/' + workshopId)
+        .then(response=> {
+          self.workshop = response.data
+        })
+        .catch(error=> {
+          console.log(error)
+        })
+    }
+  })

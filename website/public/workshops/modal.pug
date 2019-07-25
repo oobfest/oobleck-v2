@@ -1,0 +1,36 @@
+script#workshop-modal
+  section(v-show="state==0")
+    .text-center
+      .form-group(v-if="workshop.sold < workshop.capacity")
+        button.btn.btn-primary.btn-lg(@click="state++" type="button") Get Reservation - $55
+      .form-group(v-else-if="workshop.auditSold < workshop.auditCapacity")
+        p Audit reservations available
+        //button.btn.btn-primary.btn-lg(@click="state=10" type="button") Get Audit Reservation - $15
+      div(v-else).text-center
+        p.sold-out This workshop has sold out!
+  section(v-show="state==1")
+    .form-group
+      label(for="name") Name
+        small (include everyone attending)
+      input#name.form-control(type="text" v-model="ticket.name")
+    .form-group
+      label(for="email") Email
+      input#email.form-control(type="email" v-model="ticket.email")
+    .form-group
+      label(for="phone") Phone Number
+      input#phone.form-control(type="tel" v-model="ticket.phone")
+    .form-group
+      label(for="quantity") Quantity
+      select#quantity.custom-select(name="quantity" v-model="ticket.quantity")
+        option(v-for="n in 2") {{n}}
+    .row
+      .col.text-right
+        .form-group
+          #paypal-button
+      .col.text-left
+        .form-group
+          button.btn.btn-secondary(type="button" @click="state--") Cancel
+  section(v-show="state==2")
+    p Thank you for your purchase!
+    p An email has been sent to
+      span.code {{ticket.email}}

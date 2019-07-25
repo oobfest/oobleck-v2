@@ -56,7 +56,6 @@ block content
                       th Paid
                       th Audit?
                       th Date
-                      th Payment ID
                       th
                   tbody
                     tr(:class="{'line-through': student.refunded}" v-for="(student, index) in workshop.students" )
@@ -64,15 +63,14 @@ block content
                       td {{student.email}}
                       td {{student.quantity}}
                       td
-                        span(v-if="student.payment") ${{student.payment.transactions[0].amount.total.slice(0, -3)}}
+                        span(v-if="student.payment")
+                          a(:href="student.payment.receipt_url" target="_blank") Stripe
                       td {{student.auditing ? "Yes" : "" }}
                       td
-                        span(v-if="student.payment") {{new Date(Date.parse(student.payment.create_time)).toLocaleDateString('en-US')}}
+                        span(v-if="student.payment") {{new Date(student.payment.created * 1000).toLocaleDateString('en-US')}}
                       td
-                        a(:href="'https://www.paypal.com/activity/payment/' + student.payment.transactions[0].related_resources[0].sale.id" target="_blank" v-if="student.payment") {{student.payment.transactions[0].related_resources[0].sale.id}}
-                      td
-                        button.btn.btn-xs.btn-secondary(v-if="student.refunded" type="button" @click="setRefund(workshop._id, student.email, false)") Undo Refund
-                        button.btn.btn-xs.btn-secondary(v-else type="button" @click="setRefund(workshop._id, student.email, true)") Refund
+                        //button.btn.btn-xs.btn-secondary(v-if="student.refunded" type="button" @click="setRefund(workshop._id, student.email, false)") Undo Refund
+                        //button.btn.btn-xs.btn-secondary(v-else type="button" @click="setRefund(workshop._id, student.email, true)") Refund
               p(v-else) No students
 
     .form-group

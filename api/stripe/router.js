@@ -5,6 +5,7 @@ let stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 let actSubmissionModel = require('../act-submissions/model')
 let badgeModel = require('../badges/model')
 let showModel = require('../shows/model')
+let workshopModel = require('../workshops/model')
 
 let nodemailer = require('../../utilities/nodemailer')
 let badgeEmailTemplate = require('../../email-templates/compile')('badge')
@@ -106,5 +107,29 @@ let sendTicketEmail = function(ticket, show) {
   })
   nodemailer.sendEmail(recipient, subject, message)
 }
+
+router.post('/workshop/:workshopId', async(request, response)=> {
+  let workshopId = request.params.workshopId
+  let ticket = request.body.ticket
+  ticket.email = request.body.token.email
+  try {
+    let card = request.body.token.id
+    let workshop = await workshopModel.read(workshopId)
+    let customer = await stripe.customers.create({email: ticket.email, card})
+    ticket.payment = await stripe.charges.create({
+      amount: (workshop.price * ticket.quantity) * 100,
+      currency: 'usd',
+      description: ticket.quantity + "× " + workshop.name,
+      customer: customer.id
+    })
+    let ticketResponse = await workshopModel.addStudent(workshopId, ticket)
+    //sendWorkshopEmail(ticket, workshop)
+    response.json({paid: true})
+  }
+  catch(error) {
+    console.log(error)
+    response.status(500).send({paid: false})
+  }
+})
 
 module.exports = router
