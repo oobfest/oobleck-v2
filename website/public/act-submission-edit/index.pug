@@ -37,7 +37,7 @@ block content
             small.form-text.text-muted This content will be published on our website and programs. Use third person active voice, e.g. "Miller &amp; Lies is..."
               a(href="#" @click.prevent="seeExample = !seeExample") See an example
             small.form-text.font-italic(v-show="seeExample") "Miller &amp; Lies is a comedy duo that performs a single story with awkward, emotionally vulnerable oddball characters. They've been doing improv together for ten years. Come hang with them and feel your feelings."
-            textarea#public-description.form-control(maxlength="1400" name="public-description" required v-model="submission.publicDescription")
+            textarea#public-description.form-control(maxlength="14000" name="public-description" required v-model="submission.publicDescription")
         .box-block.box-bt
           h3 Primary Location
           .form-group
