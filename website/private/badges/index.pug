@@ -38,7 +38,7 @@ block content
             td(colspan=5)
               div(v-if="badge.payment && badge.payment.created")
                 h4 Payment Made
-                pre {{formatDate(badge.payment.created)}}
+                pre {{new Date(badge.payment.created * 1000).toLocaleDateString('en-US')}}
                 h4 Transaction ID
                 p.code
                   a(:href="badge.payment.receipt_url" target="_blank") {{badge.payment.id}}
