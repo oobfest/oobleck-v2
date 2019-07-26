@@ -1,0 +1,87 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Emails
+
+  #app.dash-boxes.container-fluid
+    .row
+      .col
+        .form-check.form-check-inline
+          input#locals-checkbox.form-check-input(type="checkbox" v-model="showLocals")
+          label.form-check-label(for="locals-checkbox") Local
+        .form-check.form-check-inline
+          input#out-of-town-checkbox.form-check-input(type="checkbox" v-model="showOutOfTown")
+          label.form-check-label(for="out-of-town-checkbox") Out-of-Town
+        .form-check.form-check-inline
+          input#headliners-checkbox.form-check-input(type="checkbox" v-model="showHeadliners")
+          label.form-check-label(for="headliners-checkbox") Headliner
+    .row
+      .col
+        .form-check.form-check-inline
+          input#improv-checkbox.form-check-input(type="checkbox" v-model="showImprov")
+          label.form-check-label(for="improv-checkbox") Improv
+        .form-check.form-check-inline
+          input#sketch-checkbox.form-check-input(type="checkbox" v-model="showSketch")
+          label.form-check-label(for="sketch-checkbox") Sketch
+        .form-check.form-check-inline
+          input#standup-checkbox.form-check-input(type="checkbox" v-model="showStandup")
+          label.form-check-label(for="standup-checkbox") Standup
+        .form-check.form-check-inline
+          input#podcast-checkbox.form-check-input(type="checkbox" v-model="showPodcast")
+          label.form-check-label(for="podcast-checkbox") Podcast
+        .form-check.form-check-inline
+          input#one-person-show-checkbox.form-check-input(type="checkbox" v-model="showOnePersonShow")
+          label.form-check-label(for="one-person-show-checkbox") One-person-show
+    .box.box-b
+      table.box-table.table
+        thead
+          tr
+            th Email
+        tbody
+          tr(v-for="email in emails")
+            td {{email}}
+
+
+  script.
+    let vue = new Vue({
+      el: "#app",
+      data() { return {
+        acts: [],
+        showLocals: true,
+        showOutOfTown: true,
+        showHeadliners: false,
+        showImprov: true,
+        showSketch: true,
+        showStandup: true,
+        showPodcast: true,
+        showOnePersonShow: true,
+        //showNeedsTech: true
+      }},
+      computed: {
+        emails() {
+          let filteredActs = this.acts
+          if(!this.showLocals) filteredActs = filteredActs.filter(a=> a.city!='Austin' && a.state!='TX')
+          if(!this.showOutOfTown) filteredActs = filteredActs.filter(a=>a.city=='Austin' && a.state=='TX')
+          if(!this.showHeadliners) filteredActs = filteredActs.filter(a=>a.headliner == false || a.headliner == undefined)
+          if(!this.showImprov) filteredActs = filteredActs.filter(a=>!a.showType.includes('Improv'))
+          if(!this.showSketch) filteredActs = filteredActs.filter(a=>!a.showType.includes('Sketch'))
+          if(!this.showStandup) filteredActs = filteredActs.filter(a=>!a.showType.includes('Standup'))
+          if(!this.showPodcast) filteredActs = filteredActs.filter(a=>!a.showType.includes('Podcast'))
+          if(!this.showOnePersonShow) filteredActs = filteredActs.filter(a=>!a.showType.includes('One-person-show'))
+
+          let emails = filteredActs.map(fa=> fa.contact.email)
+          return Array.from(new Set(emails))
+        }
+      },
+      created() {
+        let self = this
+        axios.get('/api/acts')
+          .then((response)=> {
+            self.acts = response.data
+          })
+          .catch((error)=> {
+            console.log(error)
+          })
+      }
+    })

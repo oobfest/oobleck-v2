@@ -59,6 +59,7 @@ router.get(['/submissions'], isLoggedIn, (request, response)=> {
 
 router.use('/acts', require('./acts/router'))
 router.use('/act-submissions', require('./act-submissions/router'))
+router.use('/emails', require('./emails/router'))
 router.use('/shows', require('./shows/router'))
 router.use('/calendar', require('./calendar/router'))
 router.use('/set-workshops', require('./set-workshops/router'))
