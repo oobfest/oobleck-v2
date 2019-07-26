@@ -2,14 +2,13 @@ script(src="https://checkout.stripe.com/checkout.js")
 #reserve
   section(v-if="remaining == 0")
     .text-center
-      h3 This show is sold out!
+      h3 This workshop is sold out!
   section(v-else-if="boxOfficeClosed")
     .text-center
-      p Online sales for this show have ended.
-      p Tickets are still available at the door!
-
+      p Online sales for this workshop have ended.
   section.text-center(v-else-if="state==0 && remaining > 0")
     button.btn.btn-primary.btn-lg(type="button" @click="state=3") Attend Workshop – ${{workshop.price}}
+    p.mt-2(v-if="workshop.teacher != 'Scott Adsit'") Special early bird price until August 12th! (Normally $65)
   section(v-show="state==1")
     .form-group
       label Badge Email
@@ -21,8 +20,6 @@ script(src="https://checkout.stripe.com/checkout.js")
         option 2
         option 3
     .text-right
-      button.btn.btn-lg.btn-primary(type="button" @click="state--") Back
-      | &nbsp;
       button.btn.btn-lg.btn-primary(type="button" @click="reserveWithBadge(workshop._id)") Make Reservation
   section(v-show="state==2")
     .text-center
@@ -31,8 +28,9 @@ script(src="https://checkout.stripe.com/checkout.js")
         span.code {{email}}
   section(v-show="state==3")
     .form-group
-      label(for="name") Name
+      label(for="name") Name(s)
       input#paypal-name.form-control(type="text" v-model="ticket.name")
+      small.form-text Please list the names of each person that would be attending this workshop.
     .form-group
       label(for="phone") Phone Number
       input#paypal-phone.form-control(type="tel" v-model="ticket.phone")

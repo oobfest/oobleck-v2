@@ -33,10 +33,10 @@ router.get('/:slug', async (request, response)=> {
 
 let formatWorkshop = function(workshop) {
   // Time
-  if(workshop.time=="10") workshop.time = "11:00am"
-  else if(workshop.time=="20") workshop.time = "12:00pm"
-  else if(workshop.time=="30") workshop.time = "1:00pm"
-  else if(workshop.time=="40") workshop.time = "3:00pm"
+  if(workshop.time=="10") workshop.time = "11:00am to 2:00pm"
+  else if(workshop.time=="20") workshop.time = "12:00pm to 3:00pm"
+  else if(workshop.time=="30") workshop.time = "1:00pm to 4:00pm"
+  else if(workshop.time=="40") workshop.time = "3:00pm to 6:00pm"
 
   // Venue
   workshop.venue = format.formatVenueShort(workshop.venue)
