@@ -26,6 +26,15 @@ module.exports = {
     return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
   },
 
+  formatWorkshopTime(time) {
+    switch(time) {
+      case "10": return "11:00am to 2:00pm"
+      case "20": return "12:00pm to 3:00pm"
+      case "30": return "1:00pm to 4:00pm"
+      case "40": return "3:00pm to 6:00pm"
+    }
+  },
+
   formatDay(day) {
     switch(day) {
       case 'Tuesday':   return 'Tuesday, Aug. 27th'

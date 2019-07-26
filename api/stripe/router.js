@@ -10,6 +10,7 @@ let workshopModel = require('../workshops/model')
 let nodemailer = require('../../utilities/nodemailer')
 let badgeEmailTemplate = require('../../email-templates/compile')('badge')
 let reservationConfirmationEmailTemplate = require('../../email-templates/compile')('reservation-confirmation')
+let workshopConfirmationEmailTemplate = require('../../email-templates/compile')('workshop-confirmation')
 
 let format = require('../../utilities/format')
 
@@ -123,7 +124,7 @@ router.post('/workshop/:workshopId', async(request, response)=> {
       customer: customer.id
     })
     let ticketResponse = await workshopModel.addStudent(workshopId, ticket)
-    //sendWorkshopEmail(ticket, workshop)
+    sendWorkshopEmail(ticket, workshop)
     response.json({paid: true})
   }
   catch(error) {
@@ -131,5 +132,18 @@ router.post('/workshop/:workshopId', async(request, response)=> {
     response.status(500).send({paid: false})
   }
 })
+
+let sendWorkshopEmail = function(ticket, workshop) {
+  let recipient = ticket.email
+  let subject = 'Workshop Booking Confirmation for Out of Bounds'
+  let message = workshopConfirmationEmailTemplate({
+    ticket,
+    workshopName: workshop.name,
+    where: format.formatVenue(workshop.venue),
+    when: format.formatDay(workshop.day) + ", " + format.formatWorkshopTime(workshop.time)
+  })
+  let sender = 'asaf@oobfest.com'
+  nodemailer.sendEmail(recipient, subject, message, sender)
+}
 
 module.exports = router
