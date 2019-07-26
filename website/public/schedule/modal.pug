@@ -22,12 +22,10 @@ script#modal-template(type="text/template")
                 p.modal-act-description {{show.host.bio}}
 
             .mb-3.text-right
-              a(href="#" @click.prevent="showUrl= !showUrl")
+              p
                 i.far.fa-share-square
-                |  Share this event
-              | &nbsp;
-              div(v-show="showUrl==true")
-                input#share-url.form-control.url(:value="'https://oobfest.com/schedule/' + show.url" type="text" readonly onClick="this.select(); this.setSelectionRange(0,99999); document.execCommand('copy')")
+                | &nbsp;
+                a(:href="'https://oobfest.com/schedule/' + show.url" target="_blank") {{'https://oobfest.com/schedule/' + show.url}}
 
             .text-right
               button.btn.btn-primary(type="button" @click="state=1") Reserve with Badge
