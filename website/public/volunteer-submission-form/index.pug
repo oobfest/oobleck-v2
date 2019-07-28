@@ -3,7 +3,7 @@ block content
   .text-center
     a(href="http://oobfest.com/" target="_parent")
       img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
-    h1.p-3.text-light.font-weight-bold 2018 Volunteer Application
+    h1.p-3.text-light.font-weight-bold 2019 Volunteer Application
   #app.container-fluid
     .row
       .col-md-8.mx-auto.pb-5
@@ -19,36 +19,25 @@ block content
                 h3 Volunteer Application
                 p The&nbsp;
                   strong Out of Bounds Comedy Festival
-                  |  is currently seeking applicants to be a part of our team! OoB runs August 28 to September 3. We are looking for volunteers for box office, ushers, performer registration, airport drivers, party assistance and more! Sign up now and a staff member will be in contact with you soon. More info on volunteer roles can be found in the&nbsp;
-                  a(href="https://www.facebook.com/groups/1813770925598511/" target="_blank") OoB Volunteers 2018 Facebook group
+                  |  is currently seeking applicants to be a part of our team! OoB runs August 27 to September 2, 2019. We are looking for volunteers for light and sound techs, box office, ushers, performer registration, airport drivers, party assistance and more! Sign up now and a staff member will be in contact with you about your availability. More information about each role can be found&nbsp;
+                  a(href="https://docs.google.com/document/d/1-Uf_wOZlkW3UDeJLUTUWZzUgaC7nUJCl54hOwnlhPaU" target="_blank") here
                   | .
                 p Please note that shifts take place at our festival venues:
                 ul
-                  li Spider House Ballroom
                   li Hideout Theatre
                   li ColdTowne Theater
                   li Fallout Theater
-                  li The Institution Theater
+                  li The North Door
                   li Velveeta Room
-                  li Additional downtown party venues TBA
                 p Out of Bounds relies on our volunteers to make the festival run smoothly and to make sure everyone has fun. It's important that our volunteers have fun, too!  Snacks will be available for show and registration volunteers during shifts, and all volunteers are entitled to attend to any non-sold-out show the day of their shift(s).
-                p All volunteers are eligible to perform in our OoB Volunteer Showcase (details pending).
+                p Volunteers are also eligible to perform in our
+                  a(href="https://oobfest.com/schedule/monday/hideout-up/600" target="_blank")  OoB Volunteer Showcase
+                  | !
                 p Any volunteer completing 5 or more shifts will earn a&nbsp;
                   em Volunteer 5+ Shifts Badge
                   | . This is equivalent to a performer badge and gives you entry to any non-sold-out show for the entirety of the festival!
-                p If you are an OoB 2018 performer and would like to volunteer, each shift earns you one entry in the MegaRaffle.
-                h4 MegaRaffle
-                p All 5+ shift volunteers and all performer-volunteers earn a raffle ticket for each shift completed. Raffle prizes will include:
-                ul
-                  li FREE submission to next year's OoB
-                  li FREE diagnostic workshop from Asaf Ronen
-                  li FREE improv coaching from Ellen Pizarek
-                  li Gift cards from local Austin businesses
-                  li OoB swag
-                  li and more...
-                p Send any questions to&nbsp;
+                p You can email any questions to&nbsp;
                   a(href="mailto:volunteer@oobfest.com" target="_blank") volunteer@oobfest.com
-                  | !
               .box-block.box-bt
                 h3 General Information
                 .form-group
@@ -65,6 +54,9 @@ block content
                 .form-group
                   label.col-form-label.required-field(for="type") What type of volunteering are you interested in?
                   .form-check
+                    input#tech-checkbox.form-check-input(type="checkbox" value="tech" v-model="volunteer.type")
+                    label.form-check-label(for="tech-checkbox") Tech
+                  .form-check
                     input#show-checkbox.form-check-input(type="checkbox" value="show" v-model="volunteer.type")
                     label.form-check-label(for="show-checkbox") Show and Workshop (including box office, ushering &amp; performer registration)
                   .form-check
@@ -74,8 +66,62 @@ block content
                     input#party-checkbox.form-check-input(type="checkbox" value="party" v-model="volunteer.type")
                     label.form-check-label(for="party-checkbox") Party
                 .form-group
+                  label.col-form-label(for="referral") How did you hear about volunteering?
+                  textarea#referral.form-control(maxlength="1500" name="referral" v-model="volunteer.referral")
+                .form-group
+                  label.col-form-label.required-field(for="volunteered-before") Have you volunteered at Out of Bounds before?
+                  select#volunteered-before.form-control(v-model="volunteer.volunteeredBefore")
+                    option(value="no") No
+                    option(value="yes") Yes
+                .form-group
+                  label.col-form-label.required-field(for="performing") Are you performing during the festival?
+                  select#performing.form-control(v-model="volunteer.performing")
+                    option(value="no") No
+                    option(value="yes") Yes
+
+              //- DRIVER
+              .box-block.box-bt(v-show="volunteer.type.includes('driver')")
+                h3 Driver Information
+                .form-group
+                  label.col-form-label.required-field(for="car-type") What is your car's make and model?
+                  input#car-type.form-control(type="text" maxlength="280" name="car-type" v-model="volunteer.car.carType")
+                .form-group
+                  label.col-form-label.required-field(for="passenger-count") How many additional passengers can you fit?
+                  select#passenger-count.form-control(v-model.number="volunteer.car.passengerCount")
+                    option 1
+                    option 2
+                    option 3
+                    option 4
+                    option 5
+                .form-group
+                  label.col-form-label.required-field(for="license-plate-number") What is your car's license plate number?
+                  input#license-plate-number.form-control(type="text" maxlength="280" name="license-plate-number" v-model="volunteer.car.licensePlateNumber")
+
+              //- TECH
+              .box-block.box-bt(v-show="volunteer.type.includes('tech')")
+                h3 Tech Information
+                .form-group
+                  label.col-form-label.required-field(for="previous-tech-experience") What is your previous tech experience?
+                  input#previous-tech-experience.form-control(type="text" maxlength="280" name="previous-tech-experience" v-model="volunteer.tech.previousExperience")
+                .form-group
+                  label.col-form-label.required-field(for="passenger-count") How many additional passengers can you fit?
+                  select#passenger-count.form-control(v-model.number="volunteer.passengerCount")
+                    option 1
+                    option 2
+                    option 3
+                    option 4
+                    option 5
+                .form-group
+                  label.col-form-label.required-field(for="license-plate-number") What is your car's license plate number?
+                  input#license-plate-number.form-control(type="text" maxlength="280" name="license-plate-number" v-model="volunteer.licensePlateNumber")
+
+
+              .box-block.box-bt
+                h3 Availability
+                .form-group
                   label.col-form-label.required-field(for="hours") How many hours are you able to commit to?
-                  select#hours.form-control(v-model="volunteer.hours")
+                  small.form-text A staff member will be in touch about your specific availability shortly!
+                  select#hours.form-control(v-model.number="volunteer.hours")
                     option(value=0)
                     option 1
                     option 2
@@ -97,39 +143,38 @@ block content
                     option 18
                     option 19
                     option 20
+                p.help-text Which days of the festival are you available?
                 .form-group
-                  label.col-form-label(for="referral") How did you hear about volunteering?
-                  textarea#referral.form-control(maxlength="1500" name="referral" v-model="volunteer.referral")
+                  .custom-control.custom-checkbox
+                    input#available-tuesday.custom-control-input(type="checkbox" value="tuesday" name="available[]" v-model="volunteer.availability")
+                    label.custom-control-label(for="available-tuesday") Tuesday, August 27th
                 .form-group
-                  label.col-form-label.required-field(for="volunteered-before") Have you volunteered at Out of Bounds before?
-                  select#volunteered-before.form-control(v-model="volunteer.volunteeredBefore")
-                    option(value="no") No
-                    option(value="yes") Yes
+                  .custom-control.custom-checkbox
+                    input#available-wednesday.custom-control-input(type="checkbox" value="wednesday" name="available[]" v-model="volunteer.availability")
+                    label.custom-control-label(for="available-wednesday") Wednesday, August 28th
                 .form-group
-                  label.col-form-label.required-field(for="performing") Are you performing during the festival?
-                  select#performing.form-control(v-model="volunteer.performing")
-                    option(value="no") No
-                    option(value="yes") Yes
-              .box-block.box-bt(v-show="volunteer.type.includes('driver')")
-                h3 Driver Information
+                  .custom-control.custom-checkbox
+                    input#available-thursday.custom-control-input(type="checkbox" value="thursday" name="available[]" v-model="volunteer.availability")
+                    label.custom-control-label(for="available-thursday") Thursday, August 29th
                 .form-group
-                  label.col-form-label.required-field(for="car-type") What is your car's make and model?
-                  input#car-type.form-control(type="text" autofocus maxlength="280" name="car-type" v-model="volunteer.carType")
+                  .custom-control.custom-checkbox
+                    input#available-friday.custom-control-input(type="checkbox" value="friday" name="available[]" v-model="volunteer.availability")
+                    label.custom-control-label(for="available-friday") Friday, August 30th
                 .form-group
-                  label.col-form-label.required-field(for="passenger-count") How many additional passengers can you fit?
-                  select#passenger-count.form-control(v-model="volunteer.passengerCount")
-                    option 1
-                    option 2
-                    option 3
-                    option 4
-                    option 5
+                  .custom-control.custom-checkbox
+                    input#available-saturday.custom-control-input(type="checkbox" value="saturday" name="available[]" v-model="volunteer.availability")
+                    label.custom-control-label(for="available-saturday") Saturday, August 31st
                 .form-group
-                  label.col-form-label.required-field(for="license-plate-number") What is your car's license plate number?
-                  input#license-plate-number.form-control(type="text" autofocus maxlength="280" name="license-plate-number" v-model="volunteer.licensePlateNumber")
-              .box-block.box-bt
+                  .custom-control.custom-checkbox
+                    input#available-sunday.custom-control-input(type="checkbox" value="sunday" name="available[]" v-model="volunteer.availability")
+                    label.custom-control-label(for="available-sunday") Sunday, September 1st
+                .form-group
+                  .custom-control.custom-checkbox
+                    input#available-monday.custom-control-input(type="checkbox" value="monday" name="available[]" v-model="volunteer.availability")
+                    label.custom-control-label(for="available-monday") Monday, September 2nd
                 .form-group
                   label.col-form-label.required-field(for="attending-orientation") We will have an orientation meeting on
-                    span.code August 25th
+                    span.code  August 25th
                     |, will you be able to attend?
                   select#attending-orientation.form-control(v-model="volunteer.attendingOrientation")
                     option(value="no") No
@@ -139,14 +184,13 @@ block content
                   textarea#notes.form-control(maxlength="1500" name="notes" v-model="volunteer.notes")
                 .text-center
                   button.btn.btn-primary.btn-lg(type="button" @click="create") Submit
+
             .box-block(v-show="submitted")
               h3 Thank You!
               p Your submission has been recorded!
               p Any questions, email
                 a(href="mailto:volunteer@oobfest.com" target="_blank") volunteer@oobfest.com
 
-  script(src="/js/vue.js")
-  script(src="/js/axios.min.js")
   script.
     new Vue({
       el: '#app',
@@ -161,14 +205,22 @@ block content
             type: [],
             hours: 0,
             referral: '',
-            volunteeredBefore: 'no',
-            performing: 'no',
-            attendingOrientation: 'yes',
+            volunteeredBefore: '',
+            performing: '',
+            attendingOrientation: '',
             notes: '',
+            availability: [],
 
-            carType: '',
-            passengerCount: 4,
-            licensePlateNumber: ''
+            car: {
+              carType: "",
+              passengerCount: 4,
+              licensePlateNumber: ""
+            },
+
+            tech: {
+              previousExperience: '',
+              hasTechedOobBefore: '',
+            }
           }
         }
       },
@@ -181,8 +233,11 @@ block content
           if(this.volunteer.type == '') validationErrors.push("The type of volunteering is required")
           if(this.volunteer.hours == 0) validationErrors.push("How many hours available is required")
           if(this.volunteer.type == 'driver') {
-            if(this.volunteer.carType == '') validationErrors.push("Car Type is required for driver volunteers")
-            if(this.volunteer.licensePlateNumber == '') validationErrors.push("License Plate Number is required for driver volunteers")
+            if(this.volunteer.car.carType == '') validationErrors.push("Car Type is required for driver volunteers")
+            if(this.volunteer.car.licensePlateNumber == '') validationErrors.push("License Plate Number is required for driver volunteers")
+          }
+          if(this.volunteer.type == 'tech') {
+            // check tech validation
           }
           return validationErrors
         },

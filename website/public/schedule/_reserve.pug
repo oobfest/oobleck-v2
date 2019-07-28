@@ -1,6 +1,8 @@
 script(src="https://checkout.stripe.com/checkout.js")
 #reserve
-  section(v-if="show.remaining == 0")
+  section(v-if="show.price == 0")
+    p This show is free! Just show up!
+  section(v-else-if="show.remaining == 0")
     .text-center
       h3 This show is sold out!
   section(v-else-if="boxOfficeClosed")

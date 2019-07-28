@@ -28,9 +28,11 @@ script#modal-template(type="text/template")
                 a(:href="'https://oobfest.com/schedule/' + show.url" target="_blank") {{'https://oobfest.com/schedule/' + show.url}}
 
             .text-right
-              button.btn.btn-primary(type="button" @click="state=1") Reserve with Badge
-              | &nbsp;
-              button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
+                p(v-if="show.price == 0") This show is free! Just show up!
+                div(v-else)
+                  button.btn.btn-primary(type="button" @click="state=1") Reserve with Badge
+                  | &nbsp;
+                  button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
           section(v-show="state==1")
             .form-group
               label Badge Email
