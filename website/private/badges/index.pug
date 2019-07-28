@@ -8,30 +8,26 @@ block content
     h4 Badge Stats
     ul
       li Total Badges:
-        span.code  {{totals.total}}
-        |  (Not including quantity)
+        span.code  {{total}}
       li Paid All-Access:
-        span.code  {{totals.allAccessTotal}}
+        span.code  {{totalAllAccessPaid}}
       li Performer Upgrades (Weekend/Full/Total):
-        span.code  {{totals.performerWeekendTotal}}/{{totals.performerFullTotal}}/{{totals.performerWeekendTotal + totals.performerFullTotal}}
+        span.code  {{totalPerformerWeekendUpgrade}}/{{totalPerformerUpgrade}}/{{totalPerformerWeekendUpgrade + totalPerformerUpgrade}}
     .box.box-b
       table.table.box-table
-        thead
-          tr
-            th Name
-            th Email
-            th Phone
-            th Badge Type
-            th Quantity
-            th Paid
+        thead: tr
+          th Name
+          th Email
+          th Phone
+          th Badge Type
+          th Quantity
+          th Paid
         tbody(v-for="badge, index in badges")
           tr(style="background-color: white")
-            td
-              a(:href="'#collapse-' + index" data-toggle="collapse") {{badge.name}}
+            td: a(:href="'#collapse-' + index" data-toggle="collapse") {{badge.name}}
             td {{badge.email}}
             td {{badge.phone}}
-            td
-              span.badge.badge-pill(:class="badge.type") {{getBadgeName(badge.type)}}
+            td: span.badge.badge-pill(:class="badge.type") {{getBadgeName(badge.type)}}
             td {{badge.quantity}}
             td {{badge.payment ? '$' + (badge.payment.amount/100) : 'n/a'}}
           tr.collapse(:id="'collapse-' + index")
@@ -40,8 +36,7 @@ block content
                 h4 Payment Made
                 pre {{new Date(badge.payment.created * 1000).toLocaleDateString('en-US')}}
                 h4 Transaction ID
-                p.code
-                  a(:href="badge.payment.receipt_url" target="_blank") {{badge.payment.id}}
+                p.code: a(:href="badge.payment.receipt_url" target="_blank") {{badge.payment.id}}
               div(v-else)
                 p No payment information
               button.btn.btn-danger(type="button" @click="destroy(badge._id, index)") Delete Badge
@@ -55,44 +50,25 @@ block content
     let app = new Vue({
       el: "#app",
       data() {
-        return {
-          badges: [],
-          totals: {
-            total: 0,
-            allAccessTotal: 0,
-            performerWeekendTotal: 0,
-            performerFullTotal: 0
-          }
-        }
+        return { badges: [] }
       },
       computed: {
         total() {
-          if(this.badges.length == 0) return null
           return this.badges.reduce((total, badge)=> {return total + badge.quantity}, 0)
+        },
+        totalAllAccessPaid() {
+          return this.badges
+            .filter(b=> b.type == 'all' && b.payment)
+            .reduce((total, badge)=> {return total + badge.quantity}, 0)
+        },
+        totalPerformerUpgrade() {
+          return this.badges.filter(b=> b.type == 'performer-upgrade').length
+        },
+        totalPerformerWeekendUpgrade() {
+          return this.badges.filter(b=> b.type == 'performer-weekend-upgrade').length
         }
       },
       methods: {
-        getTotals() {
-          for(let i=0; i<this.badges.length; i++) {
-            let badge = this.badges[i]
-
-            // All Badges
-            this.totals.total++
-
-            // All-Access Badge (paid)
-            if(badge.type == 'all' && badge.payment)
-              this.totals.allAccessTotal += badge.quantity
-
-            // Performer Upgrade (full)
-            if(badge.type == 'performer-upgrade')
-              this.totals.performerFullTotal++
-
-            // Performer Upgrade (weekend-only)
-            if(badge.type == 'performer-weekend-upgrade')
-              this.totals.performerWeekendTotal++
-
-          }
-        },
         formatDate(date) {
           return new Date(Date.parse(date)).toLocaleString('en-US')
         },
@@ -125,7 +101,6 @@ block content
           .get('/api/badges')
           .then(function(response) {
             self.badges = response.data
-            self.getTotals()
           })
           .catch(function(error) {
             alert("Error getting badges :(")
