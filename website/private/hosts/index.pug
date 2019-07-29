@@ -7,7 +7,7 @@ block content
   #app.dash-boxes.container-fluid
     edit-host-modal(:host="Object.assign({}, selectedHost)" @update="updateHost")
     p.m2
-      a(href="/host-submission-form" target="_blank") Host Submission Form
+      a(href="/host" target="_blank") Host Submission Form
     .box.box-b(v-if="hosts.length > 0")
       table.box-table.table
         thead
