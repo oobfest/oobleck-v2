@@ -101,7 +101,7 @@ router.use('/apply-screener', screenerSubmissionFormRouter)
 let secretWorkshopsRouter = require('./workshops/router')
 router.use('/workshops', secretWorkshopsRouter)
 
-let volunteerSubmissionFormRouter = require('./volunteer-submission-form/router')
-router.use('/volunteer-submission-form', volunteerSubmissionFormRouter)
+let volunteerRouter = require('./volunteer/router')
+router.use('/volunteer', volunteerRouter)
 
 module.exports = router
