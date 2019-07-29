@@ -36,6 +36,9 @@ router.use('/stripe', stripeRouter)
 let usersRouter = require('./users/router')
 router.use('/users', usersRouter)
 
+let volunteersRouter = require('./volunteers/router')
+router.use('/volunteers', volunteersRouter)
+
 let workshopsRouter = require('./workshops/router')
 router.use('/workshops', workshopsRouter)
 

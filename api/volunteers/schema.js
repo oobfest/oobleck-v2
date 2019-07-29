@@ -4,7 +4,7 @@ module.exports = mongoose.Schema({
   name: String,
   email: String,
   phone: String,
-  type: String,
+  type: [String],
   referral: String,
   volunteeredBefore: Boolean,
   performing: Boolean,

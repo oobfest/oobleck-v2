@@ -1,0 +1,162 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Volunteers
+
+  #app.dash-boxes.container-fluid
+
+    //-p
+      a(href="/volunteers/schedule") Schedule
+    p Volunteers: {{volunteers.length}}
+
+    ul.nav.nav-pills
+      li.nav-item
+        a.nav-link.active(data-toggle="tab" href="#show") All
+      li.nav-item
+        a.nav-link(data-toggle="tab" href="#driver") Drivers
+      li.nav-item
+        a.nav-link(data-toggle="tab" href="#tech") Tech
+    .tab-content.mt-3
+
+      #show.tab-pane.fade.show.active
+        p(v-if="volunteers.length == 0") No show volunteers yet
+        .box.box-b(v-else)
+          table.table.box-table
+            thead
+              tr
+                th Name
+                th Type
+                th Hours
+                th Phone
+                th Email
+            tbody(v-for="(volunteer, index) in volunteers")
+              tr
+                td
+                  a(:href="'#collapse-' + index" data-toggle="collapse") {{volunteer.name}}
+                td {{volunteer.type.join(', ')}}
+                td {{volunteer.hours}}
+                td {{volunteer.phone}}
+                td {{volunteer.email}}
+              tr.collapse(:id="'collapse-' + index")
+                td(colspan=6)
+                  ul.list-unstyled
+                    li
+                      span(v-if="volunteer.volunteeredBefore") ✅ Has volunteered before
+                      span(v-else) 🆕 Has not volunteered before
+                    li
+                      span(v-if="volunteer.attendingOrientation") ✅ Can attend orientation meeting
+                      span(v-else) ⛔️ Cannot attend orientation meeting
+                    li
+                      span(v-if="volunteer.performing") 🐝 Is performing during the festival
+                      span(v-else-if="volunteer.performing === undefined") 🤷‍♀️ May or may not be performing
+                      span(v-else) ✅ Is not performing during the festival
+
+                  div(v-if="volunteer.referral")
+                    h4 🗣 Referral
+                    p {{volunteer.referral}}
+
+                  div(v-if="volunteer.notes")
+                    h4 📝 Notes
+                    p {{volunteer.notes}}
+
+                  div(v-if="volunteer.type.includes('driver')")
+                    hr
+                    h4 🚙 Driver Details
+                    p Car:&nbsp;
+                      span.font-italic {{volunteer.car.carType}}
+                    p Passengers:&nbsp;
+                      span.code {{volunteer.car.passengerCount}}
+                    p License Plate Number:&nbsp;
+                      span.code {{volunteer.car.licensePlateNumber}}
+
+
+                  div(v-if="volunteer.type.includes('tech')")
+                    hr
+                    h4 👨🏾‍💻 Tech Details
+                    p
+                      span(v-if="volunteer.tech.hasTechedOobBefore") ✅ Has teched OoB before
+                      span(v-else) 🆕 Has not teched OoB before
+                    p Previous tech experience: {{volunteer.tech.previousExperience}}
+
+
+      #driver.tab-pane.fade
+        p(v-if="driverVolunteers.length == 0") No driver volunteers yet
+        .box.box-b(v-else)
+          table.table.box-table
+            thead
+              tr
+                th Name
+                th Email
+                th Phone
+                th Passengers
+            tbody
+              tr(v-for="driverVolunteer in driverVolunteers")
+                td {{driverVolunteer.name}}
+                td {{driverVolunteer.email}}
+                td {{driverVolunteer.phone}}
+                td {{driverVolunteer.car.passengerCount}}
+
+      #tech.tab-pane.fade
+        p(v-if="techVolunteers.length == 0") No tech volunteers yet
+        .box.box-b(v-else)
+          table.table.box-table
+            thead
+              tr
+                th Name
+                th Email
+                th Phone
+                th Previous Experience
+            tbody
+              tr(v-for="techVolunteer in techVolunteers")
+                td {{techVolunteer.name}}
+                td {{techVolunteer.email}}
+                td {{techVolunteer.phone}}
+                td {{techVolunteer.tech.previousExperience}}
+
+  script.
+    let app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          volunteers: []
+        }
+      },
+      computed: {
+        showVolunteers() {
+          return this.volunteers.filter(v=> v.type.includes('show'))
+        },
+        driverVolunteers() {
+          return this.volunteers.filter(v=> v.type.includes('driver'))
+        },
+        techVolunteers() {
+          return this.volunteers.filter(v=> v.type.includes('tech'))
+        }
+      },
+      methods: {
+        remove(id) {
+          let self = this
+          axios
+            .delete('/api/volunteers/' + id)
+            .then(function(response) {
+              alert("DONE!")
+            })
+            .catch(function(error) {
+              alert("ERROR")
+              console.log(error)
+            })
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/volunteers')
+          .then(function(response) {
+            self.volunteers = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting volunteers :(")
+            console.log(error)
+          })
+      }
+    })

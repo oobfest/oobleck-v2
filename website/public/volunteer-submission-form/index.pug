@@ -36,7 +36,7 @@ block content
                 p Any volunteer completing 5 or more shifts will earn a&nbsp;
                   em Volunteer 5+ Shifts Badge
                   | . This is equivalent to a performer badge and gives you entry to any non-sold-out show for the entirety of the festival!
-                p You can email any questions to&nbsp;
+                p Email any questions to&nbsp;
                   a(href="mailto:volunteer@oobfest.com" target="_blank") volunteer@oobfest.com
               .box-block.box-bt
                 h3 General Information
@@ -104,17 +104,10 @@ block content
                   label.col-form-label.required-field(for="previous-tech-experience") What is your previous tech experience?
                   input#previous-tech-experience.form-control(type="text" maxlength="280" name="previous-tech-experience" v-model="volunteer.tech.previousExperience")
                 .form-group
-                  label.col-form-label.required-field(for="passenger-count") How many additional passengers can you fit?
-                  select#passenger-count.form-control(v-model.number="volunteer.passengerCount")
-                    option 1
-                    option 2
-                    option 3
-                    option 4
-                    option 5
-                .form-group
-                  label.col-form-label.required-field(for="license-plate-number") What is your car's license plate number?
-                  input#license-plate-number.form-control(type="text" maxlength="280" name="license-plate-number" v-model="volunteer.licensePlateNumber")
-
+                  label.col-form-label.required-field(for="has-teched-oob-before") Have you done tech for OoB before?
+                  select#has-teched-oob-before.form-control(v-model="volunteer.tech.hasTechedOobBefore")
+                    option(value="no") No
+                    option(value="yes") Yes
 
               .box-block.box-bt
                 h3 Availability
@@ -188,7 +181,7 @@ block content
             .box-block(v-show="submitted")
               h3 Thank You!
               p Your submission has been recorded!
-              p Any questions, email
+              p Any questions, email&nbsp;
                 a(href="mailto:volunteer@oobfest.com" target="_blank") volunteer@oobfest.com
 
   script.
@@ -219,7 +212,7 @@ block content
 
             tech: {
               previousExperience: '',
-              hasTechedOobBefore: '',
+              hasTechedOobBefore: 'no',
             }
           }
         }
@@ -231,7 +224,12 @@ block content
           if(this.volunteer.email == '') validationErrors.push("Your email is required")
           if(this.volunteer.phone == '') validationErrors.push("Your phone number is required")
           if(this.volunteer.type == '') validationErrors.push("The type of volunteering is required")
+          if(this.volunteer.volunteeredBefore == '') validationErrors.push("You must let us know if you have volunteered for OoB before or not")
+          if(this.volunteer.performing == '') validationErrors.push("You must let us know if you are performing in the festival or not")
           if(this.volunteer.hours == 0) validationErrors.push("How many hours available is required")
+          if(this.volunteer.availability.length <= 0) validationErrors.push("You must be available for at least one day of the festival")
+          if(this.volunteer.attendingOrientation == '') validationErrors.push("You must let us know that you can attend volunteer orientation or not")
+
           if(this.volunteer.type == 'driver') {
             if(this.volunteer.car.carType == '') validationErrors.push("Car Type is required for driver volunteers")
             if(this.volunteer.car.licensePlateNumber == '') validationErrors.push("License Plate Number is required for driver volunteers")
