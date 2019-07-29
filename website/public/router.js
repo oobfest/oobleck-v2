@@ -83,8 +83,8 @@ router.use(actSubmissionEditRouter)
 let badgeFormRouter = require('./get-badges/router')
 router.use('/get-badges', badgeFormRouter)
 
-let hostSubmissionFormRouter = require('./host-submission-form/router')
-router.use('/host-submission-form', hostSubmissionFormRouter)
+let hostRouter = require('./host/router')
+router.use('/host', hostRouter)
 
 let lineupRouter = require('./lineup/router')
 router.use('/lineup', lineupRouter)

@@ -2,7 +2,7 @@ let express = require('express')
 let router = express.Router()
 
 router.get('/', (request, response)=> {
-  response.render('public/host-submission-form')
+  response.render('public/host')
 })
 
 module.exports = router
