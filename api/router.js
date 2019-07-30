@@ -9,38 +9,18 @@ router.use((request, response, next)=>{
   next()
 })
 
-let actSubmissionsRouter = require('./act-submissions/router')
-router.use('/act-submissions', actSubmissionsRouter)
-
-let actsRouter = require('./acts/router')
-router.use('/acts', actsRouter)
-
-let badgesRouter = require('./badges/router')
-router.use('/badges', badgesRouter)
-
-let catRouter = require('./cats/router')
-router.use('/cats', catRouter)
-
-let hostsRouter = require('./hosts/router')
-router.use('/hosts', hostsRouter)
-
-let screenerSubmissionsRouter = require('./screener-submissions/router')
-router.use('/screener-submissions', screenerSubmissionsRouter)
-
-let showsRouter = require('./shows/router')
-router.use('/shows', showsRouter)
-
-let stripeRouter = require('./stripe/router')
-router.use('/stripe', stripeRouter)
-
-let usersRouter = require('./users/router')
-router.use('/users', usersRouter)
-
-let volunteersRouter = require('./volunteers/router')
-router.use('/volunteers', volunteersRouter)
-
-let workshopsRouter = require('./workshops/router')
-router.use('/workshops', workshopsRouter)
+router.use('/act-submissions', require('./act-submissions/router'))
+router.use('/acts', require('./acts/router'))
+router.use('/badges', require('./badges/router'))
+router.use('/cats', require('./cats/router'))
+router.use('/character-showcase-submissions', require('./character-showcase-submissions/router'))
+router.use('/hosts', require('./hosts/router'))
+router.use('/screener-submissions', require('./screener-submissions/router'))
+router.use('/shows', require('./shows/router'))
+router.use('/stripe', require('./stripe/router'))
+router.use('/users', require('./users/router'))
+router.use('/volunteers', require('./volunteers/router'))
+router.use('/workshops', require('./workshops/router'))
 
 router.get('/', (request, response)=> {
   response.send({ok: true})

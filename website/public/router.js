@@ -74,34 +74,16 @@ router.post('/stripe', async (request, response)=> {
   }
 })
 
-let actSubmissionConfirmationRouter = require('./act-submission-confirmation/router')
-router.use(actSubmissionConfirmationRouter)
-
-let actSubmissionEditRouter = require('./act-submission-edit/router')
-router.use(actSubmissionEditRouter)
-
-let badgeFormRouter = require('./get-badges/router')
-router.use('/get-badges', badgeFormRouter)
-
-let hostRouter = require('./host/router')
-router.use('/host', hostRouter)
-
-let lineupRouter = require('./lineup/router')
-router.use('/lineup', lineupRouter)
-
-let loginRouter = require('./login/router')
-router.use(loginRouter)
-
-let scheduleRouter = require('./schedule/router')
-router.use('/schedule', scheduleRouter)
-
-let screenerSubmissionFormRouter = require('./screener-submission-form/router')
-router.use('/apply-screener', screenerSubmissionFormRouter)
-
-let secretWorkshopsRouter = require('./workshops/router')
-router.use('/workshops', secretWorkshopsRouter)
-
-let volunteerRouter = require('./volunteer/router')
-router.use('/volunteer', volunteerRouter)
+router.use(require('./act-submission-confirmation/router'))
+router.use(require('./act-submission-edit/router'))
+router.use(require('./login/router'))
+router.use('/apply-screener', require('./screener-submission-form/router'))
+router.use('/character-showcase', require('./character-showcase/router'))
+router.use('/get-badges', require('./get-badges/router'))
+router.use('/host', require('./host/router'))
+router.use('/lineup', require('./lineup/router'))
+router.use('/schedule', require('./schedule/router'))
+router.use('/volunteer', require('./volunteer/router'))
+router.use('/workshops', require('./workshops/router'))
 
 module.exports = router

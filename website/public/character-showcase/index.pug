@@ -1,0 +1,214 @@
+extends ../../_layout
+block content
+  .text-center
+    a(href="http://oobfest.com/" target="_parent")
+      img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    h1.p-3.text-light.font-weight-bold JFL Character Showcase Application
+  #app.container-fluid
+    .row
+      .col-md-8.mx-auto.pb-5
+        .box
+          form
+            .box-head.box-head-accent-oob
+            div(v-show="submitted==false")
+              .box-block
+                .alert.alert-danger(v-show="validationErrors.length > 0")
+                  h4.alert-heading Errors
+                  ul
+                      li(v-for="validationError in validationErrors") {{validationError}}
+                h4 What is JFL?
+                p JFL is the annual&nbsp;
+                  em Just for Laughs&nbsp;
+                  | festival in Montreal. This festival has spring-boarded the careers of comics like Jimmy Fallon, Gabriel Iglesias, Kevin Hart, Hannibal Buress, Amy Schumer, Chris D'Elia, Jerrod Carmichael, Ali Wong, The Lucas Brothers, Pete Davidson and Michelle Wolf.
+                h4 What is the JFL Showcase?
+                p Twelve performers will have a strict five minutes to perform two to three characters to a JFL industry scout. They are seeking out talented individuals to officially audition for the JFL New Character Showcase later in the year.
+                h4 Your Act
+                p Your five-minute character showcase should be a crafted and rehearsed performance of two to three well-rounded, layered characters. Each character should take 1.5-2 minutes to properly flesh out. Impressions may be shorter. Wigs and props are allowed, but we strongly recommend keeping these to a minimum as your time is precious.
+                h4 When and Where
+                p The show will take place Friday, August 30th at 7pm, upstairs at the Hideout Theatre.
+                h4 Your Submission
+                p To apply, please have a brief character reel ready to share with your submission. It should be under three minutes and feature up to three different characters you would bring to the showcase. &nbsp;
+                  a(href="https://www.youtube.com/watch?v=Iq25H4WdF0A" target="_blank") See an example.
+                h4 Deadline to Submit
+                p: strong The form deadline is Sunday, August 11th at 11:59pm.
+              .box-block.box-bt
+                h3 General Information
+                .form-group
+                  label.col-form-label.required-field(for="name") Full Name
+                  input#name.form-control(type="text" required autofocus maxlength="280" name="name" v-model="submission.name")
+                .form-group
+                  label.col-form-label.required-field(for="email") Email
+                  input#email.form-control(type="email" required  maxlength="280" name="email" v-model="submission.email")
+                .form-group
+                  label.col-form-label.required-field(for="phone") Phone Number
+                  input#phone.form-control(type="tel" required maxlength="280" name="phone" v-model="submission.phone")
+                .form-group
+                  label.col-form-label(for="accolades") List any notable performances, awards you've won and additional press materials (quotes, links to reviews, etc)
+                  textarea#accolades.form-control(maxlength="1400" name="accolades" v-model="submission.accolades")
+
+              .box-block.box-bt
+                h3 Character Reel
+                p The video should be under three minutes and feature up to three different characters you would bring to the showcase. This does not have to be your final presentation, but should give us a good feel for the direction you're headed in.
+                .form-group
+                  label.col-form-label.required-field Video URL
+                  input.form-control(required type="text" name="video-url" maxlength="1400" v-model="submission.videoUrl")
+                .form-group
+                  label.col-form-label(for="video-info") Does your video require a password or any other additional information?
+                  input#video-info.form-control(type="text" name="video-info" maxlength="1400" v-model="submission.videoInfo")
+
+              .box-block.box-bt
+                h3 Headshot Upload
+                input#image-url(type="hidden" name="image-url" v-model="submission.image.url")
+                input#delete-image-url(type="hidden" name="delete-image-url" v-model="submission.image.deleteUrl")
+
+                .custom-file(v-show="!submission.image.processed")
+                  input#image-upload-input.custom-file-input(type="file" accept="image/*" @change="imageUpload")
+                  label.custom-file-label.reqiured-field(for="file-input") Select Image
+
+                p.form-text
+                  em Image hosting powered by&nbsp;
+                    a(href="https://imgur.com/" target="_blank") Imgur
+                    | .
+
+                .progress-block(v-show="!submission.image.processed")
+                  .progress(v-show="submission.image.progress > 0")
+                    .progress-bar.bg-primary(:style="{width: submission.image.progress + '%'}")
+                  p(v-show="submission.image.progress == 100") Waiting for response from Imgur...
+
+                .box-banner(v-show="submission.image.processed")
+                  img#image-preview.box-banner-image(:src="submission.image.url" alt="Image preview")
+
+                p.text-right.mt-2(v-show="submission.image.processed")
+                  a.btn.btn-danger(:href="submission.image.deleteUrl" target="_blank" @click="removeImage") Delete
+
+              .box-block.box-bt
+                h3 Social Media Links&nbsp;
+                  small (optional)
+                small.form-text.text-muted Enter a full URL (including https), not just a username
+                .form-group
+                  label.col-form-label.field(for="social-website") Website
+                  input#social-website.form-control(type="text" maxlength="280" name="social-website" placeholder="https://" v-model="submission.social.website")
+                .form-group
+                  label.col-form-label.field(for="social-twitter") Twitter
+                  input#social-twitter.form-control(type="text" maxlength="280" name="social-twitter" placeholder="https://twitter.com/" v-model="submission.social.twitter")
+                .form-group
+                  label.col-form-label(for="social-instagram") Instagram
+                  input#social-instagram.form-control(type="text" maxlength="280" name="social-instagram" placeholder="https://www.instagram.com/" v-model="submission.social.instagram")
+                .form-group
+                  label.col-form-label(for="social-youtube") YouTube Channel
+                  input#social-youtube.form-control(type="text" maxlength="280" name="social-youtube" placeholder="https://www.youtube.com/channel/" v-model="submission.social.youtube")
+                .form-group
+                  label.col-form-label(for="social-facebook") Facebook
+                  input#social-facebook.form-control(type="text" maxlength="280" name="social-facebook" placeholder="https://facebook.com/" v-model="submission.social.facebook")
+
+              .box-block.box-bt
+                .text-center
+                  button.btn.btn-lg.btn-primary(@click="submit" type="button") Submit
+
+            .box-block(v-show="submitted")
+              h3 Thank You!
+              p Your submission has been recorded!
+
+  script.
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          submitted: false,
+          validationErrors: [],
+          submission: {
+            name: '',
+            email: '',
+            phone: '',
+            accolades: '',
+            videoUrl: '',
+            videoInfo: '',
+            accepted: false,
+            image: {
+              id: null,
+              url: null,
+              deleteUrl: null,
+              processed: false,
+              progress: 0
+            },
+            social: {
+              website: '',
+              twitter: '',
+              instagram: '',
+              facebook: ''
+            }
+          }
+        }
+      },
+      methods: {
+        getValidationErrors() {
+          let validationErrors = []
+          if(!this.submission.name) validationErrors.push('Name is required')
+          if(!this.submission.email) validationErrors.push('Email is required')
+          if(!this.submission.phone) validationErrors.push('Phone number is required')
+          if(!this.submission.videoUrl) validationErrors.push('Video URL is required')
+          if(!this.submission.image.id) validationErrors.push('Headshot is required')
+          return validationErrors
+        },
+        submit() {
+          let validationErrors = this.getValidationErrors()
+          let self = this
+          if(validationErrors.length == 0) {
+            axios
+              .post('/api/character-showcase-submissions', self.submission)
+              .then(function(response) {
+                self.submitted = true
+              })
+              .catch(function(error) {
+                alert("Error submitting application :(")
+              })
+          }
+          else {
+            alert("Some required fields were left blank")
+            this.validationErrors = validationErrors
+          }
+        },
+        uploadProgress(event) {
+          if (event.lengthComputable) {
+            this.submission.image.progress = parseInt((event.loaded / event.total) * 100)
+          }
+        },
+        removeImage() {
+          this.submission.image.id = null
+          this.submission.image.url = null
+          this.submission.image.deleteUrl = null
+          this.submission.image.processed = false
+          this.submission.image.progress = 0
+        },
+        imageUpload(event) {
+          let image = event.target.files[0]
+          if(image.size > (1024 * 1000 * 10)) {
+            alert("Image cannot be larger than 10MB")
+          }
+          else {
+            formData = new FormData()
+            formData.append('image', image)
+            let url = 'https://imgur-apiv3.p.mashape.com/3/image'
+            let onUploadProgress = this.uploadProgress
+            let headers = {
+              'X-mashape-Key': 'MeRL1vcC70mshcx4yVw7R4jv88gnp11IPvPjsn4GKcdklk5FiE',
+              'Authorization': 'Client-ID c60e83c906306c5'
+            }
+            let self = this
+            axios.post(url, formData, { onUploadProgress, headers })
+              .then(function (response) {
+                let data = response.data.data  // lol
+                self.submission.image.deleteUrl = 'https://imgur.com/delete/' + data.deletehash
+                self.submission.image.id = data.id
+                self.submission.image.url = data.link
+                self.submission.image.processed = true
+              })
+              .catch(function (error) {
+                alert("Image upload failed 😭")
+                console.log(error)
+              })
+          }
+        }
+      }
+    })
+

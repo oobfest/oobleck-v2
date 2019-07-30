@@ -1,0 +1,74 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Character Showcase Submissions
+
+  #app.dash-boxes.container-fluid
+    p Submissions: {{submissions.length}}
+
+    p(v-if="submissions.length == 0") No submissions yet
+    .box.box-b(v-else)
+      table.table.box-table
+        thead
+          tr
+            th Name
+            th Email
+            th Phone
+            th In
+        tbody(v-for="(submission, index) in submissions")
+          tr(:class="{'table-success': submission.accepted}")
+            td: a(:href="'#collapse-' + index" data-toggle="collapse") {{submission.name}}
+            td {{submission.email}}
+            td {{submission.phone}}
+            td
+              .form-check
+                input.form-check-input(v-model="submission.accepted" type="checkbox" @click="stamp(submission._id, !submission.accepted)")
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan=6)
+              h4 Headshot
+              a(:href="submission.image.url" target="_blank")
+                img.img-thumbnail(:src="'https://i.imgur.com/' + submission.image.id + 'b.jpg'")
+              div(v-if="submission.accolades")
+                h4 Accolades
+                p {{submission.accolades}}
+              h4 Video
+              p: a(:href="submission.videoUrl" target="_blank") {{submission.videoUrl}}
+              p {{submission.videoInfo}}
+
+  script.
+    let app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          submissions: []
+        }
+      },
+      methods: {
+        stamp(submissionId, accepted) {
+          let self = this
+          axios
+            .put('/api/character-showcase-submissions/' + submissionId, {accepted})
+            .then(response=> {
+              let i = self.submissions.findIndex((s)=> s._id === response.data._id)
+              self.$set(self.submissions[i], 'accepted', accepted)
+            })
+            .catch(error=> {
+              alert("Error on update :(")
+              console.log(error)
+            })
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/character-showcase-submissions')
+          .then(function(response) {
+            self.submissions = response.data
+          })
+          .catch(function(error) {
+            alert("Error getting character showcase submissions :(")
+            console.log(error)
+          })
+      }
+    })
