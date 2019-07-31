@@ -4,12 +4,14 @@ body {
 
 nav {
   font-family: 'gotham-book', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 600;
+  line-height: 2;
 }
 
 .nav-link {
   display: inline;
+  padding-bottom: 0.25rem;
 }
 a.nav-link:hover {
   box-shadow: 0 2px 0 white, 0px 1px 0 white;
