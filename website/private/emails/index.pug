@@ -8,6 +8,12 @@ block content
     .row
       .col
         .form-check.form-check-inline
+          input#all-checkbox.form-check-input(type="checkbox" v-model="showAll")
+          label.form-check-label(for="all-checkbox") Show All
+
+    .row
+      .col
+        .form-check.form-check-inline
           input#locals-checkbox.form-check-input(type="checkbox" v-model="showLocals")
           label.form-check-label(for="locals-checkbox") Local
         .form-check.form-check-inline
@@ -48,6 +54,7 @@ block content
       el: "#app",
       data() { return {
         acts: [],
+        showAll: false,
         showLocals: true,
         showOutOfTown: true,
         showHeadliners: false,
@@ -71,7 +78,17 @@ block content
           if(!this.showOnePersonShow) filteredActs = filteredActs.filter(a=>!a.showType.includes('One-person-show'))
 
           let emails = filteredActs.map(fa=> fa.contact.email)
-          return Array.from(new Set(emails))
+
+          let otherEmails = []
+          if(this.showAll) {
+            for(act of filteredActs) {
+              for(person of act.personnel) {
+                otherEmails.push(person.email)
+              }
+            }
+          }
+
+          return Array.from(new Set([...emails, ...otherEmails]))
         }
       },
       created() {
