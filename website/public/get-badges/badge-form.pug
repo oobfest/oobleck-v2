@@ -40,12 +40,20 @@ div
                           option 3
                           option 4
                           option 5
+                      .form-group
+                        .form-check
+                          input#has-promo-code.form-check-input(v-model="hasPromoCode" type="checkbox" style="height:22px")
+                          label.form-check-label(for="has-promo-code") I have a promo code
+                      .form-group(v-if="hasPromoCode")
+                        label(for="#promo-code") Promo Code
+                        input#promo-code.form-control(type="text" v-model="promoCode")
                       .row
                         .col.text-right
                           .form-group
-                            button#stripe-button.btn.btn-lg.btn-primary(@click.prevent="stripeHandler") Pay with Stripe
+                            button.btn.btn-secondary.btn-lg(type="button" @click="card1State--") Cancel
                         .col.text-left
-                          button.btn.btn-secondary.btn-lg(type="button" @click="card1State--") Cancel
+                          .form-group
+                            button#stripe-button.btn.btn-lg.btn-primary(@click.prevent="hasPromoCode? checkPromo() : stripeHandler()") Pay with Stripe
                       .row
                         .col.text-center
                           img(src="/img/powered-by-stripe.svg" height="55px")
@@ -137,8 +145,8 @@ div
   script.
 
     let handler = StripeCheckout.configure({
-      //key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
-      key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
+      key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
+      //key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
       image: '/img/oob-logo-fire.jpg',
       locale: 'auto',
       zipCode: true,
@@ -146,7 +154,7 @@ div
       allowRememberMe: false,
       token: function(token) {
         badgeApp.badge.email = token.email
-        let data = { token, badge: badgeApp.badge }
+        let data = { token, promoCode: badgeApp.promoCode, badge: badgeApp.badge }
         axios
           .post('/api/stripe/badges/', data)
           .then((response)=> {
@@ -167,6 +175,8 @@ div
       el: "#badges",
       data() {
         return {
+          hasPromoCode: false,
+          promoCode: '',
           card1State: 1,
           card2State: 0,
           badge: {
@@ -180,6 +190,21 @@ div
         }
       },
       methods: {
+        checkPromo() {
+          if(this.isValid()) {
+            let self = this
+            axios
+              .get('/api/promo/' + self.promoCode)
+              .then(response=> {
+                if(response.data.valid) self.stripeHandler()
+                else alert("Invalid promo code")
+              })
+              .catch(error=> {
+                alert("Error checking promo code")
+              })
+          }
+          else alert("All fields are required!")
+        },
         stripeHandler() {
           if (this.isValid()) {
             handler.open({
@@ -191,9 +216,10 @@ div
           else alert("All fields are required!")
         },
         getBadgeCost() {
-          if (this.badge.type == 'all') return (9900 * this.badge.quantity)
-          if (this.badge.type == 'performer-upgrade') return 6900
-          if (this.badge.type == 'performer-weekend-upgrade') return 4500
+          if (this.badge.type == 'all' && this.hasPromoCode) return (6900 * this.badge.quantity)
+          else if (this.badge.type == 'all') return (9900 * this.badge.quantity)
+          else if (this.badge.type == 'performer-upgrade') return 6900
+          else if (this.badge.type == 'performer-weekend-upgrade') return 4500
         },
         isValid() {
           return this.badge.name != '' &&

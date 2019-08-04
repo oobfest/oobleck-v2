@@ -22,6 +22,13 @@ router.use('/users', require('./users/router'))
 router.use('/volunteers', require('./volunteers/router'))
 router.use('/workshops', require('./workshops/router'))
 
+router.get('/promo/:code', (request, response)=>{
+  let attemptedPromoCode = request.params.code
+  let actualPromoCode = process.env.OOB_BAE_PROMO_CODE
+  let valid = (attemptedPromoCode == actualPromoCode)
+  response.send({valid})
+})
+
 router.get('/', (request, response)=> {
   response.send({ok: true})
 })

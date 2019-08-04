@@ -40,13 +40,14 @@ router.post('/submission/:submissionId', async (request, response)=> {
 router.post('/badges/', async (request, response)=> {
   let badge = request.body.badge
   badge.email = request.body.token.email
+  let hasValidPromoCode = request.body.promoCode == process.env.OOB_BAE_PROMO_CODE
   try {
     let customer = await stripe.customers.create({
       email: request.body.token.email,
       card: request.body.token.id
     })
     badge.payment = await stripe.charges.create({
-      amount: getBadgePrice(badge.type) * badge.quantity,
+      amount: getBadgePrice(badge.type, hasValidPromoCode) * badge.quantity,
       currency: 'usd',
       customer: customer.id
     })
@@ -60,7 +61,8 @@ router.post('/badges/', async (request, response)=> {
   }
 })
 
-let getBadgePrice = function(type) {
+let getBadgePrice = function(type, hasPromoCode) {
+  if (type == 'all' && hasPromoCode) return 6900
   if (type == 'all') return 9900
   if (type == 'performer-upgrade') return 6900
   if (type == 'performer-weekend-upgrade') return 4500
