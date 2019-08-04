@@ -93,9 +93,9 @@ div
                       .form-group
                         label(for="performer-email") Please confirm your email. Use the email address that was included on your submission form.
                         input#performer-email.form-control(type="text" v-model="badge.email")
-                      button.btn.btn-primary.btn-lg(:disabled="badge.email==''" type="button" @click="validatePerformerEmail") Confirm Email Address
-                      | &nbsp;
                       button.btn.btn-secondary.btn-lg(type="button" @click="card2State--") Cancel
+                      | &nbsp;
+                      button.btn.btn-primary.btn-lg(:disabled="badge.email==''" type="button" @click="validatePerformerEmail") Confirm Email Address
                   .col.align-self-center(v-show="card2State==2")
                     p We did not find your email. Please try again!
                     button.btn.btn-secondary.btn-lg.mb-2(type="button" @click="card2State--") Try Again
@@ -114,9 +114,10 @@ div
                       .row
                         .col.text-right
                           .form-group
-                            button#stripe-button-2.btn.btn-lg.btn-primary(@click.prevent="stripeHandler") Pay with Stripe
+                            button.btn.btn-secondary.btn-lg(type="button" @click="card2State-=2") Cancel
                         .col.text-left
-                          button.btn.btn-secondary.btn-lg(type="button" @click="card2State-=2") Cancel
+                          .form-group
+                            button#stripe-button-2.btn.btn-lg.btn-primary(@click.prevent="stripeHandler") Pay with Stripe
                       .row
                         .col.text-center
                           img(src="/img/powered-by-stripe.svg" height="55px")
@@ -145,8 +146,8 @@ div
   script.
 
     let handler = StripeCheckout.configure({
-      key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
-      //key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
+      //key: 'pk_test_vSOv2tJVVsBEI6PZJLJBNiOW',
+      key: 'pk_live_iR3EiMyek6fnYWIoFptERALW',
       image: '/img/oob-logo-fire.jpg',
       locale: 'auto',
       zipCode: true,
