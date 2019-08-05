@@ -156,7 +156,6 @@ block content
           .get('/api/acts/public')
           .then(response=> {
             self.acts = response.data
-              .filter(a=> !a.showType.includes('Standup'))
               .sort((a, b)=> {
                 if(a.name.toLowerCase() < b.name.toLowerCase()) return -1
                 if(a.name.toLowerCase() > b.name.toLowerCase()) return 1
