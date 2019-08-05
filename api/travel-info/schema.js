@@ -5,7 +5,7 @@ module.exports = mongoose.Schema({
   email: String,
   phone: String,
   actName: String,
-  wantsRide: Boolean,
+  wantsArrivalRide: Boolean,
   arrival: {
     date: String,
     time: String,
@@ -13,6 +13,7 @@ module.exports = mongoose.Schema({
     flightNumber: String,
     dropOffAddress: String
   },
+  wantsDepartureRide: Boolean,
   departure: {
     date: String,
     time: String,

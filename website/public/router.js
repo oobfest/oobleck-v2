@@ -84,6 +84,7 @@ router.use('/host', require('./host/router'))
 router.use('/lineup', require('./lineup/router'))
 router.use('/schedule', require('./schedule/router'))
 router.use('/tech-needs', require('./tech-needs/router'))
+router.use('/travel-info', require('./travel-info/router'))
 router.use('/volunteer', require('./volunteer/router'))
 router.use('/workshops', require('./workshops/router'))
 

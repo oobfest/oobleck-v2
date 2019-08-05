@@ -1,0 +1,168 @@
+extends ../../_layout
+block content
+  .text-center
+    a(href="http://oobfest.com/" target="_parent")
+      img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    h1.p-3.text-light.font-weight-bold Travel Information
+  #app.container-fluid
+    .row
+      .col-lg-8.mx-auto.pb-5
+        .box-head.box-head-accent-oob
+        div(v-show="submitted==false")
+          .box-block
+            .alert.alert-danger(v-show="validationErrors.length > 0")
+              h4.alert-heading Errors
+              ul
+                  li(v-for="validationError in validationErrors") {{validationError}}
+
+            .form-group
+              label.col-form-label(for="act-name") Act
+              select#act-name.form-control(name="act-name" v-model="travelInfo.actName")
+                option(v-for="act in acts") {{act.name}}
+
+            .form-group
+              label.col-form-label(for="name") Your Name
+              input#name.form-control(type="name" maxlength="280" v-model="travelInfo.name")
+
+            .form-group
+              label.col-form-label(for="email") Email
+              input#email.form-control(type="email" maxlength="280" v-model="travelInfo.email")
+
+            .form-group
+              label.col-form-label(for="phone") Phone Number
+              input#phone.form-control(type="tel" maxlength="280" v-model="travelInfo.phone")
+
+          .box-block.box-bt
+            h3 Arrival Information
+            .form-group
+              label.col-form-label(for="arrival-date") Arrival Date
+              input#arrival-date.form-control(type="arrival-date" maxlength="280" v-model="travelInfo.arrival.date")
+            .form-group
+              label.col-form-label(for="arrival-time") Arrival Time
+              input#arrival-time.form-control(type="arrival-time" maxlength="280" v-model="travelInfo.arrival.time")
+            .form-group
+              label.col-form-label(for="arrival-airline") Airline
+              input#arrival-airline.form-control(type="arrival-airline" maxlength="280" v-model="travelInfo.arrival.airline")
+            .form-group
+              label.col-form-label(for="arrival-flight-number") Flight Number
+              input#arrival-flight-number.form-control(type="arrival-flight-number" maxlength="280" v-model="travelInfo.arrival.flightNumber")
+            .form-group
+              label.col-form-label(for="wants-arrival-ride") Would you like Out of Bounds to provide you a FREE ride from the airport?
+              select#wants-arrival-ride.form-control(name="wants-arrival-ride" v-model="travelInfo.wantsArrivalRide")
+                option(:value="true") Yes
+                option(:value="false") No
+            .form-group(v-show="travelInfo.wantsArrivalRide")
+              label.col-form-label(for="arrival-drop-off-address") Drop-off Address
+              input#arrival-drop-off-address.form-control(type="arrival-drop-off-address" maxlength="280" v-model="travelInfo.arrival.dropOffAddress")
+
+          .box-block.box-bt
+            h3 Departure Information
+            .form-group
+              label.col-form-label(for="departure-date") Departure Date
+              input#departure-date.form-control(type="departure-date" maxlength="280" v-model="travelInfo.departure.date")
+            .form-group
+              label.col-form-label(for="departure-time") Departure Time
+              input#departure-time.form-control(type="departure-time" maxlength="280" v-model="travelInfo.departure.time")
+            .form-group
+              label.col-form-label(for="departure-airline") Departure Airline
+              input#departure-airline.form-control(type="departure-airline" maxlength="280" v-model="travelInfo.departure.airline")
+            .form-group
+              label.col-form-label(for="departure-flight-number") Flight Number
+              input#departure-flight-number.form-control(type="departure-flight-number" maxlength="280" v-model="travelInfo.departure.flightNumber")
+            .form-group
+              label.col-form-label(for="wants-departure-ride") Would you like Out of Bounds to provide you a FREE ride from the airport?
+              select#wants-departure-ride.form-control(name="wants-departure-ride" v-model="travelInfo.wantsDepartureRide")
+                option(:value="true") Yes
+                option(:value="false") No
+            .form-group(v-show="travelInfo.wantsDepartureRide")
+              label.col-form-label(for="departure-pick-up-address") Pick-up Address
+              input#departure-pick-up-address.form-control(type="departure-pick-up-address" maxlength="280" v-model="travelInfo.departure.pickUpAddress")
+
+          .box-block.text-center
+            button#submit-button.btn.btn-md.btn-primary(type="button" @click="submit") Submit
+        div(v-show="submitted==true")
+          .box-block
+            h4 Your travel information has been received!
+  script.
+    let app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          submitted: false,
+          validationErrors: [],
+          acts: [],
+          travelInfo: {
+            name: '',
+            email: '',
+            phone: '',
+            actName: '',
+            wantsArrivalRide: false,
+            arrival: {
+              date: '',
+              time: '',
+              airline: '',
+              flightNumber: '',
+              dropOffAddress: ''
+            },
+            wantsDepartureRide: false,
+            departure: {
+              date: '',
+              time: '',
+              airline: '',
+              flightNumber: '',
+              pickUpAddress: ''
+            }
+          }
+        }
+      },
+      methods: {
+        validate() {
+          let validationErrors = []
+          if(this.travelInfo.actName == '') validationErrors.push("Please select which act you are")
+          if(this.travelInfo.name == '') validationErrors.push("Please enter your name")
+          if(this.travelInfo.email == '') validationErrors.push("Please enter email address")
+          if(this.travelInfo.phone == '') validationErrors.push("Please enter phone number")
+          if(this.travelInfo.wantsArrivalRide && this.travelInfo.arrival.dropOffAddress == '')
+            validationErrors.push('Please enter drop-off address')
+          if(this.travelInfo.wantsDeparture && this.travelInfo.departure.pickUpAddress == '')
+            validationErrors.push('Please enter pick-up address')
+
+          return validationErrors
+        },
+        submit() {
+          let self = this
+
+          let validationErrors = self.validate()
+          if(validationErrors.length > 0) {
+            alert("Some required fields were left blank")
+            this.validationErrors = validationErrors
+          }
+          else {
+            axios
+              .post('/api/travel-info', self.travelInfo)
+              .then(response => {
+                self.submitted = true
+              })
+              .catch(error=> {
+                alert("There was an error submitting this form :(")
+                console.log(error)
+              })
+          }
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/acts/public')
+          .then(response=> {
+            self.acts = response.data
+              .filter(a=> !a.showType.includes('Standup'))
+              .sort((a, b)=> {
+                if(a.name.toLowerCase() < b.name.toLowerCase()) return -1
+                if(a.name.toLowerCase() > b.name.toLowerCase()) return 1
+                return 0
+              })
+            })
+          .catch(error=> alert("Error getting list of acts"))
+      }
+    })
