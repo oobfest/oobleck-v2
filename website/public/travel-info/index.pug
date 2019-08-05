@@ -70,7 +70,7 @@ block content
               label.col-form-label(for="departure-flight-number") Flight Number
               input#departure-flight-number.form-control(type="departure-flight-number" maxlength="280" v-model="travelInfo.departure.flightNumber")
             .form-group
-              label.col-form-label(for="wants-departure-ride") Would you like Out of Bounds to provide you a FREE ride from the airport?
+              label.col-form-label(for="wants-departure-ride") Would you like Out of Bounds to provide you a FREE ride to the airport?
               select#wants-departure-ride.form-control(name="wants-departure-ride" v-model="travelInfo.wantsDepartureRide")
                 option(:value="true") Yes
                 option(:value="false") No
