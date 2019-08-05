@@ -1,0 +1,150 @@
+extends ../../_layout
+block content
+  .text-center
+    a(href="http://oobfest.com/" target="_parent")
+      img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    h1.p-3.text-light.font-weight-bold Tech Needs
+  #app.container-fluid
+    .row
+      .col-lg-8.mx-auto.pb-5
+        .box-head.box-head-accent-oob
+        div(v-show="submitted==false")
+          .box-block
+            .alert.alert-danger(v-show="validationErrors.length > 0")
+              h4.alert-heading Errors
+              ul
+                  li(v-for="validationError in validationErrors") {{validationError}}
+            .form-group
+              label.col-form-label.required-field(for="act-name") Act
+              select#act-name.form-control(name="act-name" v-model="techNeeds.actName")
+                option(v-for="act in acts") {{act.name}}
+
+            .form-group
+              label.col-form-label.required-field(for="email") Email
+              input#email.form-control(type="email" required maxlength="280" v-model="techNeeds.email")
+
+            .form-group
+              label.col-form-label.required-field(for="act-type") What kind of show are you?
+              select#act-type.form-control(name="act-type" v-model="techNeeds.actType")
+                option Sketch
+                option Improv
+                option Standup
+                option(value='Musical') Musical Act (any kind)
+                option Other
+
+            .form-group
+              label.col-form-label.required-field(for="mic-needs") Will you need microphones? How many?
+              select#mic-needs.form-control(name="mic-needs" v-model="techNeeds.micNeeds")
+                option(value='Yes') Yes, one mic
+                option(value='Multiple') Yes, multiple mics
+                option(value='No') No
+
+            .form-group
+              label.col-form-label.required-field(for="has-script") Do you have a tech script?
+              small.form-text.text-muted This is a requirement for sketch
+              select#has-script.form-control(name="has-script" v-model="techNeeds.hasScript")
+                option(:value="true") Yes
+                option(:value="false") No
+
+            .form-group
+              label.col-form-label.required-field(for="needs-sound-check") Will you need a sound check?
+              small.form-text.text-muted This is a requirement for sketch
+              select#needs-sound-check.form-control(name="needs-sound-check" v-model="techNeeds.needsSoundCheck")
+                option(:value="true") Yes
+                option(:value="false") No
+
+            .form-group
+              label.col-form-label.required-field(for="bringing-own-tech-person") Are you bringing your own tech person?
+              select#bringing-own-tech-person.form-control(name="bringing-own-tech-person" v-model="techNeeds.bringingOwnTechPerson")
+                option(:value="true") Yes
+                option(:value="false") No
+
+            .form-group
+              label.col-form-label(for="props") Please list any props needed that you cannot bring yourself
+              textarea#props.form-control(maxlength="1500" name="props" v-model="techNeeds.props")
+
+            .form-group
+              label.col-form-label(for="additional-tech-needs") Please list any additional tech items you may need (e.g. a keyboard, specific inputs, etc.)
+              textarea#additional-tech-needs.form-control(maxlength="1500" name="additional-tech-needs" v-model="techNeeds.additionalTechNeeds")
+
+            .form-group
+              label.col-form-label(for="other") Anything else?
+              textarea#other.form-control(maxlength="1500" name="other" v-model="techNeeds.other")
+
+          .box-block.text-center
+            button#submit-button.btn.btn-md.btn-primary(type="button" @click="submit") Submit
+        div(v-show="submitted==true")
+          .box-block
+            h4 Your tech needs have been received!
+  script.
+    let app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          submitted: false,
+          validationErrors: [],
+          acts: [],
+          techNeeds: {
+            actName: '',
+            actType: '',
+            email: '',
+            micNeeds: '',
+            hasScript: null,
+            needsSoundCheck: null,
+            bringingOwnTechPerson: null,
+            additionalTechNeeds: '',
+            props: '',
+            other: ''
+          }
+        }
+      },
+      methods: {
+        validate() {
+          let validationErrors = []
+          if(this.techNeeds.actName == '') validationErrors.push("Please select which act you are")
+          if(this.techNeeds.email == '') validationErrors.push("Email is required")
+          if(this.techNeeds.actType == '') validationErrors.push('"What kind of show are you?" was left blank')
+          if(this.techNeeds.micNeeds == '') validationErrors.push("Mic needs is required")
+          if(this.techNeeds.hasScript == null) validationErrors.push('"Do you have a script?" is required')
+          if(this.techNeeds.needsSoundCheck == null) validationErrors.push('"Do you need a sound check?" is required')
+          if(this.techNeeds.bringingOwnTechPerson == null) validationErrors.push('"Are you bringing a tech person?" is required')
+
+          return validationErrors
+        },
+        submit() {
+          let self = this
+
+          let validationErrors = self.validate()
+          if(validationErrors.length > 0) {
+            alert("Some required fields were left blank")
+            this.validationErrors = validationErrors
+          }
+          else {
+            axios
+              .post('/api/tech-needs', self.techNeeds)
+              .then(response => {
+                self.submitted = true
+              })
+              .catch(error=> {
+                alert("There was an error submitting this form :(")
+                console.log(error)
+              })
+          }
+        }
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/acts/public')
+          .then(response=> {
+            self.acts = response.data
+              .filter(a=> !a.showType.includes('Standup'))
+              .sort((a, b)=> {
+                if(a.name.toLowerCase() < b.name.toLowerCase()) return -1
+                if(a.name.toLowerCase() > b.name.toLowerCase()) return 1
+                return 0
+              })
+            })
+          .catch(error=> alert("Error getting list of acts"))
+      }
+    })
