@@ -47,13 +47,19 @@ nav#dash-nav.dash-nav.dash-nav-accent-2
 				span.far.fa-grin-alt.fa-lg.fa-fw &nbsp;
 				|  Hosts
 
-			a.dash-nav-item(href="/character-showcase-submissions")
-				span.far.fa-surprise.fa-lg.fa-fw &nbsp;
-				|  JFL Submissions
-
 			a.dash-nav-item(href="/shows")
 				span.far.fa-list-alt.fa-lg.fa-fw &nbsp;
 				|  Shows
+
+			.dash-nav-dropdown
+				a.dash-nav-item.dash-nav-dropdown-toggle(href="#!")
+					span.far.fa-surprise.fa-lg.fa-fw &nbsp;
+					|  Submissions
+				.dash-nav-dropdown-menu
+					a.dash-nav-item(href="/character-showcase-submissions") JFL
+					a.dash-nav-item(href="/tech-needs-submissions") Tech Needs
+					a.dash-nav-item(href="/travel-info-submissions") Travel Info
+
 
 			a.dash-nav-item(href="/volunteers")
 				span.far.fa-heart.fa-lg.fa-fw &nbsp;

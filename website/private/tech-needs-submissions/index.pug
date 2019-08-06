@@ -1,0 +1,70 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Tech Need Submissions
+
+  #app.dash-boxes.container-fluid
+    p: a(href="/tech-needs") Submission Form
+    p Submissions: {{submissions.length}}
+
+    p(v-if="submissions.length == 0") No submissions yet
+    .box.box-b(v-else)
+      table.table.box-table
+        thead
+          tr
+            th Act
+            th Type
+            th Email
+            th Mic Needs
+            th Script?
+            th Sound check?
+            th Has tech?
+        tbody(v-for="(submission, index) in submissions")
+          tr
+            td: a(:href="'#collapse-' + index" data-toggle="collapse") {{submission.actName}}
+            td {{submission.actType}}
+            td {{submission.email}}
+            td {{submission.micNeeds}}
+            td.text-center {{submission.hasScript ? '✅' : ''}}
+            td.text-center {{submission.needsSoundCheck ? '✅' : ''}}
+            td.text-center {{submission.bringingOwnTechPerson ? '✅' : ''}}
+          tr.collapse(:id="'collapse-' + index")
+            td(colspan=7)
+              div(v-if="!submission.additionalTechNeeds && !submission.props && !submission.other")
+                p No other info submitted
+              div(v-if="submission.additionalTechNeeds")
+                h3 Needs
+                p {{submission.additionalTechNeeds}}
+              div(v-if="submission.props")
+                h3 Props
+                p {{submission.props}}
+              div(v-if="submission.other")
+                h3 Other
+                p {{submission.other}}
+
+
+  script.
+    let app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          submissions: []
+        }
+      },
+      methods: {
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/tech-needs')
+          .then(response=> {
+            self.submissions = response.data
+              .sort((a, b)=> a.actName.localeCompare(b.actName))
+          })
+          .catch(function(error) {
+            alert("Error getting tech need submissions :(")
+            console.log(error)
+          })
+      }
+    })

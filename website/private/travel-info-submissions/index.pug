@@ -1,0 +1,82 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Travel Info Submissions
+
+  #app.dash-boxes.container-fluid
+    p: a(href="/travel-info") Submission Form
+    p Submissions: {{submissions.length}}
+
+    p(v-if="submissions.length == 0") No submissions yet
+    .box.box-b(v-else)
+      table.table.box-table
+        thead
+          tr
+            th Act
+            th Name
+            th Email
+            th Phone
+            th Pickup?
+            th Dropoff?
+        tbody(v-for="(submission, index) in submissions")
+          tr
+            td: a(:href="'#collapse-' + index" data-toggle="collapse") {{submission.actName}}
+            td {{submission.name}}
+            td {{submission.email}}
+            td {{submission.phone}}
+            td {{submission.wantsArrivalRide ? '✅' : ''}}
+            td {{submission.wantsDepartureRide ? '✅' : ''}}
+          tr.collapse(:id="'collapse-' + index")
+            td
+              div(v-if="submission.wantsArrivalRide")
+                h3 Arrival Info
+                h6 Date
+                p {{submission.arrival.date}}
+                h6 Time
+                p {{submission.arrival.time}}
+                h6 Airline
+                p {{submission.arrival.airline}}
+                h6 Flight Number
+                p {{submission.arrival.flightNumber}}
+                h6 Drop-off Address
+                p: code {{submission.arrival.dropOffAddress}}
+              div(v-if="submission.wantsDepartureRide")
+                h3 Departure Info
+                h6 Date
+                p {{submission.departure.date}}
+                h6 Time
+                p {{submission.departure.time}}
+                h6 Airline
+                p {{submission.departure.airline}}
+                h6 Flight Number
+                p {{submission.departure.flightNumber}}
+                h6 Pick-up Address
+                p: code {{submission.departure.pickUpAddress}}
+
+
+
+  script.
+    let app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          submissions: []
+        }
+      },
+      methods: {
+      },
+      created() {
+        let self = this
+        axios
+          .get('/api/travel-info')
+          .then(response=> {
+            self.submissions = response.data
+              .sort((a, b)=> a.actName.localeCompare(b.actName))
+          })
+          .catch(function(error) {
+            alert("Error getting travel info submissions :(")
+            console.log(error)
+          })
+      }
+    })

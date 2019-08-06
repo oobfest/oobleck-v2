@@ -64,6 +64,8 @@ router.use('/character-showcase-submissions', require('./character-showcase-subm
 router.use('/emails', require('./emails/router'))
 router.use('/hosts', require('./hosts/router'))
 router.use('/shows', require('./shows/router'))
+router.use('/tech-needs-submissions', require('./tech-needs-submissions/router'))
+router.use('/travel-info-submissions', require('./travel-info-submissions/router'))
 router.use('/volunteers', require('./volunteers/router'))
 router.use('/set-workshops', require('./set-workshops/router'))
 
