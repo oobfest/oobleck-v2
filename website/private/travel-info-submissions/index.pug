@@ -28,7 +28,7 @@ block content
             td {{submission.wantsArrivalRide ? '✅' : ''}}
             td {{submission.wantsDepartureRide ? '✅' : ''}}
           tr.collapse(:id="'collapse-' + index")
-            td
+            td(colspan=6)
               div(v-if="submission.wantsArrivalRide")
                 h3 Arrival Info
                 h6 Date
