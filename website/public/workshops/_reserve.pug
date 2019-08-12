@@ -1,14 +1,22 @@
 script(src="https://checkout.stripe.com/checkout.js")
 #reserve
-  section(v-if="remaining == 0")
+  section(v-if="remaining == 0 && !auditing")
     .text-center
       h3 This workshop is sold out!
+      p No more audit slots available.
   section(v-else-if="boxOfficeClosed")
     .text-center
       p Online sales for this workshop have ended.
   section.text-center(v-else-if="state==0 && remaining > 0")
     button.btn.btn-primary.btn-lg(type="button" @click="state=3") Attend Workshop – ${{workshop.price}}
     p.mt-2(v-if="workshop.teacher != 'Scott Adsit'") Special early bird price until August 12th! (Normally $65)
+  section(v-else-if="state == 0 && auditing")
+    .text-center
+      h3 Audit slots are still available.
+      button.btn.btn-primary.btn-lg(type="button" @click="state=3") Audit Workshop – ${{workshop.auditPrice}}
+    .font-italic.mt-2
+      p Auditor slots are offered for sold out workshops, allowing people to attend in a strictly audience capacity. You will be able to watch the workshop, but not able to directly participate.
+      p If any registrants to the workshop fail to show up or otherwise forfeiting their slot, auditors will have the opportunity to upgrade into those slots.
   section(v-show="state==1")
     .form-group
       label Badge Email
@@ -59,7 +67,7 @@ script.
     token: function(token) {
       reserve.ticket.email = token.email
       reserve.email = token.email
-      let data = { token, ticket: reserve.ticket }
+      let data = { token, ticket: reserve.ticket, auditing: reserve.auditing }
       axios
         .post('/api/stripe/workshop/' + reserve.workshop._id, data)
         .then(response=>{
@@ -96,6 +104,12 @@ script.
       remaining() {
         return this.workshop.capacity - this.workshop.sold
       },
+      auditRemaining() {
+        return this.workshop.auditCapacity - this.workshop.auditSold
+      },
+      auditing() {
+        return (this.remaining <= 0) && (this.auditRemaining > 0)
+      },
       boxOfficeClosed() {
         // Todo: Update!
         return false
@@ -109,7 +123,8 @@ script.
         return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
       },
       quantityToSell() {
-        if(this.remaining) return Math.min(this.remaining, 5)
+        if(this.auditing && this.auditRemaining) return Math.min(this.auditRemaining, 5)
+        else if(this.remaining) return Math.min(this.remaining, 5)
         else return 0
       },
     },
@@ -122,7 +137,7 @@ script.
           handler.open({
             name: 'Out Of Bounds Comedy',
             description: this.workshop.name + " Workshop",
-            amount: (this.workshop.price * this.ticket.quantity) * 100
+            amount: ( (this.auditing ? this.workshop.auditPrice : this.workshop.price) * this.ticket.quantity) * 100
           })
         }
         else alert("All fields are required!")
@@ -141,8 +156,7 @@ script.
     created() {
       let workshopId = '#{workshop._id}'
       let self = this
-      axios
-        .get('/api/workshops/' + workshopId)
+      axios.get('/api/workshops/public/' + workshopId)
         .then(response=> {
           self.workshop = response.data
         })

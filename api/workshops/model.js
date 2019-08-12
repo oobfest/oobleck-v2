@@ -6,8 +6,9 @@ let mongooseModel = mongoose.model('workshop', schema)
 let overrides = {
 
   async getPublic(workshopId) {
-    let publicFields = 'name description teacher bio affiliation image day venue time capacity sold refunded auditCapacity auditSold auditRefunded price'
-    return mongooseModel.findById(workshopId, publicFields).lean().exec()
+    let publicFields = 'name description teacher bio affiliation image day venue time capacity sold refunded price auditCapacity auditSold auditRefunded auditPrice'
+    let x = await mongooseModel.findById(workshopId, publicFields).lean().exec()
+    return x
   },
 
   async addStudent(workshopId, student) {

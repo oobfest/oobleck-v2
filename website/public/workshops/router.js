@@ -32,6 +32,10 @@ router.get('/:slug', async (request, response)=> {
 })
 
 let formatWorkshop = function(workshop) {
+
+  // Remove Students
+  workshop.students = null
+
   // Time
   if(workshop.time=="10") workshop.time = "11:00am to 2:00pm"
   else if(workshop.time=="20") workshop.time = "12:00pm to 3:00pm"

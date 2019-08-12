@@ -115,14 +115,17 @@ router.post('/workshop/:workshopId', async(request, response)=> {
   let workshopId = request.params.workshopId
   let ticket = request.body.ticket
   ticket.email = request.body.token.email
+  ticket.auditing = request.body.auditing
   try {
     let card = request.body.token.id
     let workshop = await workshopModel.read(workshopId)
     let customer = await stripe.customers.create({email: ticket.email, card})
     ticket.payment = await stripe.charges.create({
-      amount: (workshop.price * ticket.quantity) * 100,
+      amount: ticket.auditing
+        ? (workshop.auditPrice * ticket.quantity * 100)
+        : (workshop.price * ticket.quantity * 100),
       currency: 'usd',
-      description: ticket.quantity + "× " + workshop.name,
+      description: `${ticket.quantity}× ${workshop.name} ${ticket.auditing?"(audit)":""}`,
       customer: customer.id
     })
     let ticketResponse = await workshopModel.addStudent(workshopId, ticket)
@@ -137,7 +140,9 @@ router.post('/workshop/:workshopId', async(request, response)=> {
 
 let sendWorkshopEmail = function(ticket, workshop) {
   let recipient = ticket.email
-  let subject = 'Workshop Booking Confirmation for Out of Bounds'
+  let subject = ticket.auditing
+    ? 'Workshop Audit Booking Confirmation for Out of Bounds'
+    : 'Workshop Booking Confirmation for Out of Bounds'
   let message = workshopConfirmationEmailTemplate({
     ticket,
     workshopName: workshop.name,

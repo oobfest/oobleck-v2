@@ -4,8 +4,9 @@ let createController = require('../create-controller')
 let overrides = {
   async getPublic(request, response) {
     try {
-      let workshopId = request.body.workshopId
-      return model.getPublic(workshopId)
+      let workshopId = request.params.workshopId
+      let workshop = await model.getPublic(workshopId)
+      response.json(workshop)
     }
     catch(error) {
       console.log(error)

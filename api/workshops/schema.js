@@ -53,7 +53,8 @@ let workshopSchema = mongoose.Schema({
 
   students: [studentSchema],
 
-  price: Number
+  price: Number,
+  auditPrice: Number,
 
 })
 

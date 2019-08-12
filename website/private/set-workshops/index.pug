@@ -18,6 +18,7 @@ block content
             th Audit
             th Refund
             th Price
+            th Audit Price
         tbody(v-for="(workshop, index) in workshops")
           tr( style="background-color: white")
             td
@@ -28,8 +29,8 @@ block content
             td.code {{workshop.auditSold}}/{{workshop.auditCapacity}}
               //a(href="#" @click="setAuditCapacity(workshop._id)")
             td {{workshop.refunded}}
-            td
-              a(href="#" @click="setPrice(workshop._id)") {{workshop.price ? workshop.price : 'n/a'}}
+            td: a(href="#" @click="setPrice(workshop._id)") {{workshop.price ? workshop.price : 'n/a'}}
+            td: a(href="#" @click="setAuditPrice(workshop._id)") {{workshop.auditPrice ? workshop.auditPrice : 'n/a'}}
           tr.collapse(:id="'collapse-' + index")
             td(colspan="6")
               h4 Description
@@ -108,6 +109,20 @@ block content
             })
             .catch((error)=> {
               alert("Error setting workshop price :(")
+              console.log(error)
+            })
+        },
+        setAuditPrice(workshopId) {
+          let auditPrice = Number(prompt("How many dollars??"))
+          let self = this
+          axios
+            .put('/api/workshops/' + workshopId, {auditPrice})
+            .then(response=> {
+              let index = self.workshops.map(w=> w._id).indexOf(workshopId)
+              Vue.set(self.workshops, index, response.data)
+            })
+            .catch((error)=> {
+              alert("Error setting workshop audit price :(")
               console.log(error)
             })
         },
