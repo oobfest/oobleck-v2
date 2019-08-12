@@ -25,9 +25,12 @@ block content
               a(:href="'#collapse-' + index" data-toggle="collapse") {{workshop.name ? workshop.name : '[no name]'}}
             td {{workshop.teacher}}
             td {{getWorkshopDate(workshop)}}
-            td.code(:class="{'text-success': workshop.sold == workshop.capacity, 'text-danger': workshop.sold > workshop.capacity}") {{workshop.sold}}/{{workshop.capacity}}
-            td.code {{workshop.auditSold}}/{{workshop.auditCapacity}}
-              //a(href="#" @click="setAuditCapacity(workshop._id)")
+            td.code(:class="{'text-success': workshop.sold == workshop.capacity, 'text-danger': workshop.sold > workshop.capacity}")
+              | {{workshop.sold}}/{{workshop.capacity}}
+            td.code
+              span(:class="{'text-success': workshop.auditSold == workshop.auditCapacity, 'text-danger': workshop.auditSold > workshop.auditCapacity}") {{workshop.auditSold}}
+              | /
+              a(href="#" @click="setAuditCapacity(workshop._id)") {{workshop.auditCapacity ? workshop.auditCapacity : '0'}}
             td {{workshop.refunded}}
             td: a(href="#" @click="setPrice(workshop._id)") {{workshop.price ? workshop.price : 'n/a'}}
             td: a(href="#" @click="setAuditPrice(workshop._id)") {{workshop.auditPrice ? workshop.auditPrice : 'n/a'}}
@@ -123,6 +126,20 @@ block content
             })
             .catch((error)=> {
               alert("Error setting workshop audit price :(")
+              console.log(error)
+            })
+        },
+        setAuditCapacity(workshopId) {
+          let auditCapacity = Number(prompt("Audit Capacity"))
+          let self = this
+          axios
+            .put('/api/workshops/' + workshopId, {auditCapacity})
+            .then(response=> {
+              let index = self.workshops.map(w=> w._id).indexOf(workshopId)
+              Vue.set(self.workshops, index, response.data)
+            })
+            .catch((error)=> {
+              alert("Error setting workshop audit capacity :(")
               console.log(error)
             })
         },
