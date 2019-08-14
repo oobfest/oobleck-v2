@@ -62,15 +62,14 @@ block content
 
                   h4 Availability
                     ul
-                      li(v-if="volunteer.availability.includes('Tuesday')") Tuesday
-                      li(v-if="volunteer.availability.includes('Wednesday')") Wednesday
-                      li(v-if="volunteer.availability.includes('Thursday')") Thursday
-                      li(v-if="volunteer.availability.includes('Friday')") Friday
-                      li(v-if="volunteer.availability.includes('Saturday')") Saturday
-                      li(v-if="volunteer.availability.includes('Sunday')") Sunday
-                      li(v-if="volunteer.availability.includes('Monday')") Monday
+                      li(v-if="volunteer.availability.includes('tuesday')") Tuesday
+                      li(v-if="volunteer.availability.includes('wednesday')") Wednesday
+                      li(v-if="volunteer.availability.includes('thursday')") Thursday
+                      li(v-if="volunteer.availability.includes('friday')") Friday
+                      li(v-if="volunteer.availability.includes('saturday')") Saturday
+                      li(v-if="volunteer.availability.includes('sunday')") Sunday
+                      li(v-if="volunteer.availability.includes('monday')") Monday
 
-                      li(v-for="day in volunteer.availability") {{day | capitalize}}
 
                   div(v-if="volunteer.type.includes('driver')")
                     hr
