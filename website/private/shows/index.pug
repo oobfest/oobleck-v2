@@ -73,8 +73,9 @@ block content
                           td {{ticket.name}}
                           td {{ticket.email}}
                           td {{ticket.quantity}}
-
-                          td {{ticket.type}}
+                          td
+                            span(v-if="ticket.payment"): a(:href="ticket.payment.receipt_url" target="_blank") stripe
+                            span(v-else) {{ticket.type}}
                           td
                             a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
                     p(v-else) No tickets sold
