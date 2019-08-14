@@ -45,9 +45,9 @@ block content
                           option North Door
                 th Cap
                 th
-                  a(href="#" @click.prevent="sortByRemaining = false") Sold
+                  a(href="#" @click.prevent="sortBySold=!sortBySold") Sold
                 th
-                  a(href="#" @click.prevent="sortByRemaining = true") Left
+                  a(href="#" @click.prevent="sortByRemaining=!sortByRemaining") Left
             tbody
               tr(v-for="(show, index) in filteredShows")
                 td.text-left
@@ -78,7 +78,7 @@ block content
                           td
                             a(href="#" @click.prevent="removeReservation(show._id, ticket._id)") remove
                     p(v-else) No tickets sold
-                    button.btn.btn-secondary.btn-xs(type="button" @click="showId = show._id" data-toggle="modal" data-target="#add-ticket-modal") Add Ticket Reservation
+                    button.btn.btn-secondary.btn-xs(type="button" @click="showId = show._id" data-toggle="modal" data-target="#add-ticket-modal") Add Comp
                     | &nbsp;
                     button.btn.btn-secondary.btn-xs(type="button" @click="reserveWithBadge(show._id)") Add Badge Reservation
 
@@ -125,6 +125,7 @@ block content
             time: '',
           },
           sortByRemaining: false,
+          sortBySold: false,
           ticketsSort: 'shows',
           shows: [],
           showId: null,
@@ -142,7 +143,7 @@ block content
         },
         filteredShows() {
           if(this.sortByRemaining) this.shows.sort((a,b)=> { return b.remaining - a.remaining })
-          else this.shows.sort((a,b)=> { return (a.capacity - a.remaining) - (b.capacity - b.remaining) })
+          else if (this.sortBySold) this.shows.sort((a,b)=> { return (a.capacity - a.remaining) - (b.capacity - b.remaining) })
 
           let searchDayRegex = new RegExp(this.searchDay, 'i')
           let searchVenueRegex = new RegExp(this.searchVenue, 'i')

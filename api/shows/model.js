@@ -75,10 +75,14 @@ let overrides = {
     let show = await mongooseModel.findById(showId).exec()
 
     // Show is sold out
-    if(show.remaining <= 0) return { reservationSuccessful: false, message: "Show is sold out"}
+    if(show.remaining <= 0) {
+      return { reservationSuccessful: false, message: "Show is sold out"}
+    }
 
       // Not enough tickets remaining for requested quantity
-    else if (ticket.quantity > show.remaining) return { reservationSuccessful: false, message: `There are less than ${ticket.quantity} tickets available for this show`}
+    else if (ticket.quantity > show.remaining) {
+      return { reservationSuccessful: false, message: `There are less than ${ticket.quantity} tickets available for this show`}
+    }
 
     else {
       show.tickets.push(ticket)

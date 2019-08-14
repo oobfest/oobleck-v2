@@ -54,8 +54,7 @@ script.
           .post('/api/shows/ticket/', {showId: self.showId, ticket: self.ticket})
           .then(function(response) {
 
-            // TODO: Fix this!
-            let savedShow = response.data.savedShow
+            let savedShow = response.data
             let index = self.$parent.shows.map(s=> s._id).indexOf(self.showId)
             Vue.set(self.$parent.shows, index, savedShow)
 
