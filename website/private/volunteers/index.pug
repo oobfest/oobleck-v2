@@ -60,6 +60,10 @@ block content
                     h4 📝 Notes
                     p {{volunteer.notes}}
 
+                  h4 Availability
+                    ul
+                      li(v-for="day in volunteer.availability") {{day | capitalize}}
+
                   div(v-if="volunteer.type.includes('driver')")
                     hr
                     h4 🚙 Driver Details
@@ -120,6 +124,11 @@ block content
       data() {
         return {
           volunteers: []
+        }
+      },
+      filters: {
+        capitalize(value) {
+          return value.charAt(0).toUpperCase() + value.slice(1)
         }
       },
       computed: {
