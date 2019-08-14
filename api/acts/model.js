@@ -40,7 +40,7 @@ let model = {
 
   async read(id = null) {
     if(id) return mongooseModel.findById(id).lean().exec()
-    else return mongooseModel.find({stamp: 'in'}).lean().exec()
+    else return mongooseModel.find({stamp: 'in', confirmationStatus: { $ne: "no"}}).lean().exec()
   },
 
   async readFat() {

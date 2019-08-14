@@ -19,14 +19,14 @@ block content
           table.box-table.table
             thead
               tr
-                th
+                //-th
                 th Name
                 th Type
                 th Location
                 th Headliner
             tbody
               tr
-                th(style="width:180px")
+                //-th(style="width:180px")
                   select.form-control(v-model="filterActsByConfirmation")
                     option(value='confirmed') Confirmed
                     option(value='all') All
@@ -57,7 +57,7 @@ block content
                     option Yes
                     option No
               tr(v-for="act in filteredActs")
-                td.text-center
+                //-td.text-center
                   a(:href="'/confirmation/' + act._id" target="_blank")
                     | {{act.confirmationStatus === 'no' ? '⛔️' : act.confirmationStatus === 'reschedule' ? '🚸' : act.confirmationStatus === 'yes' ? '✅' : '👻'}}
 
