@@ -59,6 +59,7 @@ block content
                       th Quantity
                       th Paid
                       th Audit?
+                      th Refund?
                       th Date
                       th
                   tbody
@@ -70,11 +71,12 @@ block content
                         span(v-if="student.payment")
                           a(:href="student.payment.receipt_url" target="_blank") Stripe
                       td {{student.auditing ? "Yes" : "" }}
+                      td {{student.refunded ? "Yes" : "" }}
                       td
                         span(v-if="student.payment") {{new Date(student.payment.created * 1000).toLocaleDateString('en-US')}}
                       td
-                        //button.btn.btn-xs.btn-secondary(v-if="student.refunded" type="button" @click="setRefund(workshop._id, student.email, false)") Undo Refund
-                        //button.btn.btn-xs.btn-secondary(v-else type="button" @click="setRefund(workshop._id, student.email, true)") Refund
+                        button.btn.btn-xs.btn-secondary(v-if="student.refunded" type="button" @click="setRefund(workshop._id, student.email, false)") Undo Refund
+                        button.btn.btn-xs.btn-secondary(v-else type="button" @click="setRefund(workshop._id, student.email, true)") Refund
               p(v-else) No students
 
     .form-group
@@ -147,10 +149,10 @@ block content
           let index = this.workshops.map(w=> w._id).indexOf(workshop._id)
           Vue.set(this.workshops, index, workshop)
         },
-        setRefund(workshopId, studentEmail, refunded) {
+        setRefund(workshopId, email, refunded) {
           let self = this
           axios
-            .post('/api/workshops/set-refund/' + workshopId, {email: studentEmail, refunded: refunded})
+            .post('/api/workshops/refund/' + workshopId, {email, refunded})
             .then((response)=> {
               let index = self.workshops.map(w=> w._id).indexOf(workshopId)
               Vue.set(self.workshops, index, response.data)
