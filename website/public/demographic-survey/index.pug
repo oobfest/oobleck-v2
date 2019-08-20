@@ -19,6 +19,13 @@ block content
               |  and they want to make sure their money is going towards events that serve as wide a variety of people as posisble.
             p This survey is anonymous, only needs to be filled out once per person and helps us understand our impact as a sponsored project of the city.
             .form-group
+              label.col-form-label(for="location") Location
+              select#location.form-control(name="location" v-model="demographic.location")
+                option Austin Local
+                option Outside Austin
+                option Outside Texas
+                option Outside U.S.
+            .form-group
               label.col-form-label.required-field(for="zip-code") Zip Code
               input#zip-code.form-control(type="text" required autofocus maxlength="5" v-model="demographic.zipCode")
               small.form-text.muted Put "00000" if from outside U.S.
@@ -45,19 +52,23 @@ block content
                 label.custom-control-label(for="neurodivergent") Neurodivergent
             .form-group
               .custom-control.custom-checkbox
-                input#hearing-impaired.custom-control-input( type="checkbox" value="Hearing Impaired" v-model="demographic.special")
-                label.custom-control-label(for="hearing-impaired") Hearing Impaired
+                input#deaf.custom-control-input(type="checkbox" value="Deaf or Hard of Hearing" v-model="demographic.special")
+                label.custom-control-label(for="deaf") Deaf or Hard of Hearing
             .form-group
               .custom-control.custom-checkbox
-                input#visually-impaired.custom-control-input( type="checkbox" value="Visually Impaired" v-model="demographic.special")
-                label.custom-control-label(for="visually-impaired") Visually Impaired
+                input#blind.custom-control-input(type="checkbox" value="Blind or Low Vision" v-model="demographic.special")
+                label.custom-control-label(for="visually-impaired") Blind or Low Vision
             .form-group
               .custom-control.custom-checkbox
-                input#veteran.custom-control-input( type="checkbox" value="Veteran" v-model="demographic.special")
+                input#other-disability.custom-input(type="checkbox" value="Other Disabillity" v-model="demographic.special")
+                label.custom-control-label(for="other-disability") Other Disability
+            .form-group
+              .custom-control.custom-checkbox
+                input#veteran.custom-control-input(type="checkbox" value="Veteran" v-model="demographic.special")
                 label.custom-control-label(for="veteran") Veteran
             .form-group
               .custom-control.custom-checkbox
-                input#senior-citizen.custom-control-input( type="checkbox" value="Senior Citizen" v-model="demographic.special")
+                input#senior-citizen.custom-control-input(type="checkbox" value="Senior Citizen" v-model="demographic.special")
                 label.custom-control-label(for="senior-citizen") Senior Citizen
             .form-group
               .custom-control.custom-checkbox

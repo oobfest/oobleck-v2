@@ -6,8 +6,6 @@ block content
   meta(property="og:description" content="Showcasing the best in improv, sketch and standup Labor Day Weekend in Austin, TX")
   meta(property="og:image" content="https://oobfest.com/img/image-for-facebook.jpg")
 
-  script(src="https://checkout.stripe.com/checkout.js")
-
   .container-fluid.text-white.text-center
     .row
       .col
@@ -15,18 +13,29 @@ block content
         h2.display-4.mt-3 Labor Day Weekend
         h2.text-light August 27th to September 2nd
 
-    .row.justify-content-center.mt-6
+    .row.justify-content-center.mt-4
       .col-lg-8
-        h2.display-4 2019 Schedule is Live!
-        a.btn.btn-lg.btn-primary(href="/schedule") View Schedule
+        
+        hr
 
-    .row.justify-content-center.mt-6
-      .col-lg-8
-        h2.display-4 Become a Volunteer!
-        a.btn.btn-lg.btn-primary(href="/volunteer") Volunteer
+        h2.display-1 
+          a(href="/schedule") Schedule
 
+        h2.display-1
+          a(href="/lineup") Lineup
 
-    .row.justify-content-center.mt-6
+        h2.display-1
+          a(href="/get-badges") Badges
+
+        h2.display-1
+          a(href="/workshops") Workshops
+
+        h2.display-1
+          a(href="/volunteer") Volunteer
+
+        hr
+
+    .row.justify-content-center.mt-4
       .col-lg-8
         h2.display-4 What is Out of Bounds?
         p.h4 The&nbsp;
@@ -34,9 +43,6 @@ block content
           |  is a live performance festival that showcases the best in improv, sketch and standup. OoB is Austin's longest-running comedy festival and&nbsp;
           em the largest multi-disciplinary comedy festival in the south
           | .
-
-    .mt-8
-      include get-badges/badge-form
 
     .row.justify-content-center.mt-8
       .col-sm-3

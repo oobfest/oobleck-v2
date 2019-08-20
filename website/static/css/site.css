@@ -51,3 +51,15 @@ li.nav-item {
   background-color: rgba(0,0,0,0.75);
   box-shadow: 3px 3px 5px black;
 }
+
+/* Homepage Links */
+hr { border-color: white }
+
+.display-1 a {
+  font-variant: small-caps;
+  color: #f9a01b;
+}
+
+.display-1 a:hover {
+  color: #fbeaa9;
+}

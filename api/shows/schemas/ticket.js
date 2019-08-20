@@ -6,6 +6,7 @@ let TicketSchema = mongoose.Schema({
   phone: String,
   quantity: Number,
   type: String,
+  checkedIn: Boolean,
   payment: {}
 })
 
