@@ -9,7 +9,7 @@ script(src="https://checkout.stripe.com/checkout.js")
       p Online sales for this workshop have ended.
   section.text-center(v-else-if="state==0 && remaining > 0")
     button.btn.btn-primary.btn-lg(type="button" @click="state=3") Attend Workshop – ${{workshop.price}}
-    p.mt-2(v-if="workshop.teacher != 'Scott Adsit'") Special early bird price until August 16th! (Normally $65)
+    //- p.mt-2(v-if="workshop.teacher != 'Scott Adsit'") Special early bird price until August 16th! (Normally $65)
   section(v-else-if="state == 0 && auditing")
     .text-center
       h3 Audit slots are still available.
