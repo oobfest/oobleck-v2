@@ -44,10 +44,6 @@ block content
             p.help-text Please select all that apply.
             .form-group
               .custom-control.custom-checkbox
-                input#college-student.custom-control-input( type="checkbox" value="College Student" v-model="demographic.special")
-                label.custom-control-label(for="college-student") College Student
-            .form-group
-              .custom-control.custom-checkbox
                 input#neurodivergent.custom-control-input( type="checkbox" value="Neurodivergent" v-model="demographic.special")
                 label.custom-control-label(for="neurodivergent") Neurodivergent
             .form-group
@@ -62,6 +58,10 @@ block content
               .custom-control.custom-checkbox
                 input#other-disability.custom-input(type="checkbox" value="Other Disabillity" v-model="demographic.special")
                 label.custom-control-label(for="other-disability") Other Disability
+            .form-group
+              .custom-control.custom-checkbox
+                input#college-student.custom-control-input( type="checkbox" value="College Student" v-model="demographic.special")
+                label.custom-control-label(for="college-student") College Student
             .form-group
               .custom-control.custom-checkbox
                 input#veteran.custom-control-input(type="checkbox" value="Veteran" v-model="demographic.special")

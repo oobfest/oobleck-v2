@@ -23,6 +23,7 @@ router.post('/login', (request, response, next)=> {
         else if (user.roles.includes('staff')) response.redirect('/act-submissions')
         else if (user.roles.includes('reviewer')) response.redirect('/act-submissions/review')
         else if (user.roles.includes('standup-reviewer')) response.redirect('/act-submissions/review')
+        else if (user.roles.includes('box-office')) response.redirect('/tickets')
         else next(Error("Role not found"))
       }
     })

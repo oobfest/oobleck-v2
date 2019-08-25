@@ -28,6 +28,9 @@
         .form-check
           input#standup-reviewer-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="standup-reviewer" v-model="newUser.roles")
           label.form-check-label(for="standup-reviewer-role-checkbox") Standup Reviewer
+        .form-check
+          input#box-office-role-checkbox.form-check-input.input(type="checkbox" name="roles" value="box-office" v-model="newUser.roles")
+          label.form-check-label(for="box-office-role-checkbox") Box Office
       .modal-footer
         button.btn.btn-secondary(type="button" data-dismiss="modal") Cancel
         button#add-user-button.btn.btn-primary(type="submit" @click.prevent="create" data-dismiss="modal") Save
