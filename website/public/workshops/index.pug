@@ -25,7 +25,8 @@ block content
                 h3 #{workshop.affiliation}
                 h4 #{workshop.day}, #{workshop.time} at #{workshop.venue}
                 p.d-none.d-sm-block #{workshop.description}
-                a(href='/workshops/' + workshop.slug) Read More
+                button.btn.btn-primary.btn-large
+                  a(href='/workshops/' + workshop.slug) Read More
               if workshop.image
                 img(src=('https://i.imgur.com/' + workshop.image.id + 'm.jpg') style="max-width: 320px")
 
