@@ -21,6 +21,16 @@ module.exports = {
       case 'North Door':        return 'The North Door'
     }
   },
+  formatVenueShortest(venue) {
+    switch(venue) {
+      case 'hideout-up':        return 'Hideout Theatre (Upstairs)'
+      case 'hideout-down':      return 'Hideout Theatre (Downstairs)'
+      case 'coldtowne':         return 'ColdTowne Theater'
+      case 'fallout':           return 'Fallout Theater'
+      case 'velveeta':          return 'Velveeta Room'
+      case 'north-door':        return 'The North Door'
+    }
+  },
   formatTime(time) {
     time = String(time)
     return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"

@@ -63,3 +63,7 @@ hr { border-color: white }
 .display-1 a:hover {
   color: #fbeaa9;
 }
+
+.sponsors img {
+  max-height:250px;
+}
