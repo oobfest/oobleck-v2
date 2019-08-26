@@ -169,7 +169,16 @@ let overrides = {
     else show.remaining = capacity - (show.capacity - show.remaining)
     show.capacity = capacity
     return await show.save()
+  },
+  
+  async checkIn(showId, ticketId, status) {
+    let show = await mongooseModel.findById(showId).exec()
+    let ticketIndex = show.tickets.findIndex(t=> t._id == ticketId)
+    show.tickets[ticketIndex].checkedIn = status
+    show.markModified('tickets')
+    return show.save()
   }
+  
 }
 
 function formatDayAndTime(day, time) {

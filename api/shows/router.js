@@ -15,4 +15,6 @@ router.post('/check-remaining-tickets/:showId', controller.setCapacity)
 router.post('/add-badge-reservation/:showId', controller.addBadgeReservation)
 router.post('/get-show', controller.getShow)
 
+router.post('/check-in/:showId', controller.checkIn)
+
 module.exports = createRouter(router, controller)

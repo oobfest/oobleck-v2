@@ -3,8 +3,8 @@
 @font-face { font-family: 'gotham-book'; src: url(../font/gotham-book.ttf); }
 body { font-family: 'Raleway', sans-serif }
 p { white-space: pre-line }
-a { color: #13818d }
-a:hover { color: #145962 }
+a, .btn-link { color: #13818d }
+a:hover, .btn-link:hover { color: #145962 }
 a.btn { color: white !important; }
 h5 { font-size: 1rem }
 h6 { margin-bottom: 0 }

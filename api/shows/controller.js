@@ -120,6 +120,20 @@ let overrides = {
       console.log(error.message)
       response.status(500).send("Error on setCapacity()")
     }
+  },
+  
+  async checkIn(request, response) {
+    try {
+      let showId = request.params.showId
+      let ticketId = request.body.ticketId
+      let status = request.body.status
+      let show = await model.checkIn(showId, ticketId, status)
+      response.json(show)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on checkIn()")
+    }
   }
 }
 

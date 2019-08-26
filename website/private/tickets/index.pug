@@ -1,124 +1,143 @@
-extends ../../_layout
-block content
-  #app.dash-boxes.container-fluid
-    p: button.btn.btn-danger(@click="reset") Reset
-    section(v-if="!selectedVenue")
-      h3 Venue
-      button.btn.btn-primary.m-1(@click="selectedVenue='ColdTowne'") ColdTowne Theater
-      button.btn.btn-primary.m-1(@click="selectedVenue='Fallout'") Fallout Theater
-      button.btn.btn-primary.m-1(@click="selectedVenue='Hideout Up'") Hideout Theatre (upstairs)
-      button.btn.btn-primary.m-1(@click="selectedVenue='Hideout Down'") Hideout Theatre (downstairs)
-      button.btn.btn-primary.m-1(@click="selectedVenue='North Door'") North Door
-      button.btn.btn-primary.m-1(@click="selectedVenue='Velveeta'") Velveeta
-    section(v-else)
-      p: strong {{selectedVenue}}
-          
-    section(v-if="selectedVenue && !selectedDay")
-      h3 Day
-      button.btn.btn-primary.m-1(v-for="day in days" @click="selectedDay=day") {{day}}
-    section(v-else)
-      p: strong {{selectedDay}}
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name="Content-Secruity-Policy" content="script-src *;")
+    link(href="/img/favicon.png" rel="shortcut icon" type="image/png" )
+    link(href="/css/charming-green.css" rel="stylesheet")
+    link(href="/css/custom.css" rel="stylesheet")
+    script(src="/js/min/vue.js")
+    script(src="/js/min/axios.js")
+  body
+    .dash.dash-fixed
+      #dash-app.dash-app
+        #app.dash-boxes.container-fluid
+          p.float-right: button.btn.btn-secondary(@click="reset") Change Show
+          section(v-if="!selectedVenue")
+            h3 Venue
+            button.btn.btn-primary.m-1(@click="selectedVenue='ColdTowne'") ColdTowne Theater
+            button.btn.btn-primary.m-1(@click="selectedVenue='Fallout'") Fallout Theater
+            button.btn.btn-primary.m-1(@click="selectedVenue='Hideout Up'") Hideout Theatre (upstairs)
+            button.btn.btn-primary.m-1(@click="selectedVenue='Hideout Down'") Hideout Theatre (downstairs)
+            button.btn.btn-primary.m-1(@click="selectedVenue='North Door'") North Door
+            button.btn.btn-primary.m-1(@click="selectedVenue='Velveeta'") Velveeta
+                
+          section(v-if="selectedVenue && !selectedDay")
+            h3 Day
+            button.btn.btn-primary.m-1(v-for="day in days" @click="selectedDay=day") {{day}}
 
-    section(v-if="selectedVenue && selectedDay && !selectedTime")
-      h3 Time
-      button.btn.btn-primary.m-1(v-for="time in times" @click="selectedTime=time") {{time | formatTime}}
-    section(v-else-if="selectedTime != null")
-      p: strong {{selectedTime | formatTime}}
-     
-    section(v-if="selectedVenue && selectedDay && selectedTime")
-      table.minimal-table.mt-2
-        thead
-          th Price
-          th Max
-          th Sold
-          th Left
-        tbody
-          td {{selectedShow.price}} 
-          td {{selectedShow.capacity}} 
-          td {{selectedShow.capacity - selectedShow.remaining}} 
-          td {{selectedShow.remaining}} 
-          
-      table.minimal-table.mt-3
-        thead
-          th #
-          th Name
-          th Email
-          th Type
-          th 
-        tbody
-          tr(v-for="ticket in selectedShow.tickets")
-            td {{ticket.quantity}}
-            td {{ticket.name}}
-            td {{ticket.email}}
-            td {{ticket.type}}
-            td: a(href="#" @click="checkIn(ticket._id)") check-in
-                   
+          section(v-if="selectedVenue && selectedDay && !selectedTime")
+            h3 Time
+            button.btn.btn-primary.m-1(v-for="time in times" @click="selectedTime=time") {{time | formatTime}}
+           
+          section(v-if="selectedVenue && selectedDay && selectedTime")
+            h3 {{selectedVenue}}, {{selectedDay}}, {{selectedTime | formatTime}}
+            table.text-center.mt-2(style="width:100%")
+              thead
+                th Price
+                th Capacity
+                th Reserved
+                th Remaining
+              tbody
+                td ${{selectedShow.price}} 
+                td {{selectedShow.capacity}} 
+                td {{selectedShow.capacity - selectedShow.remaining}} 
+                td {{selectedShow.remaining}} 
+                
+            table.minimal-table.mt-3
+              thead
+                th #
+                th Name
+                th Email
+                th Type
+                th 
+              tbody
+                tr(:class="{'table-success': ticket.checkedIn }" v-for="ticket in selectedShow.tickets")
+                  td {{ticket.quantity}}
+                  td {{ticket.name}}
+                  td {{ticket.email}}
+                  td {{ticket.type}}
+                  td
+                    button.btn.btn-link(v-if="ticket.checkedIn" @click="checkIn(selectedShow._id, ticket._id, false)") cancel
+                    button.btn.btn-link(v-else @click="checkIn(selectedShow._id, ticket._id, true)") check-in
+                         
 
-    
-  script.
-    let app = new Vue({
-      el: "#app",
-      data() {
-        return {
-          state: 'venue',
-          selectedVenue: null,
-          selectedDay: null,
-          selectedTime: null,
-          shows: []
-        }
-      },
-      computed: {
-        days() {
-          return Array.from(new Set(this.shows
-            .filter(s=> s.venue == this.selectedVenue)
-            .map(s=> s.day)))
-        },
-        times() {
-          return this.shows
-            .filter(s=> s.venue == this.selectedVenue)
-            .filter(s=> s.day == this.selectedDay)
-            .map(s=> s.startTime)
-        },
-        selectedShow() {
-          return this.shows.find(s=> (
-            s.venue == this.selectedVenue && 
-            s.day == this.selectedDay && 
-            s.startTime == this.selectedTime))
-        }
-      },
-      filters: {
-        formatTime(time) {
-          time = String(time)
-          return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
-        }
-      },
-      methods: {
-        reset() {
-          this.selectedVenue = null
-          this.selectedDay = null
-          this.selectedTime = null
-        },
-        checkIn() {
-        
-        }
-      },
-      created() {
-        let self = this
-        axios
-          .get('/api/shows')
-          .then(response=> {
-            self.shows = response.data
+          
+        script.
+          let app = new Vue({
+            el: "#app",
+            data() {
+              return {
+                state: 'venue',
+                selectedVenue: null,
+                selectedDay: null,
+                selectedTime: null,
+                shows: []
+              }
+            },
+            computed: {
+              days() {
+                return Array.from(new Set(this.shows
+                  .filter(s=> s.venue == this.selectedVenue)
+                  .map(s=> s.day)))
+              },
+              times() {
+                return this.shows
+                  .filter(s=> s.venue == this.selectedVenue)
+                  .filter(s=> s.day == this.selectedDay)
+                  .map(s=> s.startTime)
+              },
+              selectedShow() {
+                return this.shows.find(s=> (
+                  s.venue == this.selectedVenue && 
+                  s.day == this.selectedDay && 
+                  s.startTime == this.selectedTime))
+              }
+            },
+            filters: {
+              formatTime(time) {
+                time = String(time)
+                return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
+              }
+            },
+            methods: {
+              reset() {
+                this.selectedVenue = null
+                this.selectedDay = null
+                this.selectedTime = null
+              },
+              checkIn(showId, ticketId, status) {
+                let self = this
+                axios
+                  .post('/api/shows/check-in/' + showId, {ticketId, status})
+                  .then((response)=> {
+                    let index = self.shows.map(s=> s._id).indexOf(showId)
+                    Vue.set(self.shows, index, response.data)
+                  })
+                  .catch((error)=> {
+                    alert("Error setting workshop refund :(")
+                    console.log(error)
+                  })
+              }
+            },
+            created() {
+              let self = this
+              axios
+                .get('/api/shows')
+                .then(response=> {
+                  self.shows = response.data
+                })
+                .catch(function(error) {
+                  alert("Error getting shows :(")
+                  console.log(error)
+                })
+            }
           })
-          .catch(function(error) {
-            alert("Error getting shows :(")
-            console.log(error)
-          })
-      }
-    })
-    
-  style.
-    .dash-nav { display: none; }
-    .dash-fixed .dash-toolbar { left: 0; }
-    .dash-fixed .dash-app main { margin-left: 0}
-    .minimal-table { border-collapse: collapse; width: 100% }
-    .minimal-table td { border: 1px solid black; padding: 0.5em}
+          
+        style.
+          .dash-nav { display: none; }
+          .dash-fixed .dash-toolbar { left: 0; }
+          .dash-fixed .dash-app main { margin-left: 0}
+          .minimal-table { border-collapse: collapse; width: 100% }
+          .minimal-table td { border: 1px solid black; padding: 0.5em}
