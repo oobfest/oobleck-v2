@@ -45,9 +45,9 @@ html(lang="en")
                 td ${{selectedShow.price}} 
                 td {{selectedShow.capacity}} 
                 td {{selectedShow.capacity - selectedShow.remaining}} 
-                td {{selectedShow.remaining}} 
+                td(:class="{'text-danger': remainingIncludingWalkups < 0}") {{remainingIncludingWalkups}} 
                 
-            table.minimal-table.mt-3
+            table.minimal-table.mt-3.mb-3
               thead
                 th #
                 th Name
@@ -63,7 +63,22 @@ html(lang="en")
                   td
                     button.btn.btn-link(v-if="ticket.checkedIn" @click="checkIn(selectedShow._id, ticket._id, false)") Cancel
                     button.btn.btn-link(v-else @click="checkIn(selectedShow._id, ticket._id, true)") Check-in
-                         
+            
+            h4 Walk-Ups
+            .row
+              .col
+                .form-group
+                  label(for="paid-walkups") Paid
+                  input#paid-walkups.form-control(type="number" min=0 v-model="selectedShow.walkupAdmissionsPaid" @change="setWalkups") 
+              .col
+                .form-group
+                  label(for="performer-walkups") Performer
+                  input#performer-walkups.form-control(type="number" min=0 v-model="selectedShow.walkupAdmissionsPerformer" @change="setWalkups") 
+              .col
+                .form-group
+                  label(for="volunteer-walkups") Volunteer
+                  input#volunteer-walkups.form-control(type="number" min=0 v-model="selectedShow.walkupAdmissionsVolunteer" @change="setWalkups") 
+            </div> 
 
           
         script.
@@ -105,6 +120,13 @@ html(lang="en")
                 let showTime = this.selectedShow.startTime
                 return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
               },
+              remainingIncludingWalkups() {
+                let remaining = this.selectedShow.remaining 
+                if(this.selectedShow.walkupAdmissionsPaid) remaining -= this.selectedShow.walkupAdmissionsPaid
+                if(this.selectedShow.walkupAdmissionsPerformer) remaining -= this.selectedShow.walkupAdmissionsPerformer
+                if(this.selectedShow.walkupAdmissionsVolunteer) remaining -= this.selectedShow.walkupAdmissionsVolunteer
+                return remaining
+              }
             },
             filters: {
               formatTime(time) {
@@ -137,7 +159,25 @@ html(lang="en")
                     Vue.set(self.shows, index, response.data)
                   })
                   .catch((error)=> {
-                    alert("Error setting workshop refund :(")
+                    alert("Error checking in :(")
+                    console.log(error)
+                  })
+              },
+              setWalkups() {
+                let self = this
+                let showId = self.selectedShow._id
+                axios
+                  .put('/api/shows/' + showId, {
+                    walkupAdmissionsPaid: self.selectedShow.walkupAdmissionsPaid|0, 
+                    walkupAdmissionsPerformer: self.selectedShow.walkupAdmissionsPerformer|0, 
+                    walkupAdmissionsVolunteer: self.selectedShow.walkupAdmissionsVolunteer|0
+                  })
+                  .then(response=> {
+                    let index = self.shows.map(s=> s._id).indexOf(showId)
+                    Vue.set(self.shows, index, response.data)
+                  })
+                  .catch((error)=> {
+                    alert("Error setting walkups :(")
                     console.log(error)
                   })
               },

@@ -13,6 +13,10 @@ let showSchema = mongoose.Schema({
   capacity: Number,
   remaining: Number,
   price: Number,
+  
+  walkupAdmissionsPaid: Number,
+  walkupAdmissionsPerformer: Number,
+  walkupAdmissionsVolunteer: Number,
 
   acts: [ActSchema],
 
