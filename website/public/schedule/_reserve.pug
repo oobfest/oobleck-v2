@@ -119,15 +119,12 @@ script.
     },
     computed: {
       boxOfficeClosed() {
-        // Todo: Update!
-        return false
-
         // When it is the week of the festival:
         let now = new Date()
         let nowDay = now.getDay() <= 1 ? now.getDay() + 5 : now.getDay() - 2
         let nowTime = ( (now.getHours() - 11) * 100) + now.getMinutes()
         let showDay = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'].indexOf(this.show.day)
-        let showTime = this.show.time
+        let showTime = this.show.startTime
         return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
       },
       quantityToSell() {

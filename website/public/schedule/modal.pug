@@ -29,10 +29,16 @@ script#modal-template(type="text/template")
 
             .text-right
                 p(v-if="show.price == 0") This show is free! Just show up!
+                div(v-else-if="show.remaining <= 0")
+                  h3 This show is sold out!
+                div(v-else-if="boxOfficeClosed")
+                  h3 Online sales for this show have ended.
+                  h3 Tickets are still available at the door!
                 div(v-else)
                   button.btn.btn-primary(type="button" @click="state=1") Reserve with Badge
                   | &nbsp;
                   button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
+
           section(v-show="state==1")
             .form-group
               label Badge Email
@@ -121,6 +127,15 @@ script.
       }
     },
     computed: {
+      boxOfficeClosed() {
+        // When it is the week of the festival:
+        let now = new Date()
+        let nowDay = now.getDay() <= 1 ? now.getDay() + 5 : now.getDay() - 2
+        let nowTime = ( (now.getHours() - 11) * 100) + now.getMinutes()
+        let showDay = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'].indexOf(this.show.day)
+        let showTime = this.show.startTime
+        return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
+      },
       modalSize() {
         return this.state == 0 || this.state == 2
           ? 'modal-lg'
@@ -170,19 +185,6 @@ script.
         document.getElementById('show-modal').style.display = "none"
         document.body.classList.remove('modal-open')
         this.reset()
-      },
-      boxOfficeClosed() {
-        // Todo: Update!
-        let weekOfFestival = false
-        if(weekOfFestival) {
-          let now = new Date()
-          let nowDay = now.getDay() <= 1 ? now.getDay() + 5 : now.getDay() - 2
-          let nowTime = ( (now.getHours() - 11) * 100) + now.getMinutes()
-          let showDay = ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'].indexOf(this.show.day)
-          let showTime = this.show.time
-          return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
-        }
-        else return false
       },
       getUrlForShow(show) {
         if (show.day && show.venue && show.startTime)
