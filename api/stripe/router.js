@@ -63,7 +63,7 @@ router.post('/badges/', async (request, response)=> {
 
 let getBadgePrice = function(type, hasPromoCode) {
   if (type == 'all' && hasPromoCode) return 6900
-  if (type == 'all') return 9900
+  if (type == 'all') return 12900
   if (type == 'performer-upgrade') return 6900
   if (type == 'performer-weekend-upgrade') return 4500
 }

@@ -12,11 +12,11 @@ div
                   .col-md.align-self-center
                     img.img-fluid.img-thumbnail(src="/img/ggg.jpg")
                   .col.align-self-center(v-show="card1State==1")
-                    p.font-italic.mb-0 Special "early bird" price for a limited time!
+                    //- p.font-italic.mb-0 Special "early bird" price for a limited time!
                     .card-title
                       h3.price
                         sup.dollar-sign $
-                        span 99
+                        span 129
                     ul
                       li Access to All Shows (Including Headliners)
                       li Reserve Your Seat Ahead of Time
@@ -218,7 +218,7 @@ div
         },
         getBadgeCost() {
           if (this.badge.type == 'all' && this.hasPromoCode) return (6900 * this.badge.quantity)
-          else if (this.badge.type == 'all') return (9900 * this.badge.quantity)
+          else if (this.badge.type == 'all') return (12900 * this.badge.quantity)
           else if (this.badge.type == 'performer-upgrade') return 6900
           else if (this.badge.type == 'performer-weekend-upgrade') return 4500
         },
