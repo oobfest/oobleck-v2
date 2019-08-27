@@ -38,6 +38,9 @@ script#modal-template(type="text/template")
                   button.btn.btn-primary(type="button" @click="state=1") Reserve with Badge
                   | &nbsp;
                   button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
+                p.mt-3
+                  span.fas.fa-arrow-circle-left(aria-hidden="true") 
+                  a(href="#" @click="hide")  Back to Schedule
 
           section(v-show="state==1")
             .form-group
@@ -58,6 +61,9 @@ script#modal-template(type="text/template")
               h2 Success!
               p A confirmation email has been sent to &nbsp;
                 span.code {{email}}
+              p.mt-3
+                span.fas.fa-arrow-circle-left(aria-hidden="true") 
+                a(href="#" @click="hide")  Back to Schedulee
           section(v-show="state==3")
             .form-group
               label(for="name") Name
