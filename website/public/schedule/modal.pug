@@ -151,7 +151,7 @@ script.
           : 'modal-md'
       },
       quantityToSell() {
-        if(this.show.remaining) return Math.min(this.show.remaining, 15)
+        if(this.show.remaining > 0) return Math.min(this.show.remaining, 15)
         else return 0
       },
     },
