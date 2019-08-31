@@ -63,7 +63,7 @@ script#modal-template(type="text/template")
                 span.code {{email}}
               p.mt-3
                 span.fas.fa-arrow-circle-left(aria-hidden="true") 
-                a(href="#" @click="hide")  Back to Schedulee
+                a(href="#" @click="hide")  Back to Schedule
           section(v-show="state==3")
             .form-group
               label(for="name") Name
@@ -105,7 +105,10 @@ script.
           if(response.data.paid) {
             showModal.state = 2
           }
-          else alert("Payment failed 😟")
+          else {
+            alert("The payment was cancelled: " + response.data.message)
+            showModal.state = 0
+          }
         })
         .catch(error=> {
           console.log("ERROR :(")
@@ -175,7 +178,8 @@ script.
           .get('/api/shows/refresh-tickets/' + this.show._id)
             .then(response=> {
               this.show.remaining = response.data.remaining
-              this.state = 3
+              if(this.show.remaining<=0) this.state = 0
+              else this.state = 3
             })
             .catch(error=> {
               alert("Error getting ticket data, please try again later")

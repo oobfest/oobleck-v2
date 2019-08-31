@@ -68,12 +68,15 @@ script.
       reserve.email = token.email
       let data = { token, ticket: reserve.ticket }
       axios
-        .post('/api/stripe/show/' + reserve.show._id, data)
+        .post('/api/stripe/show/' + showModal.show._id, data)
         .then(response=>{
           if(response.data.paid) {
-            reserve.state = 2
+            showModal.state = 2
           }
-          else alert("Payment failed 😟")
+          else {
+            alert("The payment was cancelled: " + response.data.message)
+            showModal.state = 0
+          }
         })
         .catch(error=> {
           console.log("ERROR :(")
@@ -138,7 +141,8 @@ script.
           .get('/api/shows/refresh-tickets/' + this.show._id)
             .then(response=> {
               this.show.remaining = response.data.remaining
-              this.state = 3
+              if(this.show.remaining<=0) this.state = 0
+              else this.state = 3
             })
             .catch(error=> {
               alert("Error getting ticket data, please try again later")

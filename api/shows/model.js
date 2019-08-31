@@ -74,26 +74,26 @@ let overrides = {
   async find(url) {
     return mongooseModel.findOne({url})
   },
+  
+  async checkTicket(showId, ticket) {
+    let response = await mongooseModel.findById(showId, 'remaining').exec()
+    
+    // Show is sold out
+    if(response.remaining <= 0) return { spaceAvailable: false, message: "Show is sold out"}
+    
+    // Not enough tickets remaining for requested quantity
+    else if (ticket.quantity > response.remaining) return { spaceAvailable: false, message: `There are less than ${ticket.quantity} tickets available for this show`}
+    
+    // All good!
+    else return { spaceAvailable: true}
+  },
 
   async addTicket(showId, ticket) {
     let show = await mongooseModel.findById(showId).exec()
-
-    // Show is sold out
-    if(show.remaining <= 0) {
-      return { reservationSuccessful: false, message: "Show is sold out"}
-    }
-
-      // Not enough tickets remaining for requested quantity
-    else if (ticket.quantity > show.remaining) {
-      return { reservationSuccessful: false, message: `There are less than ${ticket.quantity} tickets available for this show`}
-    }
-
-    else {
-      show.tickets.push(ticket)
-      show.remaining = (show.remaining - ticket.quantity)
-      show.markModified('tickets')
-      return await show.save()
-    }
+    show.tickets.push(ticket)
+    show.remaining = (show.remaining - ticket.quantity)
+    show.markModified('tickets')
+    return await show.save()
   },
 
   async addBadgeReservation(showId, email, quantity) {

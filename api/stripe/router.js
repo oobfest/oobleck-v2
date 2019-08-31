@@ -81,16 +81,22 @@ router.post('/show/:showId', async (request, response)=> {
   try {
     let card = request.body.token.id
     let show = await showModel.read(showId)
-    let customer = await stripe.customers.create({email: ticket.email, card})
-    ticket.payment = await stripe.charges.create({
-      amount: (show.price * ticket.quantity) * 100,
-      currency: 'usd',
-      description: ticket.quantity + "× " + show.day + " at " + format.formatVenueShort(show.venue) + ", " + format.formatTime(show.startTime),
-      customer: customer.id
-    })
-    let ticketResponse = await showModel.addTicket(showId, ticket)
-    sendTicketEmail(ticket, show)
-    response.json({paid: true})
+    let checkTicket = await showModel.checkTicket(showId, ticket)
+    if(checkTicket.spaceAvailable) {
+      let customer = await stripe.customers.create({email: ticket.email, card})
+      ticket.payment = await stripe.charges.create({
+        amount: (show.price * ticket.quantity) * 100,
+        currency: 'usd',
+        description: ticket.quantity + "× " + show.day + " at " + format.formatVenueShort(show.venue) + ", " + format.formatTime(show.startTime),
+        customer: customer.id
+      })
+      showModel.addTicket(showId, ticket)
+      sendTicketEmail(ticket, show)
+      response.json({paid: true})
+    }
+    else {
+      response.json({paid: false, message: checkTicket.message})
+    }
   }
   catch(error) {
     console.log(error)
