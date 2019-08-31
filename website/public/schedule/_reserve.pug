@@ -12,7 +12,7 @@ script(src="https://checkout.stripe.com/checkout.js")
 
   section.text-center(v-else-if="state==0 && show.remaining > 0")
       p
-        button.btn.btn-primary.btn-lg(type="button" @click="state=3") Buy Tickets – ${{show.price}}
+        button.btn.btn-primary.btn-lg(type="button" @click="refreshTickets") Buy Tickets – ${{show.price}}
       p
         button.btn.btn-primary.btn-lg(type="button" @click="state=1") Reserve with Badge
   section(v-show="state==1")
@@ -133,6 +133,17 @@ script.
       },
     },
     methods: {
+      refreshTickets() {
+        axios
+          .get('/api/shows/refresh-tickets/' + this.show._id)
+            .then(response=> {
+              this.show.remaining = response.data.remaining
+              this.state = 3
+            })
+            .catch(error=> {
+              alert("Error getting ticket data, please try again later")
+            })
+      },
       isValid() {
         return this.ticket.name != '' && this.ticket.phone != ''
       },

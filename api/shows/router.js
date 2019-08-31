@@ -17,4 +17,6 @@ router.post('/get-show', controller.getShow)
 
 router.post('/check-in/:showId', controller.checkIn)
 
+router.get('/refresh-tickets/:showId', controller.refreshTickets)
+
 module.exports = createRouter(router, controller)

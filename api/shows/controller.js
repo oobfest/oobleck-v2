@@ -2,6 +2,18 @@ let model = require('./model')
 let createController = require('../create-controller')
 
 let overrides = {
+  
+  async refreshTickets(request, response) {
+    try {
+      let showId = request.params.showId
+      let remainingTickets = await model.refreshTickets(showId)
+      response.json(remainingTickets)
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on refreshTickets()")
+    }
+  },
 
   async getShow(request, response) {
     try {

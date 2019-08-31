@@ -10,6 +10,10 @@ let reservationConfirmationEmailTemplate = require('../../email-templates/compil
 let urlSlug = require('url-slug')
 
 let overrides = {
+  
+  async refreshTickets(showId) {
+    return await mongooseModel.findById(showId, 'remaining').exec()    
+  },
 
   async create(show) {
     show.url = `${urlSlug(show.day)}/${urlSlug(show.venue)}/${show.startTime}`

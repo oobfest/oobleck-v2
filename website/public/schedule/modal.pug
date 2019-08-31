@@ -37,7 +37,7 @@ script#modal-template(type="text/template")
                 div(v-else)
                   button.btn.btn-primary(type="button" @click="state=1") Reserve with Badge
                   | &nbsp;
-                  button.btn.btn-primary(type="button" @click="state=3") Buy Tickets – ${{show.price}}
+                  button.btn.btn-primary(type="button" @click="refreshTickets") Buy Tickets – ${{show.price}}
                 p.mt-3
                   span.fas.fa-arrow-circle-left(aria-hidden="true") 
                   a(href="#" @click="hide")  Back to Schedule
@@ -170,6 +170,17 @@ script.
       },
     },
     methods: {
+      refreshTickets() {
+        axios
+          .get('/api/shows/refresh-tickets/' + this.show._id)
+            .then(response=> {
+              this.show.remaining = response.data.remaining
+              this.state = 3
+            })
+            .catch(error=> {
+              alert("Error getting ticket data, please try again later")
+            })
+      },
       isValid() {
         return this.ticket.name != '' && this.ticket.phone != ''
       },
