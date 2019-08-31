@@ -109,7 +109,7 @@ block content
       created() {
         let self = this
         axios
-          .get('/api/shows')
+          .get('/api/shows/lite-read')
           .then(function(response) {
             self.shows = response.data
           })

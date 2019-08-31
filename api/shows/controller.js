@@ -3,6 +3,16 @@ let createController = require('../create-controller')
 
 let overrides = {
   
+  async liteRead(request, response) {
+    try {
+      response.json(await model.lite())
+    }
+    catch(error) {
+      console.log(error.message)
+      response.status(500).send("Error on lite()")      
+    }
+  },
+  
   async refreshTickets(request, response) {
     try {
       let showId = request.params.showId

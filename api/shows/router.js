@@ -4,6 +4,8 @@ let controller = require('./controller')
 
 let router = express.Router()
 
+router.get('/lite-read', controller.liteRead)
+
 router.post('/add-act', controller.addAct)
 router.post('/remove-act/:actId', controller.removeAct)
 router.post('/refresh', controller.refresh)

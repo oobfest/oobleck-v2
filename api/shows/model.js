@@ -11,6 +11,10 @@ let urlSlug = require('url-slug')
 
 let overrides = {
   
+  async lite() {
+    return await mongooseModel.find({}, 'day venue startTime endTime remaining price acts host url').lean().exec()
+  },
+  
   async refreshTickets(showId) {
     return await mongooseModel.findById(showId, 'remaining').exec()    
   },
