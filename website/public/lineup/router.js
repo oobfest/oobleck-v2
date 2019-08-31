@@ -10,24 +10,28 @@ router.get('/', (request, response)=> {
 router.get('/:name', async(request, response)=> {
   let name = request.params.name
   let act = await actModel.find(name)
-  act.shows = []
-
-  // Get Shows
-  let shows = await showModel.read()
-  for(show of shows) {
-    for(showAct of show.acts) {
-      if(showAct.name == act.name) {
-        act.shows.push({
-          day: show.day,
-          venue: formatVenue(show.venue),
-          time: formatTime(show.startTime),
-          url: show.url
-        })
+  if(act) {
+    act.shows = []
+    // Get Shows
+    let shows = await showModel.read()
+    for(show of shows) {
+      for(showAct of show.acts) {
+        if(showAct.name == act.name) {
+          act.shows.push({
+            day: show.day,
+            venue: formatVenue(show.venue),
+            time: formatTime(show.startTime),
+            url: show.url
+          })
+        }
       }
-    }
+    }    
+    response.render('public/lineup/act', {alt: true, act})
+  }
+  else {
+    response.redirect('/lineup')
   }
 
-  response.render('public/lineup/act', {alt: true, act})
 })
 
 let formatVenue = function(venue) {

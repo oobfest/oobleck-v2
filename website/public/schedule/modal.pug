@@ -102,7 +102,7 @@ script.
       axios
         .post('/api/stripe/show/' + showModal.show._id, data)
         .then(response=>{
-          if(response.data.paid) {
+          if(response.data && response.data.paid) {
             showModal.state = 2
           }
           else {
@@ -111,7 +111,7 @@ script.
           }
         })
         .catch(error=> {
-          console.log("ERROR :(")
+          alert("Error with payment, please try again")
           console.log(error)
         })
     }

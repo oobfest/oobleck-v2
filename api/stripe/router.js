@@ -100,7 +100,7 @@ router.post('/show/:showId', async (request, response)=> {
   }
   catch(error) {
     console.log(error)
-    response.status(500).send({paid: false})
+    response.status(500).send({paid: false, error: error})
   }
 })
 

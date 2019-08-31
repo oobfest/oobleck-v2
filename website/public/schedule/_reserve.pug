@@ -70,7 +70,7 @@ script.
       axios
         .post('/api/stripe/show/' + showModal.show._id, data)
         .then(response=>{
-          if(response.data.paid) {
+          if(response.data && response.data.paid) {
             showModal.state = 2
           }
           else {
