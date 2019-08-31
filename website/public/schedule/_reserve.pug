@@ -2,7 +2,7 @@ script(src="https://checkout.stripe.com/checkout.js")
 #reserve
   section(v-if="show.price == 0")
     p This show is free! Just show up!
-  section(v-else-if="show.remaining == 0")
+  section(v-else-if="show.remaining <= 0")
     .text-center
       h3 This show is sold out!
   section(v-else-if="boxOfficeClosed")
@@ -131,7 +131,7 @@ script.
         return (nowDay > showDay) || ((nowDay == showDay) && (nowTime >= showTime))
       },
       quantityToSell() {
-        if(this.show.remaining) return Math.min(this.show.remaining, 15)
+        if(this.show.remaining > 0) return Math.min(this.show.remaining, 15)
         else return 0
       },
     },
