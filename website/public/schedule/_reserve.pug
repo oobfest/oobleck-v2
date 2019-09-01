@@ -68,14 +68,14 @@ script.
       reserve.email = token.email
       let data = { token, ticket: reserve.ticket }
       axios
-        .post('/api/stripe/show/' + showModal.show._id, data)
+        .post('/api/stripe/show/' + reserve.show._id, data)
         .then(response=>{
           if(response.data && response.data.paid) {
-            showModal.state = 2
+            reserve.state = 2
           }
           else {
             alert("The payment was cancelled: " + response.data.message)
-            showModal.state = 0
+            reserve.state = 0
           }
         })
         .catch(error=> {
