@@ -1,0 +1,360 @@
+extends ../../_layout
+block content
+  .text-center
+    img.submission-logo(src="/img/logo.png" alt="Out of Bounds Comedy Festival")
+    h1.p-3.text-light.font-weight-bold 2019 Survey
+  #app.container-fluid
+    .row
+      .col-lg-8.mx-auto.pb-5
+        .box-head.box-head-accent-oob
+        div(v-show="page==0")
+          .box-block
+            h2 Demographics Survey
+            .alert.alert-danger(v-show="validationErrors.length > 0")
+              h4.alert-heading Errors
+              ul
+                  li(v-for="validationError in validationErrors") {{validationError}}
+            p We recieve funding from 
+              a(href="https://www.austintexas.gov/department/cultural-arts" target="_blank") Austin's Cultural Arts Division
+              |  who want to ensure their events serve as wide a variety of people as posisble.
+            p This survey is anonymous, only needs to be filled out once per person and helps us understand our impact as a sponsored project of the city.
+            .form-group
+              label.col-form-label(for="location") Location
+              select#location.form-control(name="location" v-model="survey.location")
+                option Austin Local
+                option Outside U.S.A.
+                option Outside Texas
+                option Outside Austin
+            .form-group(v-show="survey.location && survey.location!='Outside U.S.A.'")
+              label.col-form-label(for="zip-code") Zip Code
+              input#zip-code.form-control(type="text" maxlength="5" v-model="survey.zipCode")
+            .form-group
+              label.col-form-label(for="race") Racial Demographic
+              select#race.form-control(name="race" v-model="survey.race")
+                option American Indian/Alaskan Native
+                option Asian
+                option Black/African-American
+                option Latino/Hispanic
+                option Multi-Racial
+                option Native Hawaiian/Pacific Islander
+                option White
+                option Other
+            .form-group
+              label.col-form-label(for="gender") Gender
+              select#gender.form-control(name="gender" v-model="survey.gender")
+                option Female
+                option Male
+                option Non-binary
+                option Other
+            h4 Special Constituencies
+            p.help-text Please select all that apply.
+            .form-group
+              .custom-control.custom-checkbox
+                input#neurodivergent.custom-control-input( type="checkbox" value="Neurodivergent" v-model="survey.special")
+                label.custom-control-label(for="neurodivergent") Neurodivergent
+            .form-group
+              .custom-control.custom-checkbox
+                input#deaf.custom-control-input(type="checkbox" value="Deaf or Hard of Hearing" v-model="survey.special")
+                label.custom-control-label(for="deaf") Deaf or Hard of Hearing
+            .form-group
+              .custom-control.custom-checkbox
+                input#blind.custom-control-input(type="checkbox" value="Blind or Low Vision" v-model="survey.special")
+                label.custom-control-label(for="blind") Blind or Low Vision
+            .form-group
+              .custom-control.custom-checkbox
+                input#other-impairment.custom-control-input(type="checkbox" value="Other Impairment" v-model="survey.special")
+                label.custom-control-label(for="other-impairment") Otherwise Impaired
+            .form-group
+              .custom-control.custom-checkbox
+                input#college-student.custom-control-input( type="checkbox" value="College Student" v-model="survey.special")
+                label.custom-control-label(for="college-student") College Student
+            .form-group
+              .custom-control.custom-checkbox
+                input#veteran.custom-control-input(type="checkbox" value="Veteran" v-model="survey.special")
+                label.custom-control-label(for="veteran") Veteran
+            .form-group
+              .custom-control.custom-checkbox
+                input#senior-citizen.custom-control-input(type="checkbox" value="Senior Citizen" v-model="survey.special")
+                label.custom-control-label(for="senior-citizen") Senior Citizen
+            .form-group
+              .custom-control.custom-checkbox
+                input#institutionalized-correctional.custom-control-input( type="checkbox" value="Institutionalized (correctional)" v-model="survey.special")
+                label.custom-control-label(for="institutionalized-correctional") Institutionalized (correctional)
+            .form-group
+              .custom-control.custom-checkbox
+                input#institutionalized-non-correctional.custom-control-input( type="checkbox" value="Institutionalized (non-correctional)" v-model="survey.special")
+                label.custom-control-label(for="institutionalized-non-correctional") Institutionalized (non-correctional)
+            .form-group
+              .custom-control.custom-checkbox
+                input#select-other.custom-control-input( type="checkbox" v-model="otherSelected")
+                label.custom-control-label(for="select-other") Other
+            .form-group(v-if="otherSelected")
+              // label.col-form-label.required-field(for="special") Other
+              input#special.form-control(type="tel" required maxlength="280" placeholder="Other" v-model="specialOther")
+          .box-block.text-center
+            button#submit-button.btn.btn-md.btn-primary(type="button" @click="submitSurvey") Submit
+        
+        div(v-show="page==1")
+          .box-block
+            h2 Satisfaction Survey
+            
+            h4 How did you participate in this year's Out of Bounds?
+            p.help-text Please select all that apply
+            .form-group
+              .custom-control.custom-checkbox
+                input#participation-audience-member.custom-control-input(type="checkbox" value="Audience Member" v-model="survey.participation")
+                label.custom-control-label(for="participation-audience-member") Audience Member
+            .form-group
+              .custom-control.custom-checkbox
+                input#participation-performer.custom-control-input(type="checkbox" value="Performer" v-model="survey.participation")
+                label.custom-control-label(for="participation-performer") Performer
+            .form-group
+              .custom-control.custom-checkbox
+                input#participation-volunteer.custom-control-input(type="checkbox" value="Volunteer" v-model="survey.participation")
+                label.custom-control-label(for="participation-volunteer") Volunteer
+            .form-group
+              .custom-control.custom-checkbox
+                input#participation-host.custom-control-input(type="checkbox" value="Host" v-model="survey.participation")
+                label.custom-control-label(for="participation-host") Host
+            .form-group
+              .custom-control.custom-checkbox
+                input#participation-workshop-attendee.custom-control-input(type="checkbox" value="Workshop Attendee" v-model="survey.participation")
+                label.custom-control-label(for="participation-workshop-attendee") Workshop Attendee
+
+          
+          .box-block.box-bt(v-show="survey.participation.includes('Audience Member')")
+            h3 Audience Member Experience
+            .form-group
+              label.col-form-label(for="audience-member-experience") How was your overall experience as an audience member?
+              select#audience-member-experience.form-control(name="audience-member-experience" v-model.number="survey.audienceMemberExperience")
+                option(value="5") Exceptional
+                option(value="4") Very Good
+                option(value="3") Good
+                option(value="2") Bad
+                option(value="1") Very Bad
+                option(value="0") Extremely Bad
+            .form-group
+              label.col-form-label(for="liked-acts") What acts did you like? Why?
+              textarea#liked-acts.form-control(type="text" v-model="survey.likedActs")
+            .form-group
+              label.col-form-label(for="disliked-acts") 
+                | What acts did you 
+                strong not 
+                | like? Why?
+              textarea#disliked-acts.form-control(type="text" v-model="survey.dislikedActs")
+            .form-group
+              label.col-form-label(for="audience-member-experience-notes") Anything else you would like us to know about your experience as an audience member?
+              textarea#audience-member-experience-notes.form-control(type="text" v-model="survey.audienceMemberExperienceNotes")
+            
+          .box-block.box-bt(v-show="survey.participation.includes('Performer')")
+            h3 Performer Experience
+            p What type of performance did you do for the festival? Please select all that apply.
+            .form-group
+              .custom-control.custom-checkbox
+                input#performer-type-improv.custom-control-input(type="checkbox" value="Improv" v-model="survey.performerType")
+                label.custom-control-label(for="performer-type-improv") Improv
+            .form-group
+              .custom-control.custom-checkbox
+                input#performer-type-sketch.custom-control-input(type="checkbox" value="Sketch" v-model="survey.performerType")
+                label.custom-control-label(for="performer-type-sketch") Sketch
+            .form-group
+              .custom-control.custom-checkbox
+                input#performer-type-stand-up.custom-control-input(type="checkbox" value="Stand-up" v-model="survey.performerType")
+                label.custom-control-label(for="performer-type-stand-up") Stand-up
+            .form-group
+              .custom-control.custom-checkbox
+                input#performer-type-other.custom-control-input(type="checkbox" value="Other" v-model="survey.performerType")
+                label.custom-control-label(for="performer-type-other") Other
+
+            .form-group
+              label.col-form-label(for="performer-show-experience") How was your show experience?
+              select#performer-show-experience.form-control(name="performer-show-experience" v-model.number="survey.performerShowExperience")
+                option(value="5") Exceptional
+                option(value="4") Very Good
+                option(value="3") Good
+                option(value="2") Bad
+                option(value="1") Very Bad
+                option(value="0") Extremely Bad
+            .form-group
+              label.col-form-label(for="performer-show-experience-notes") 
+                strong Optional: 
+                | Elaborate on your response.
+              textarea#performer-show-experience-notes.form-control(type="text" v-model="survey.performerShowExperienceNotes")
+
+            .form-group
+              label.col-form-label(for="performer-festival-experience") How was your overall festival experience?
+              select#performer-festival-experience.form-control(name="performer-festival-experience" v-model.number="survey.performerFestivalExperience")
+                option(value="5") Exceptional
+                option(value="4") Very Good
+                option(value="3") Good
+                option(value="2") Bad
+                option(value="1") Very Bad
+                option(value="0") Extremely Bad
+            .form-group
+              label.col-form-label(for="performer-festival-experience-notes") 
+                strong Optional: 
+                | Elaborate on your response.
+              textarea#performer-festival-experience-notes.form-control(type="text" v-model="survey.performerFestivalExperienceNotes")
+
+          
+          .box-block.box-bt(v-show="survey.participation.includes('Volunteer')")
+            h3 Volunteer Experience
+            .form-group
+              label.col-form-label(for="volunteer-experience") How was your experience as an Out of Bounds volunteer?
+              select#volunteer-experience.form-control(name="volunteer-experience" v-model.number="survey.volunteerExperience")
+                option(value="5") Exceptional
+                option(value="4") Very Good
+                option(value="3") Good
+                option(value="2") Bad
+                option(value="1") Very Bad
+                option(value="0") Extremely Bad
+            .form-group
+              label.col-form-label(for="volunteer-experience-notes") 
+                strong Optional: 
+                | Elaborate on your response.
+              textarea#volunteer-experience-notes.form-control(type="text" v-model="survey.volunteerExperienceNotes")
+
+          .box-block.box-bt(v-show="survey.participation.includes('Host')")
+            h3 Host Experience
+            .form-group
+              label.col-form-label(for="host-experience") How was your experience as an Out of Bounds host?
+              select#host-experience.form-control(name="host-experience" v-model.number="survey.hostExperience")
+                option(value="5") Exceptional
+                option(value="4") Very Good
+                option(value="3") Good
+                option(value="2") Bad
+                option(value="1") Very Bad
+                option(value="0") Extremely Bad
+            .form-group
+              label.col-form-label(for="host-experience-notes") 
+                strong Optional: 
+                | Elaborate on your response.
+              textarea#host-experience-notes.form-control(type="text" v-model="survey.hostExperienceNotes") 
+           
+          .box-block.box-bt(v-show="survey.participation.includes('Workshop Attendee')")
+            h3 Workshop Attendee Experience
+            .form-group
+              label.col-form-label(for="workshop-attendee-experience") How was your workshop experience?
+              select#workshop-attendee-experience.form-control(name="workshop-attendee-experience" v-model.number="survey.workshopAttendeeExperience")
+                option(value="5") Exceptional
+                option(value="4") Very Good
+                option(value="3") Good
+                option(value="2") Bad
+                option(value="1") Very Bad
+                option(value="0") Extremely Bad
+            .form-group
+              label.col-form-label(for="workshop-attendee-experience-notes") 
+                strong Optional: 
+                | Elaborate on your response.
+              textarea#workshop-attendee-experience-notes.form-control(type="text" v-model="survey.workshopAttendeeExperienceNotes")
+
+          .box-block.box-bt
+            .form-group
+              label.col-form-label(for="email") Please nclude your email address if you would like us to follow up with your survey. 
+              input#email.form-control(type="email" v-model="survey.email") 
+        
+          .box-block.box-bt.text-center
+            button#submit-button.btn.btn-md.btn-primary(type="button" @click="updateSurvey") Submit
+
+        div(v-show="page==2")
+          .box-block
+            h4 Your submission has been received!
+
+  script.
+    let app = new Vue({
+      el: '#app',
+      data() {
+        return {
+          page: 0,
+          validationErrors: [],
+          survey: {
+            id: null,
+            location: null,
+            zipCode: null,
+            race: null,
+            gender: null,
+            special: [],
+            
+            participation: [],
+            age: null,
+            localImpact: null,
+            localImpactNotes: null,
+            
+            // Performer
+            performerType: [],
+            performerShowExperience: null,
+            performerShowExperienceNotes: null,
+            performerFestivalExperience: null,
+            performerFestivalExperienceNotes: null,
+            
+            // Audience
+            likedActs: null,
+            dislikedActs: null,
+            audienceMemberExperience: null,
+            audienceMemberExperienceNotes: null,
+            
+            // Host
+            hostExperience: null,
+            hostExperienceNotes: null,
+            
+            // Volunteer
+            volunteerExperience: null,
+            volunteerExperienceNotes: null,
+            
+            // Workshop Attendee
+            workshopAttendeeExperience: null,
+            workshopAttendeeExperienceNotes: null,
+            
+            email: null,
+            
+          },
+          specialOther: null,
+          otherSelected: false
+        }
+      },
+      methods: {
+        validate() {
+          let validationErrors = []
+          if(this.survey.location && this.survey.location != 'Outside U.S.A.') {
+            if(this.survey.zipCode == "" || this.survey.zipCode == null) validationErrors.push("Please enter a zip code")
+            else if(!this.survey.zipCode.match(/\d\d\d\d\d/)) validationErrors.push("Zip Code should be a five-digit number")
+          }
+          if(this.survey.race == "") validationErrors.push("Racial demographic required")
+          if(this.otherSelected && this.specialOther == "") validationErrors.push("Please define \"other\" under Special Constituencies")
+          return validationErrors
+        },
+        submitSurvey() {
+          let self = this
+          let validationErrors = self.validate()
+          if(validationErrors.length > 0) {
+            alert("Some fields are not correct")
+            this.validationErrors = validationErrors
+          }
+          else {
+            if(this.otherSelected) this.survey.special.push(this.specialOther)
+            axios
+              .post('/api/survey/', self.survey)
+              .then(response => {
+                self.page = 1
+                self.survey.id = response.data._id
+              })
+              .catch(error=> {
+                alert("There was an error submitting the survey :(")
+                console.log(error)
+              })
+          }
+        },
+        updateSurvey() {
+          let self = this
+          axios
+            .put('/api/survey/' + self.survey.id, self.survey)
+            .then(response => {
+              self.page = 2
+            })
+            .catch(error=> {
+              alert('There was an error updating the survey :(')
+              console.log(error)
+            })
+        }
+      }
+    })
