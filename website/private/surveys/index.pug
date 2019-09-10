@@ -1,0 +1,116 @@
+extends ../../_layout
+block content
+  header.dash-titlebar
+    .mb-md-0.mb-3
+      span.dash-titlebar-title Surveys
+
+  #app.dash-boxes.container-fluid
+    h2 Demographics
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Location
+            th Zip Code
+            th Race
+            th Gender
+            th Participation
+            th 
+        tbody
+          tr(v-for="survey in surveys")
+            td {{survey.location}}
+            td {{survey.zipCode}}
+            td {{survey.race}}
+            td {{survey.gender}}
+            td {{survey.participation.join(", ")}}
+            td {{survey.special.join(", ")}}
+    
+    h2 Audience Feedback
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Experience
+            th Notes
+        tbody
+          tr(v-for="survey in audienceSurveys")
+            td {{survey.audienceMemberExperience}}
+            td {{survey.audienceMemberExperienceNotes}}
+    
+    h2 Performer Feedback
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Location
+        tbody
+          tr(v-for="survey in performerSurveys")
+            td {{survey}}
+    
+    
+    h2 Volunteer Feedback
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Location
+        tbody
+          tr(v-for="survey in volunteerSurveys")
+            td {{survey}}
+    
+    
+    h2 Host Feedback
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Location
+        tbody
+          tr(v-for="survey in hostSurveys")
+            td {{survey}}
+    
+    
+    h2 Workshop Feedback
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Location
+        tbody
+          tr(v-for="survey in workshopSurveys")
+            td {{survey}}
+
+  script.
+    let vue = new Vue({
+      el: "#app",
+      data() { return {
+        surveys: []
+      }},
+      computed: {
+        audienceSurveys() {
+          return this.surveys.filter(s=> s.participation.includes('Performer'))
+        },
+        performerSurveys() {
+          return this.surveys.filter(s=> s.participation.includes('Audience Member'))
+        },
+        volunteerSurveys() {
+          return this.surveys.filter(s=> s.participation.includes('Host'))
+        },
+        hostSurveys() {
+          return this.surveys.filter(s=> s.participation.includes('Volunteer'))
+        },
+        workshopSurveys() {
+          return this.surveys.filter(s=> s.participation.includes('Workshop Attendee'))
+        }
+      },
+      created() {
+        let self = this
+        axios.get('/api/survey')
+          .then((response)=> {
+            self.surveys = response.data
+          })
+          .catch((error)=> {
+            console.log(error)
+          })
+      }
+    })

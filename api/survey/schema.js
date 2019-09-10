@@ -25,7 +25,7 @@ module.exports = mongoose.Schema({
   likedActs: String,
   dislikedActs: String,
   audienceMemberExperience: Number,
-  audienceMemberEperienceNotes: String,
+  audienceMemberExperienceNotes: String,
   
   // Survey, Performer
   performerType: [String], // Stand-up, Improv, Sketch, Other
