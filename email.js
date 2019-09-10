@@ -160,7 +160,6 @@ let demographicSurvey = async function() {
   for(let workshop of workshops) {
     for(let student of workshop.students) {
       allEmails.add(student.email)
-      console.log(student.email)
     }
   }
   
@@ -168,7 +167,7 @@ let demographicSurvey = async function() {
   // Emails!
   let message = surveyTemplate()
   for(let recipient of allEmails) {
-    //console.log(recipient)
+    console.log(recipient)
     //nodemailer.sendEmailFromProducers(recipient, "Survey for City Funding for Out of Bounds", message)
   }
 }
