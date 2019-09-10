@@ -4,6 +4,7 @@ let setupMongoose = require('./setup/mongoose')
 let setupServer = require('./setup/server')
 let actSubmissionModel = require('./api/act-submissions/model')
 let showModel = require('./api/shows/model')
+let workshopModel = require('./api/workshops/model')
 let acceptedEmailTemplate = require('./email-templates/compile')('acceptance')
 let rejectedEmailTemplate = require('./email-templates/compile')('rejection')
 let dateConfirmationTemplate = require('./email-templates/compile')('date-confirmation')
@@ -154,11 +155,20 @@ let demographicSurvey = async function() {
     }
   }
   
+  // Workshoppers
+  let workshops = await workshopModel.read()
+  for(let workshop of workshops) {
+    for(let student of workshop.students) {
+      allEmails.add(student.email)
+      console.log(student.email)
+    }
+  }
+  
     
   // Emails!
   let message = surveyTemplate()
   for(let recipient of allEmails) {
-    console.log(recipient)
+    //console.log(recipient)
     //nodemailer.sendEmailFromProducers(recipient, "Survey for City Funding for Out of Bounds", message)
   }
 }
