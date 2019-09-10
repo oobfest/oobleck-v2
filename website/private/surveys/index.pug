@@ -5,7 +5,7 @@ block content
       span.dash-titlebar-title Surveys
 
   #app.dash-boxes.container-fluid
-    h2 Demographics
+    h2.mt-3 Demographics
     .box.box-b
       table.table.box-table
         thead
@@ -25,7 +25,43 @@ block content
             td {{survey.participation.join(", ")}}
             td {{survey.special.join(", ")}}
     
-    h2 Audience Feedback
+    h2.mt-3 Audience Feedback
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Experience
+            th Notes
+            th Liked Acts
+            th Disliked
+        tbody
+          tr(v-for="survey in audienceSurveys")
+            td {{survey.audienceMemberExperience}}
+            td {{survey.audienceMemberExperienceNotes}}
+            td {{survey.likedActs}}
+            td {{survey.dislikedActs}}
+            
+    
+    h2.mt-3 Performer Feedback
+    .box.box-b
+      table.table.box-table
+        thead
+          tr
+            th Performer Type
+            th Show
+            th Festival
+            th Show Notes
+            th Festival Notes
+        tbody
+          tr(v-for="survey in performerSurveys")
+            td {{survey.performerType.join(', ')}}
+            td {{survey.performerShowExperience}}
+            td {{survey.performerFestivalExperience}}
+            td {{survey.performerShowExperienceNotes}}
+            td {{survey.performerFestivalExperienceNotes}}
+    
+    
+    h2.mt-3 Volunteer Feedback
     .box.box-b
       table.table.box-table
         thead
@@ -33,52 +69,35 @@ block content
             th Experience
             th Notes
         tbody
-          tr(v-for="survey in audienceSurveys")
-            td {{survey.audienceMemberExperience}}
-            td {{survey.audienceMemberExperienceNotes}}
-    
-    h2 Performer Feedback
-    .box.box-b
-      table.table.box-table
-        thead
-          tr
-            th Location
-        tbody
-          tr(v-for="survey in performerSurveys")
-            td {{survey}}
-    
-    
-    h2 Volunteer Feedback
-    .box.box-b
-      table.table.box-table
-        thead
-          tr
-            th Location
-        tbody
           tr(v-for="survey in volunteerSurveys")
-            td {{survey}}
+            td {{survey.volunteerExperience}}
+            td {{survey.volunteerExperienceNotes}}
     
     
-    h2 Host Feedback
+    h2.mt-3 Host Feedback
     .box.box-b
       table.table.box-table
         thead
           tr
-            th Location
+            th Experience
+            th Notes
         tbody
           tr(v-for="survey in hostSurveys")
-            td {{survey}}
+            td {{survey.hostExperience}}
+            td {{survey.hostExperienceNotes}}
     
     
-    h2 Workshop Feedback
+    h2.mt-3 Workshop Feedback
     .box.box-b
       table.table.box-table
         thead
           tr
-            th Location
+            th Experience
+            th Notes
         tbody
           tr(v-for="survey in workshopSurveys")
-            td {{survey}}
+            td {{survey.workshopAttendeeExperience}}
+            td {{survey.workshopAttendeeExperienceNotes}}
 
   script.
     let vue = new Vue({
