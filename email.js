@@ -8,6 +8,7 @@ let acceptedEmailTemplate = require('./email-templates/compile')('acceptance')
 let rejectedEmailTemplate = require('./email-templates/compile')('rejection')
 let dateConfirmationTemplate = require('./email-templates/compile')('date-confirmation')
 let performerShowDetailsTemplate = require('./email-templates/compile')('performer-show-details')
+let surveyTemplate = require('./email-templates/compile')('survey')
 let nodemailer = require('./utilities/nodemailer')
 
 async function setup() {
@@ -125,4 +126,41 @@ let formatTime = function(time) {
   return time.slice(0, time.length-2) + ":" + time.slice(time.length-2) + "pm"
 }
 
-getStuff()
+
+let demographicSurvey = async function() {
+  let allEmails = new Set()
+  await setup()
+  
+  // Ticket buyers
+  let shows  = await showModel.read()
+  for (let show of shows) {
+    for(let ticket of show.tickets) {
+      allEmails.add(ticket.email)
+    }
+  }
+  
+  
+  // Performers
+  let submissions = await actSubmissionModel.read()
+  let acts = submissions.filter(s=>
+    s.stamp == 'in' 
+    && !s.headliner 
+    && (s.confirmationStatus == 'yes' || s.confirmationStatus == 'reschedule')
+  ) 
+  for(let act of acts) {
+    allEmails.add(act.contact.email)
+    for(let person of act.personnel) {
+      allEmails.add(person.email)
+    }
+  }
+  
+    
+  // Emails!
+  let message = surveyTemplate()
+  for(let recipient of allEmails) {
+    console.log(recipient)
+    //nodemailer.sendEmailFromProducers(recipient, "Survey for City Funding for Out of Bounds", message)
+  }
+}
+
+demographicSurvey()

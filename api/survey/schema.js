@@ -11,9 +11,6 @@ module.exports = mongoose.Schema({
   
   // Survey
   participation: [String], // Performer, Audience Member, Host, Volunteer, Workshop Attendee
-  age: String, // Under 18, 18-25, 26-35, 36-45, 46-55, 55+
-  localImpact: Number,
-  localImpactNotes: String,
  
   // Five-point Scale: 
   // https://www.nbrii.com/faqs/customer-survey/best-rating-scale-customer-survey/

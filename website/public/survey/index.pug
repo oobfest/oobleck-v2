@@ -250,7 +250,9 @@ block content
 
           .box-block.box-bt
             .form-group
-              label.col-form-label(for="email") Please nclude your email address if you would like us to follow up with your survey. 
+              label.col-form-label(for="email") 
+                strong Optional: 
+                | Please include your email address if you would like us to follow up with your survey. 
               input#email.form-control(type="email" v-model="survey.email") 
         
           .box-block.box-bt.text-center
@@ -258,7 +260,7 @@ block content
 
         div(v-show="page==2")
           .box-block
-            h4 Your submission has been received!
+            h4 Your survey has been recieved! Thank you for your time.
 
   script.
     let app = new Vue({
@@ -276,9 +278,6 @@ block content
             special: [],
             
             participation: [],
-            age: null,
-            localImpact: null,
-            localImpactNotes: null,
             
             // Performer
             performerType: [],
