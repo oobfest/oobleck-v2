@@ -107,16 +107,16 @@ block content
       }},
       computed: {
         audienceSurveys() {
-          return this.surveys.filter(s=> s.participation.includes('Performer'))
-        },
-        performerSurveys() {
           return this.surveys.filter(s=> s.participation.includes('Audience Member'))
         },
+        performerSurveys() {
+          return this.surveys.filter(s=> s.participation.includes('Performer'))
+        },
         volunteerSurveys() {
-          return this.surveys.filter(s=> s.participation.includes('Host'))
+          return this.surveys.filter(s=> s.participation.includes('Volunteer'))
         },
         hostSurveys() {
-          return this.surveys.filter(s=> s.participation.includes('Volunteer'))
+          return this.surveys.filter(s=> s.participation.includes('Host'))
         },
         workshopSurveys() {
           return this.surveys.filter(s=> s.participation.includes('Workshop Attendee'))
