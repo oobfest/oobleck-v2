@@ -1,5 +1,5 @@
 # OoBleck
-Asset management software for the Out of Bounds Comedy Festival.
+Asset management software for the *Out of Bounds Comedy Festival*.
  
 ## Preview Images
 ### Adding and editing Workshops
