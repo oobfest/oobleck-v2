@@ -1,5 +1,7 @@
 # OoBleck
 Asset management software for the *Out of Bounds Comedy Festival*.
+
+Released under the [GPLv3 License](https://www.gnu.org/licenses/gpl-3.0.en.html).
  
 ## Preview Images
 ### Adding and editing Workshops
