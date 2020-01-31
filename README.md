@@ -10,8 +10,8 @@ Made with the VENoM stack (Vue, Express, Node and MongoDB) and released under th
 ### Volunteer Submission Form
 ![](screenshot-4.png)
 
-### Adding and editing Workshops
+### Adding and editing Workshops (Backend)
 ![](screenshot-1.png)
 
-### Adding and editing schedule
+### Adding and editing schedule (Backend)
 ![](screenshot-2.png)
