@@ -9,7 +9,7 @@
   "repository": "github:oobfest/oobleck-v2",
   "dependencies": {
     "aws-sdk": "^2.475.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "chalk": "^2.4.2",
     "cookie-session": "^2.0.0-beta.3",
     "diff": "^4.0.1",
