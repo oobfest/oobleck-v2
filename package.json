@@ -8,7 +8,7 @@
   "license": "GPL-3.0",
   "repository": "github:oobfest/oobleck-v2",
   "dependencies": {
-    "aws-sdk": "^2.475.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.18.1",
     "chalk": "^2.4.2",
     "cookie-session": "^2.0.0-beta.3",
